@@ -4,16 +4,19 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,13 +46,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.hoanglong.wetrack.BeaconScanService.adapterDevice;
+import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconRange;
 
 
-public class MainActivity extends AppCompatActivity implements BeaconConsumer {
-    private BeaconManager beaconManager;
-    public static List<String> listBeacon = new ArrayList<String>();
+public class MainActivity extends AppCompatActivity {
 
+    public static ArrayAdapter<String> adapterDevice;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -59,10 +64,15 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     @BindView(R.id.viewpager)
     ViewPager viewPager;
 
+    @BindView(R.id.btnSearch)
+    FloatingActionButton btnSearch;
+
 //    @BindView(R.id.btnSearch)
 //    Button btnSearch;
 
     FragmentPagerAdapter adapterViewPager;
+
+    BluetoothAdapter bluetoothAdapter;
 
     private int[] icons = new int[]{
             R.drawable.ic_home,
@@ -153,40 +163,45 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             tabLayout.getTabAt(i).setText(null);
         }
 
+        IntentFilter intentFilter = new IntentFilter();
 
-        beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 
-        // By default the AndroidBeaconLibrary will only find AltBeacons.  If you wish to make it
-        // find a different type of beacon, you must specify the byte layout for that beacon's
-        // advertisement with a line like below.  The example shows how to find a beacon with the
-        // same byte layout as AltBeacon but with a beaconTypeCode of 0xaabb.  To find the proper
-        // layout expression for other beacon types, do a web search for "setBeaconLayout"
-        // including the quotes.
-        //
-        beaconManager.getBeaconParsers().clear();
-        beaconManager.getBeaconParsers().add(new BeaconParser().
-                setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
-        beaconManager.bind(this);
+        registerReceiver(searchDevices, intentFilter);
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initBluetooth();
+                if (!bluetoothAdapter.isEnabled()) {
+                    btnSearch.setImageResource(R.drawable.ic_play_arrow);
+                }else{
+                    bluetoothAdapter.disable();
+                    btnSearch.setImageResource(R.drawable.ic_pause);
+                }
+            }
+        });
+
+
+        if (!bluetoothAdapter.isEnabled()) {
+            btnSearch.setImageResource(R.drawable.ic_play_arrow);
+        }else{
+            btnSearch.setImageResource(R.drawable.ic_pause);
+        }
+
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        beaconManager.unbind(this);
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (beaconManager.isBound(this)) beaconManager.setBackgroundMode(true);
+    private void initBluetooth() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, 9);
+        }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (beaconManager.isBound(this)) beaconManager.setBackgroundMode(false);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -195,12 +210,14 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             case 10:
                 if (resultCode == Activity.RESULT_OK) {
 //                    toggleButton.setChecked(true);
+                    btnSearch.setImageResource(R.drawable.ic_pause);
                     listBeacon.clear();
+                    listBeaconRange.clear();
                     adapterDevice.notifyDataSetChanged();
-
                     Toast.makeText(getBaseContext(), "Searching device", Toast.LENGTH_SHORT).show();
 
                 } else {
+                    btnSearch.setImageResource(R.drawable.ic_play_arrow);
 //                    toggleButton.setChecked(false);
                 }
                 break;
@@ -208,29 +225,69 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onBeaconServiceConnect() {
-        beaconManager.setRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                if (beacons.size() > 0) {
-                    //EditText editText = (EditText)RangingActivity.this.findViewById(R.id.rangingText);
-                    Beacon firstBeacon = beacons.iterator().next();
-                    logToDisplay("The first beacon " + firstBeacon.getBluetoothName() + " is about " + firstBeacon.getDistance() + " meters away.");
+    private BroadcastReceiver searchDevices = new BroadcastReceiver() {
+
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                        BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        btnSearch.setImageResource(R.drawable.ic_play_arrow);
+                        adapterDevice.notifyDataSetChanged();
+                        break;
+
+                    case BluetoothAdapter.STATE_ON:
+                        btnSearch.setImageResource(R.drawable.ic_pause);
+
+                        break;
                 }
             }
 
-        });
 
-        try {
-            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
-        } catch (RemoteException e) {   }
+//            if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+////                initBluetooth();
+////                adapterDevice.notifyDataSetChanged();
+//
+//                bluetoothAdapter.startDiscovery();
+////                Intent mIntent = new Intent();
+////                mIntent.setClass(MainActivity.this, ControlActivity.class);
+////                startActivity(mIntent);
+//            }
+        }
+    };
+
+
+    @Override
+    public void onResume() {
+        /*register broadcast*/
+        IntentFilter intentFilter = new IntentFilter();
+
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+
+        registerReceiver(searchDevices, intentFilter);
+
+
+//        listDevice.clear();
+//        adapterDevice.notifyDataSetChanged();
+//        bluetoothAdapter.startDiscovery();
+        super.onResume();
     }
 
-    private void logToDisplay(final String line) {
+    @Override
+    protected void onPause() {
+        unregisterReceiver(searchDevices);
+        super.onPause();
+    }
+
+    public void logToDisplay(final String line) {
         runOnUiThread(new Runnable() {
             public void run() {
-                listBeacon.add(line);
                 adapterDevice.notifyDataSetChanged();
             }
         });

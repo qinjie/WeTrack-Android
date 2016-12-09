@@ -15,7 +15,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:title="TabLayout"
+            app:title="We Track"
             android:theme="@style/Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">

@@ -14,8 +14,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //import static com.example.hoanglong.wetrack.BluetoothReceiver.adapterDevice;
-import static com.example.hoanglong.wetrack.BeaconScanService.adapterDevice;
-import static com.example.hoanglong.wetrack.MainActivity.listBeacon;
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconRange;
+import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
+//import static com.example.hoanglong.wetrack.MainActivity.listBeacon;
 
 /**
  * Created by hoanglong on 06-Dec-16.
@@ -41,7 +43,7 @@ public class BeaconListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_beacon_list, container, false);
         ButterKnife.bind(this, rootView);
 //        adapterDevice = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listDevice);
-        adapterDevice = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listBeacon);
+        adapterDevice = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listBeaconRange);
 
         listViewDevice.setAdapter(adapterDevice);
         return rootView;
