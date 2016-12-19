@@ -1,5 +1,6 @@
 package com.example.hoanglong.wetrack;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

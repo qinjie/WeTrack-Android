@@ -48,12 +48,13 @@ import butterknife.ButterKnife;
 
 import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconRange;
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayAdapter<String> adapterDevice;
+    //    public static ArrayAdapter<String> adapterDevice;
+    public static BeaconListAdapter adapterDevice;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_place,
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Manta")).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
 
         Intent in = new Intent(getBaseContext(), BeaconScanService.class);
         getBaseContext().startService(in);
@@ -177,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 initBluetooth();
                 if (!bluetoothAdapter.isEnabled()) {
                     btnSearch.setImageResource(R.drawable.ic_play_arrow);
-                }else{
+                } else {
                     bluetoothAdapter.disable();
                     btnSearch.setImageResource(R.drawable.ic_pause);
                 }
@@ -185,9 +187,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
         if (!bluetoothAdapter.isEnabled()) {
             btnSearch.setImageResource(R.drawable.ic_play_arrow);
-        }else{
+        } else {
             btnSearch.setImageResource(R.drawable.ic_pause);
         }
 
@@ -212,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 //                    toggleButton.setChecked(true);
                     btnSearch.setImageResource(R.drawable.ic_pause);
                     listBeacon.clear();
-                    listBeaconRange.clear();
+                    listBeaconAndRange.clear();
                     adapterDevice.notifyDataSetChanged();
                     Toast.makeText(getBaseContext(), "Searching device", Toast.LENGTH_SHORT).show();
 
@@ -272,6 +275,12 @@ public class MainActivity extends AppCompatActivity {
 
         registerReceiver(searchDevices, intentFilter);
 
+        if (!bluetoothAdapter.isEnabled()) {
+            btnSearch.setImageResource(R.drawable.ic_play_arrow);
+        } else {
+            btnSearch.setImageResource(R.drawable.ic_pause);
+        }
+
 
 //        listDevice.clear();
 //        adapterDevice.notifyDataSetChanged();
@@ -285,10 +294,12 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    public void logToDisplay(final String line) {
+    public void logToDisplay() {
         runOnUiThread(new Runnable() {
             public void run() {
-                adapterDevice.notifyDataSetChanged();
+//                adapterDevice.notifyDataSetChanged();
+                adapterDevice.add(listBeacon, listBeaconAndRange);
+//                adapterDevice.setBeacons(listBeacon);
             }
         });
     }

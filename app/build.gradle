@@ -30,7 +30,8 @@ dependencies {
     compile 'com.github.chenupt.android:springindicator:1.0.2@aar'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile('com.mikepenz:materialdrawer:5.6.0@aar') {
         transitive = true
     }

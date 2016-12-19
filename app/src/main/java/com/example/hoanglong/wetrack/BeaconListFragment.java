@@ -1,8 +1,11 @@
 package com.example.hoanglong.wetrack;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +18,7 @@ import butterknife.ButterKnife;
 
 //import static com.example.hoanglong.wetrack.BluetoothReceiver.adapterDevice;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconRange;
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
 //import static com.example.hoanglong.wetrack.MainActivity.listBeacon;
 
@@ -25,9 +28,8 @@ import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
 
 public class BeaconListFragment extends Fragment {
 
-    @BindView(R.id.listView)
-    ListView listViewDevice;
-
+    @BindView(R.id.rvBeacons)
+    RecyclerView rvBeacons;
 
     public static BeaconListFragment newInstance(String title) {
         Bundle args = new Bundle();
@@ -42,12 +44,14 @@ public class BeaconListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_beacon_list, container, false);
         ButterKnife.bind(this, rootView);
-//        adapterDevice = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listDevice);
-        adapterDevice = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, listBeaconRange);
+        rvBeacons.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+        adapterDevice = new BeaconListAdapter(listBeacon, listBeaconAndRange);
+        rvBeacons.setAdapter(adapterDevice);
 
-        listViewDevice.setAdapter(adapterDevice);
+
         return rootView;
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -78,4 +82,16 @@ public class BeaconListFragment extends Fragment {
     public void onPause() {
         super.onPause();
     }
+
+//    public void setTextViewText(String value){
+//        tvBeacon.setText(value);
+//    }
+//
+//    public void hideTextview(){
+//        tvBeacon.setVisibility(View.INVISIBLE);
+//    }
+//
+//    public void showTextview(){
+//        tvBeacon.setVisibility(View.VISIBLE);
+//    }
 }
