@@ -1,4 +1,4 @@
-package com.example.hoanglong.wetrack.api;
+package com.example.hoanglong.wetrack.utils;
 
 import com.google.gson.annotations.SerializedName;
 

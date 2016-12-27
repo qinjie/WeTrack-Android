@@ -1,5 +1,6 @@
 package com.example.hoanglong.wetrack;
 
+import android.*;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -46,7 +48,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
+//import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent in = new Intent(getBaseContext(), BeaconScanService.class);
         getBaseContext().startService(in);
+        ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
 
 
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -183,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     bluetoothAdapter.disable();
                     btnSearch.setImageResource(R.drawable.ic_pause);
                 }
+
             }
         });
 
@@ -253,15 +257,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-//            if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-////                initBluetooth();
-////                adapterDevice.notifyDataSetChanged();
-//
-//                bluetoothAdapter.startDiscovery();
-////                Intent mIntent = new Intent();
-////                mIntent.setClass(MainActivity.this, ControlActivity.class);
-////                startActivity(mIntent);
-//            }
         }
     };
 
