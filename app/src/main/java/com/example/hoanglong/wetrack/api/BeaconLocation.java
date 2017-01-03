@@ -1,5 +1,6 @@
 package com.example.hoanglong.wetrack.api;
 
+
 /**
  * Created by hoanglong on 16-Dec-16.
  */
@@ -9,12 +10,14 @@ public class BeaconLocation {
     private int user_id;
     private double longitude;
     private double latitude;
+    private String created_at;
 
-    public BeaconLocation(int beacon_id, int user_id, double longitude, double latitude) {
+    public BeaconLocation(int beacon_id, int user_id, double longitude, double latitude, String created_at) {
         this.beacon_id = beacon_id;
         this.user_id = user_id;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.created_at = created_at;
     }
 
     public int getBeacon_id() {
@@ -47,5 +50,13 @@ public class BeaconLocation {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public String getcreated_at() {
+        return created_at;
+    }
+
+    public void setcreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }

@@ -23,6 +23,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     private static final String TAG = ".MyApplicationName";
     private RegionBootstrap regionBootstrap;
     private BackgroundPowerSaver backgroundPowerSaver;
+    private BeaconManager mBeaconmanager;
 
     @Override
     public void onCreate() {
@@ -54,9 +55,12 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         Region region = new Region("MyRegion", null, null, null);
         regionBootstrap = new RegionBootstrap(this, region);
 
-        BeaconManager.getInstanceForApplication(this).getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
+        mBeaconmanager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
 
         backgroundPowerSaver = new BackgroundPowerSaver(this);
+
+        mBeaconmanager.setBackgroundBetweenScanPeriod(120000l);
 
         this.startService
                 (new Intent(this, BeaconScanService.class));

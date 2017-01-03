@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.widget.Toast;
 
+import com.example.hoanglong.wetrack.BeaconScanActivation;
 import com.example.hoanglong.wetrack.BeaconScanService;
 import com.example.hoanglong.wetrack.TestService;
 
@@ -19,21 +20,31 @@ import java.io.IOException;
  * Created by hoanglong on 19-Dec-16.
  */
 
-public class BeaconBroadcastReceiver extends BroadcastReceiver{
+public class BeaconBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        context.startService
-                (new Intent(context, BeaconScanService.class));
-        Toast.makeText(context,"service started",Toast.LENGTH_SHORT).show();
 
-        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            String str = device.getName() + "|" + device.getAddress();
-            Toast.makeText(context,str,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context,"service started",Toast.LENGTH_SHORT).show();
 
-
+        if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+            final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                    BluetoothAdapter.ERROR);
+            switch (state) {
+                case BluetoothAdapter.STATE_OFF:
+                    break;
+                case BluetoothAdapter.STATE_TURNING_OFF:
+                    break;
+                case BluetoothAdapter.STATE_ON: {
+                    Toast.makeText(context, "bluetooth on", Toast.LENGTH_SHORT).show();
+                    context.startService
+                            (new Intent(context, BeaconScanService.class));
+                }
+                break;
+                case BluetoothAdapter.STATE_TURNING_ON:
+                    break;
+            }
         }
 
     }

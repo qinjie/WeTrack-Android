@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name="com.example.hoanglong.wetrack.BeaconScanActivation"
@@ -32,19 +33,19 @@
             android:enabled="true"
             />
 
-        <!--<receiver-->
-            <!--android:name=".receiver.BeaconBroadcastReceiver"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true"-->
-           <!--android:permission="">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.bluetooth.device.action.FOUND" />-->
-                <!--<action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />-->
-                <!--<action android:name="android.bluetooth.device.action.BOND_STATE_CHANGED" />-->
-                <!--<action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />-->
-                <!--<action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <receiver
+            android:name=".receiver.BeaconBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+           android:permission="">
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.FOUND" />
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+                <action android:name="android.bluetooth.device.action.BOND_STATE_CHANGED" />
+                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />
+            </intent-filter>
+        </receiver>
 
         <!--<service-->
             <!--android:name=".TestService"-->
