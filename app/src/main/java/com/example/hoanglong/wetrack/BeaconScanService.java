@@ -49,6 +49,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -238,6 +239,8 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 String oldData = sharedPref.getString("listPatientsAndLocations-WeTrack2", "");
                                 editor.putString("listPatientsAndLocations-WeTrack2", firstBeaconIdentifiers + "," + mLocation.getLongitude() + "," + mLocation.getLatitude() + "," + dateObj + ";" + oldData);
+                                editor.putLong("ExpiredDate", System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(44640));
+
                                 editor.commit();
                             }
                         }

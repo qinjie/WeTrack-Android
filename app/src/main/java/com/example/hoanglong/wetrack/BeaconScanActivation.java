@@ -4,7 +4,9 @@ import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -75,6 +77,13 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
     @Override
     public void didEnterRegion(Region arg0) {
+        //TODO
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        if (sharedPref.getLong("ExpiredDate", -1) < System.currentTimeMillis()) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            editor.apply();
+        }
 
         Toast.makeText(getBaseContext(), "enter region beaconScanActivation", Toast.LENGTH_SHORT).show();
 
