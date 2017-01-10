@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -49,12 +50,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 //import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
+//import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
+//import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final int REQUEST_ENABLE_LOCATION = 1994;
     //    public static ArrayAdapter<String> adapterDevice;
     public static BeaconListAdapter adapterDevice;
 
@@ -93,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
 
-        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
-        getBaseContext().startService(in);
-        ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+//        Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
+//        getBaseContext().startService(in);
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
 
 
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -191,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         if (!bluetoothAdapter.isEnabled()) {
             btnSearch.setImageResource(R.drawable.ic_play_arrow);
         } else {
@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         if (!bluetoothAdapter.isEnabled()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, 9);
+
         }
     }
 
@@ -214,26 +215,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         switch (requestCode) {
-            case 10:
-                if (resultCode == Activity.RESULT_OK) {
-//                    toggleButton.setChecked(true);
-                    btnSearch.setImageResource(R.drawable.ic_pause);
-                    listBeacon.clear();
-                    listBeaconAndRange.clear();
-                    adapterDevice.notifyDataSetChanged();
-                    Toast.makeText(getBaseContext(), "Searching device", Toast.LENGTH_SHORT).show();
 
-                } else {
-                    btnSearch.setImageResource(R.drawable.ic_play_arrow);
-//                    toggleButton.setChecked(false);
-                }
-                break;
+            case REQUEST_ENABLE_LOCATION: {
+                Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
+                getBaseContext().startService(in);
+                Toast.makeText(getBaseContext(),"hahaxxxx",Toast.LENGTH_SHORT).show();
+            }
+            break;
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private BroadcastReceiver searchDevices = new BroadcastReceiver() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
 
+            case REQUEST_ENABLE_LOCATION: {
+                Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
+                getBaseContext().startService(in);
+                Toast.makeText(getBaseContext(),"hahayyyyyyyy",Toast.LENGTH_SHORT).show();
+            }
+            break;
+
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private BroadcastReceiver searchDevices = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -293,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
 //                adapterDevice.notifyDataSetChanged();
-                adapterDevice.add(listBeacon, listBeaconAndRange);
+//                adapterDevice.add(listBeacon, listBeaconAndRange);
 //                adapterDevice.setBeacons(listBeacon);
             }
         });

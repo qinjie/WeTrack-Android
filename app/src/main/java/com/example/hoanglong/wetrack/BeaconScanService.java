@@ -170,6 +170,15 @@ public class BeaconScanService extends Service implements BeaconConsumer {
 
         final MainActivity test = new MainActivity();
 
+//        Intent it= new Intent(getApplicationContext(),BeaconScanActivation.class);
+//        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////        startActivity(it);
+//        startService(it);
+//        BeaconScanActivation tmp = new BeaconScanActivation();
+//        tmp.();
+
+
+
         beaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
@@ -213,6 +222,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                             patientList = gson.fromJson(jsonPatients, type);
                         }
                     });
+
 
                     if (!listBeacon.contains(line)) {
                         listBeacon.add(line);
@@ -362,7 +372,6 @@ public class BeaconScanService extends Service implements BeaconConsumer {
             e.printStackTrace();
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
 
     }
 

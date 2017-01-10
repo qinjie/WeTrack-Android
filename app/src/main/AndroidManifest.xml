@@ -33,6 +33,11 @@
             android:enabled="true"
             />
 
+        <service
+            android:name=".BeaconMonitoringService"
+            android:enabled="true"
+            />
+
         <receiver
             android:name=".receiver.BeaconBroadcastReceiver"
             android:enabled="true"

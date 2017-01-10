@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.widget.Toast;
 
+import com.example.hoanglong.wetrack.BeaconMonitoringService;
 import com.example.hoanglong.wetrack.BeaconScanActivation;
 import com.example.hoanglong.wetrack.BeaconScanService;
 import com.example.hoanglong.wetrack.TestService;
@@ -39,7 +40,7 @@ public class BeaconBroadcastReceiver extends BroadcastReceiver {
                 case BluetoothAdapter.STATE_ON: {
                     Toast.makeText(context, "bluetooth on", Toast.LENGTH_SHORT).show();
                     context.startService
-                            (new Intent(context, BeaconScanService.class));
+                            (new Intent(context, BeaconMonitoringService.class));
                 }
                 break;
                 case BluetoothAdapter.STATE_TURNING_ON:
