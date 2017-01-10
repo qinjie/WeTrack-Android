@@ -250,7 +250,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 
                             @Override
                             public void onFailure(Call<List<Patients>> call, Throwable t) {
-                                sendNotification("Please turn on internet connection");
+                                sendNotification("Please turn on internet connectionccccc");
                                 Gson gson = new Gson();
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                                 String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
@@ -260,7 +260,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                             }
                         });
 
-                        
+
                         final Handler handler2 = new Handler();
                         handler2.postDelayed(new Runnable() {
                             @Override
@@ -379,7 +379,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                                     }
                                 } else {
                                     if (mLocation == null) {
-                                        sendNotification("Please turn on location service");
+                                        sendNotification("Please turn on location servicezzzz");
                                     }
                                 }
 
@@ -426,7 +426,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 
                                                                     @Override
                                                                     public void onFailure(Call<JsonObject> call, Throwable error) {
-                                                                        sendNotification("Please turn on internet connection");
+                                                                        sendNotification("Please turn on internet connectionxxxx");
                                                                     }
                                                                 });
 
@@ -470,7 +470,8 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
-
+//TODO
+            //tim hieu tai sao khi tat beacon 6 thi bi loi
 //            regionList.removeAll(toRemove);
 //            regionList.addAll(toAdd);
 
@@ -490,6 +491,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 //            }
             toRemove.clear();
             toAdd.clear();
+            sendNotification("hahah");
             mHandler.postDelayed(mStatusChecker, mInterval);
         }
     };
