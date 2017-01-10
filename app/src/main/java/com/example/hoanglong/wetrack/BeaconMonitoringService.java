@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.hoanglong.wetrack.api.BeaconAPI;
 import com.example.hoanglong.wetrack.api.BeaconLocation;
 import com.example.hoanglong.wetrack.api.RetrofitUtils;
+import com.example.hoanglong.wetrack.utils.Beacons;
 import com.example.hoanglong.wetrack.utils.Patients;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -86,7 +87,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
         //TODO
         //check lai vu allow location
         Toast.makeText(getBaseContext(), "after hahayyyyyyyy", Toast.LENGTH_SHORT).show();
-        onCreate();
+//        onCreate();
         return Service.START_STICKY;
     }
 
@@ -171,6 +172,14 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
             }
         });
 
+//        for (Region aRegion : beaconManager.getMonitoredRegions()) {
+//            try {
+//                beaconManager.stopMonitoringBeaconsInRegion(aRegion);
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
     }
 
 
@@ -192,19 +201,21 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                     e.printStackTrace();
                 }
 
-
                 if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
                     for (Patients aPatient : patientList) {
-                        if (aPatient.getStatus() == 1 && aPatient.getPatientBeacon().get(0).getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
-                            String uuid = aPatient.getPatientBeacon().get(0).getUuid();
-                            Identifier identifier = Identifier.parse(uuid);
-                            Identifier identifier2 = Identifier.parse(String.valueOf(aPatient.getPatientBeacon().get(0).getMajor()));
-                            Region region = new Region(aPatient.getId() + ";" + identifier, identifier, identifier2, null);
-                            regionList.add(region);
+                        for (Beacons aBeacon : aPatient.getPatientBeacon()) {
+                            if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+                                //if change region in this part, remember also change region below
+                                String uuid = aBeacon.getUuid();
+                                Identifier identifier = Identifier.parse(uuid);
+                                Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
+                                Region region = new Region(aPatient.getId() + ";" + identifier, identifier, identifier2, null);
+                                regionList.add(region);
+                            }
                         }
+
                     }
                 }
-
 
                 beaconManager.addMonitorNotifier(new MonitorNotifier() {
                     @Override
@@ -216,8 +227,9 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                     }
 
                     @Override
-                    public void didDetermineStateForRegion(int status, Region region) {
+                    public void didDetermineStateForRegion(final int status, final Region region) {
                         beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+
                         beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
                             @Override
                             public void onResponse(Call<List<Patients>> call, Response<List<Patients>> response) {
@@ -248,163 +260,192 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                             }
                         });
 
+                        
+                        final Handler handler2 = new Handler();
+                        handler2.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
+                                    for (Patients aPatient : patientList) {
+                                        for (Beacons aBeacon : aPatient.getPatientBeacon()) {
+                                            if (aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+                                                String uuid = aBeacon.getUuid();
+                                                Identifier identifier = Identifier.parse(uuid);
+                                                Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
+                                                Region regionx = new Region(aPatient.getId() + ";" + identifier, identifier, identifier2, null);
 
-                        if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                            for (Patients aPatient : patientList) {
-                                if (aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
-                                    String uuid = aPatient.getPatientBeacon().get(0).getUuid();
-                                    Identifier identifier = Identifier.parse(uuid);
-                                    Region regionx = new Region(aPatient.getId() + ";" + identifier, identifier, null, null);
+                                                if (aPatient.getStatus() == 0 || aBeacon.getStatus() == 0) {
+                                                    toRemove.add(regionx);
+                                                    try {
+                                                        beaconManager.stopMonitoringBeaconsInRegion(regionx);
+                                                        regionList.remove(regionx);
+                                                    } catch (RemoteException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
 
-                                    if (aPatient.getStatus() == 0 || aPatient.getPatientBeacon().get(0).getStatus() == 0) {
-                                        toRemove.add(regionx);
-                                    }
-                                    if (aPatient.getStatus() == 1 && aPatient.getPatientBeacon().get(0).getStatus() == 1 && !regionList.contains(regionx) && !toAdd.contains(regionx)) {
-                                        toAdd.add(regionx);
-                                    }
-
-                                }
-
-                            }
-                        }
-
-                        //TODO
-                        LocationListener locationListener = new LocationListener() {
-                            public void onLocationChanged(Location location) {
-                                mLocation = location;
-                            }
-
-                            public void onStatusChanged(String provider, int status, Bundle extras) {
-                                Log.i("locationListener", "changed" + provider);
-                            }
-
-                            public void onProviderEnabled(String provider) {
-                                Log.i("locationListener", "enabled" + provider);
-                            }
-
-                            public void onProviderDisabled(String provider) {
-                                Log.i("locationListener", "disabled" + provider);
-                            }
-                        };
-
-                        if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
-
-                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
-                        mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-                        Date aDate = new Date();
-                        SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        String dateObj = curFormatter.format(aDate);
-
-                        sendNotification(beaconManager.getMonitoredRegions().size() + " xxx " + patientList.size() + " yyy " + regionList.size() + " lll " + patientList.get(0).getFullname());
-
-                        if (patientList != null && !patientList.equals("") && patientList.size() > 0 && status == 1 && !region.equals(region3) && mLocation != null) {
-
-                            String[] regionInfo = region.getUniqueId().split(";");
-                            Log.i("Service monitoring", regionInfo[0] + " | " + regionInfo[1]);
-
-                            for (Patients patient : patientList) {
-                                if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(patient.getPatientBeacon().get(0).getUuid())) {
-
-                                    if (!checkInternetOn()) {
-                                        String firstBeaconIdentifiers = regionInfo[1] + patient.getPatientBeacon().get(0).getMajor() + patient.getPatientBeacon().get(0).getMinor();
-                                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                                        SharedPreferences.Editor editor = sharedPref.edit();
-                                        String oldData = sharedPref.getString("listPatientsAndLocations-WeTrack2", "");
-                                        editor.putString("listPatientsAndLocations-WeTrack2", firstBeaconIdentifiers + "," + mLocation.getLongitude() + "," + mLocation.getLatitude() + "," + dateObj + ";" + oldData);
-                                        editor.putLong("ExpiredDate", System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(44640));
-                                        editor.commit();
-                                    }
-
-                                    BeaconLocation aLocation = new BeaconLocation(patient.getPatientBeacon().get(0).getId(), patient.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
-
-                                    Gson gson = new GsonBuilder()
-                                            .setLenient()
-                                            .create();
-                                    JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
-
-                                    Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
-                                    call.enqueue(new Callback<JsonObject>() {
-                                        @Override
-                                        public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                                            try {
-
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<JsonObject> call, Throwable error) {
-                                        }
-                                    });
-                                }
-                            }
-                        } else {
-                            if (mLocation == null) {
-                                sendNotification("Please turn on location service");
-                            }
-                        }
-
-
-                        if (checkInternetOn()) {
-                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            String savedData = sharedPref.getString("listPatientsAndLocations-WeTrack2", "");
-
-                            if (!savedData.equals("") && patientList != null) {
-                                final String[] patientOffline = savedData.split(";");
-                                for (int i = 0; i < patientOffline.length; i++) {
-                                    String[] patientInfoOffline = patientOffline[i].split(",");
-                                    if (savedData.contains(patientOffline[i] + ";")) {
-                                        savedData = savedData.replace(patientOffline[i] + ";", "");
-                                    }
-
-                                    if (patientList.size() > 0) {
-                                        for (final Patients patient : patientList) {
-                                            if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
-                                                String patientBeaconIdentifiers = patient.getPatientBeacon().get(0).getUuid() + patient.getPatientBeacon().get(0).getMajor() + patient.getPatientBeacon().get(0).getMinor();
-                                                if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && patient.getPatientBeacon().get(0).getStatus() == 1) {
-                                                    BeaconLocation aLocation = new BeaconLocation(patient.getPatientBeacon().get(0).getId(), 696555, Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
-                                                    Gson gson = new GsonBuilder()
-                                                            .setLenient()
-                                                            .create();
-                                                    JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
-
-                                                    sendNotification(patient.getFullname() + "offline");
-
-
-//                                        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
-                                                    Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
-                                                    call.enqueue(new Callback<JsonObject>() {
-                                                        @Override
-                                                        public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                                                            try {
-
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onFailure(Call<JsonObject> call, Throwable error) {
-                                                            sendNotification("Please turn on internet connection");
-                                                        }
-                                                    });
-
+                                                if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && !regionList.contains(regionx) && !toAdd.contains(regionx)) {
+                                                    toAdd.add(regionx);
+                                                    try {
+                                                        beaconManager.startMonitoringBeaconsInRegion(regionx);
+                                                        regionList.add(regionx);
+                                                    } catch (RemoteException e) {
+                                                        e.printStackTrace();
+                                                    }
                                                 }
 
                                             }
                                         }
+
+
                                     }
                                 }
-                                editor.putString("listPatientsAndLocations-WeTrack2", savedData);
-                                editor.commit();
-                            }
 
-                        }
+                                LocationListener locationListener = new LocationListener() {
+                                    public void onLocationChanged(Location location) {
+                                        mLocation = location;
+                                    }
+
+                                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                                        Log.i("locationListener", "changed" + provider);
+                                    }
+
+                                    public void onProviderEnabled(String provider) {
+                                        Log.i("locationListener", "enabled" + provider);
+                                    }
+
+                                    public void onProviderDisabled(String provider) {
+                                        Log.i("locationListener", "disabled" + provider);
+                                    }
+                                };
+
+                                if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    return;
+                                }
+
+                                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+                                mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                                Date aDate = new Date();
+                                SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                String dateObj = curFormatter.format(aDate);
+
+
+                                if (patientList != null && !patientList.equals("") && patientList.size() > 0 && status == 1 && !region.equals(region3) && mLocation != null) {
+
+                                    String[] regionInfo = region.getUniqueId().split(";");
+                                    Log.i("Service monitoring", regionInfo[0] + " | " + regionInfo[1]);
+
+                                    for (Patients patient : patientList) {
+                                        for (Beacons aBeacon : patient.getPatientBeacon()) {
+                                            if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid())) {
+
+                                                if (!checkInternetOn()) {
+                                                    String firstBeaconIdentifiers = regionInfo[1] + aBeacon.getMajor() + aBeacon.getMinor();
+                                                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                                    String oldData = sharedPref.getString("listPatientsAndLocations-WeTrack2", "");
+                                                    editor.putString("listPatientsAndLocations-WeTrack2", firstBeaconIdentifiers + "," + mLocation.getLongitude() + "," + mLocation.getLatitude() + "," + dateObj + ";" + oldData);
+                                                    editor.putLong("ExpiredDate", System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(44640));
+                                                    editor.commit();
+                                                }
+
+                                                BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), patient.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+
+                                                Gson gson = new GsonBuilder()
+                                                        .setLenient()
+                                                        .create();
+                                                JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
+
+                                                Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
+                                                call.enqueue(new Callback<JsonObject>() {
+                                                    @Override
+                                                    public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                                                        try {
+                                                            sendNotification("monitered: " + beaconManager.getMonitoredRegions().size() + "; patient: " + patientList.size() + "; region: " + regionList.size());
+
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<JsonObject> call, Throwable error) {
+                                                    }
+                                                });
+                                            }
+                                        }
+
+                                    }
+                                } else {
+                                    if (mLocation == null) {
+                                        sendNotification("Please turn on location service");
+                                    }
+                                }
+
+
+                                if (checkInternetOn()) {
+                                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    String savedData = sharedPref.getString("listPatientsAndLocations-WeTrack2", "");
+
+                                    if (!savedData.equals("") && patientList != null) {
+                                        final String[] patientOffline = savedData.split(";");
+                                        for (int i = 0; i < patientOffline.length; i++) {
+                                            String[] patientInfoOffline = patientOffline[i].split(",");
+                                            if (savedData.contains(patientOffline[i] + ";")) {
+                                                savedData = savedData.replace(patientOffline[i] + ";", "");
+                                            }
+
+                                            if (patientList.size() > 0) {
+                                                for (final Patients patient : patientList) {
+                                                    for (Beacons aBeacon : patient.getPatientBeacon()) {
+                                                        if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
+                                                            String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
+                                                            if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
+                                                                BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), patient.getId(), Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
+                                                                Gson gson = new GsonBuilder()
+                                                                        .setLenient()
+                                                                        .create();
+                                                                JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
+
+                                                                sendNotification(patient.getFullname() + "offline");
+
+//                                                        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+
+                                                                Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
+                                                                call.enqueue(new Callback<JsonObject>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                                                                        try {
+
+                                                                        } catch (Exception e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onFailure(Call<JsonObject> call, Throwable error) {
+                                                                        sendNotification("Please turn on internet connection");
+                                                                    }
+                                                                });
+
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                        editor.putString("listPatientsAndLocations-WeTrack2", savedData);
+                                        editor.commit();
+                                    }
+
+                                }
+                            }
+                        }, 5000);
+
 
                     }
                 });
@@ -429,20 +470,24 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
+
+//            regionList.removeAll(toRemove);
+//            regionList.addAll(toAdd);
+
             for (Region aRegion : regionList) {
                 beaconManager.requestStateForRegion(aRegion);
             }
-            regionList.removeAll(toRemove);
-            regionList.addAll(toAdd);
-            try {
-                for (Region aRegion : toAdd) {
-                    beaconManager.startMonitoringBeaconsInRegion(aRegion);
-                }
-                for (Region aRegion : toRemove) {
-                    beaconManager.stopMonitoringBeaconsInRegion(aRegion);
-                }
-            } catch (RemoteException e) {
-            }
+//            try {
+//                for (Region aRegion : toRemove) {
+//                    beaconManager.stopMonitoringBeaconsInRegion(aRegion);
+//                }
+//
+//                for (Region aRegion : toAdd) {
+//                    beaconManager.startMonitoringBeaconsInRegion(aRegion);
+//                }
+//
+//            } catch (RemoteException e) {
+//            }
             toRemove.clear();
             toAdd.clear();
             mHandler.postDelayed(mStatusChecker, mInterval);
