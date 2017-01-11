@@ -245,7 +245,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 //        }
 
 
-//        Toast.makeText(getBaseContext(), "enter region beaconScanActivation", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "enter region beaconScanActivation", Toast.LENGTH_SHORT).show();
 //        Log.d("yolooooooo", "Got a didEnterRegion call: " + region.getUniqueId());
 //         This call to disable will make it so the activity below only gets launched the first time a beacon is seen (until the next time the app is launched)
 //         if you want the Activity to launch every single time beacons come into view, remove this call.

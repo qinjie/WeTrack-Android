@@ -97,7 +97,6 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
         super.onCreate();
 
 
-
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
 //        // By default the AndroidBeaconLibrary will only find AltBeacons.  If you wish to make it
 //        // find a different type of beacon, you must specify the byte layout for that beacon's
@@ -179,9 +178,10 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 //            }
 //        }
 
+//        mHandler = new Handler();
+//        startRepeatingTask();
         mHandler = new Handler();
         startRepeatingTask();
-
     }
 
 
@@ -193,6 +193,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 sendNotification(beaconManager.getMonitoredRegions().size() + "");
 
                 final Region region3 = new Region("AnyBeacon", null, null, null);
@@ -299,7 +300,6 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                                             }
                                         }
 
-
                                     }
                                 }
 
@@ -328,6 +328,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
                                 mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+
                                 Date aDate = new Date();
                                 SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 String dateObj = curFormatter.format(aDate);
@@ -340,7 +341,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 
                                     for (final Patients patient : patientList) {
                                         for (Beacons aBeacon : patient.getPatientBeacon()) {
-                                            if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid())) {
+                                            if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid()) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                                                 if (!checkInternetOn()) {
                                                     String firstBeaconIdentifiers = regionInfo[1] + aBeacon.getMajor() + aBeacon.getMinor();
@@ -365,7 +366,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                                                     public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                                         try {
 //                                                            sendNotification("monitered: " + beaconManager.getMonitoredRegions().size() + "; patient: " + patientList.size() + "; region: " + regionList.size());
-                                                                sendNotification(patient.getFullname()+" | "+beaconManager.getMonitoredRegions().size()+" | "+regionList.size());
+                                                            sendNotification(patient.getFullname() + " | " + beaconManager.getMonitoredRegions().size() + " | " + regionList.size());
                                                         } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }
@@ -445,6 +446,8 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                                     }
 
                                 }
+
+
                             }
                         }, 5000);
 
@@ -477,24 +480,23 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 //            regionList.removeAll(toRemove);
 //            regionList.addAll(toAdd);
 
-            if (regionList.size() == 0) {
-                if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                    for (Patients aPatient : patientList) {
-                        for (Beacons aBeacon : aPatient.getPatientBeacon()) {
-                            if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
-                                //if change region in this part, remember also change region below
-                                String uuid = aBeacon.getUuid();
-                                Identifier identifier = Identifier.parse(uuid);
-                                Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
-                                Region region = new Region(aPatient.getId() + ";" + identifier, identifier, identifier2, null);
-                                regionList.add(region);
-                            }
-                        }
-
-                    }
-                }
-            }
-
+//            if (regionList.size() == 0) {
+//                if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
+//                    for (Patients aPatient : patientList) {
+//                        for (Beacons aBeacon : aPatient.getPatientBeacon()) {
+//                            if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+//                                //if change region in this part, remember also change region below
+//                                String uuid = aBeacon.getUuid();
+//                                Identifier identifier = Identifier.parse(uuid);
+//                                Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
+//                                Region region = new Region(aPatient.getId() + ";" + identifier, identifier, identifier2, null);
+//                                regionList.add(region);
+//                            }
+//                        }
+//
+//                    }
+//                }
+//            }
             for (Region aRegion : regionList) {
                 beaconManager.requestStateForRegion(aRegion);
             }
@@ -511,7 +513,6 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 //            }
             toRemove.clear();
             toAdd.clear();
-
 
             mHandler.postDelayed(mStatusChecker, mInterval);
         }
