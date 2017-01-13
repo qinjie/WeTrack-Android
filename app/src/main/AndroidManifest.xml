@@ -28,15 +28,15 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".BeaconScanService"
-            android:enabled="true"
-            />
+        <!--<service-->
+            <!--android:name=".BeaconScanService"-->
+            <!--android:enabled="true"-->
+            <!--/>-->
 
-        <service
-            android:name=".BeaconMonitoringService"
-            android:enabled="true"
-            />
+        <!--<service-->
+            <!--android:name=".BeaconMonitoringService"-->
+            <!--android:enabled="false"-->
+            <!--/>-->
 
         <receiver
             android:name=".receiver.BeaconBroadcastReceiver"
