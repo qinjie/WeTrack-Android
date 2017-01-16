@@ -1,7 +1,6 @@
 package com.example.hoanglong.wetrack;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,7 +42,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     private void bindBeacon(final String beacon, final BeaconViewHolder viewHolder) {
-        viewHolder.tvBeacon.setText(beacon + " is "+ beaconsMap.get(beacon)+" meters away.");
+        viewHolder.tvBeacon.setText(beacon + " is " + beaconsMap.get(beacon) + " meters away.");
     }
 
 

@@ -4,20 +4,17 @@ import android.Manifest;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -29,7 +26,6 @@ import com.example.hoanglong.wetrack.api.BeaconAPI;
 import com.example.hoanglong.wetrack.api.BeaconLocation;
 import com.example.hoanglong.wetrack.api.RetrofitUtils;
 import com.example.hoanglong.wetrack.utils.Beacons;
-import com.example.hoanglong.wetrack.utils.PatientList;
 import com.example.hoanglong.wetrack.utils.Patients;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,11 +40,13 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -170,10 +168,15 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         }
 
 
-        sendNotification("enterzzz: " + region.getUniqueId() + " | " + mBeaconmanager.getMonitoredRegions().size());
+//        sendNotification("enter: " + region.getUniqueId() + " | " + mBeaconmanager.getMonitoredRegions().size());
 
 //        this.startService
 //                (new Intent(this, BeaconMonitoringService.class));
+        if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 
         Date aDate = new Date();
@@ -212,7 +215,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             @Override
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
-                                    sendNotification(patient.getFullname() + " | " + mBeaconmanager.getMonitoredRegions().size() + " | " + regionList.size());
+//                                    sendNotification(patient.getFullname() + " | " + mBeaconmanager.getMonitoredRegions().size() + " | " + regionList.size());
+                                    sendNotification("Sending info of " + patient.getFullname() + " successfully");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -228,67 +232,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             }
         } else {
             if (mLocation == null) {
-                sendNotification("Please turn on location servicezzzz");
+                sendNotification("Please turn on location service");
             }
         }
-
-
-//        if (checkInternetOn()) {
-//            SharedPreferences sharedPref3 = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-//            SharedPreferences.Editor editor = sharedPref3.edit();
-//            String savedData = sharedPref.getString("listPatientsAndLocations-WeTrack2", "");
-//
-//            if (!savedData.equals("") && patientList != null) {
-//                final String[] patientOffline = savedData.split(";");
-//                for (int i = 0; i < patientOffline.length; i++) {
-//                    String[] patientInfoOffline = patientOffline[i].split(",");
-//                    if (savedData.contains(patientOffline[i] + ";")) {
-//                        savedData = savedData.replace(patientOffline[i] + ";", "");
-//                    }
-//
-//                    if (patientList.size() > 0) {
-//                        for (final Patients patient : patientList) {
-//                            for (Beacons aBeacon : patient.getPatientBeacon()) {
-//                                if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
-//                                    String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
-//                                    if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
-//                                        BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), patient.getId(), Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
-//                                        Gson gson = new GsonBuilder()
-//                                                .setLenient()
-//                                                .create();
-//                                        JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
-//
-//                                        sendNotification(patient.getFullname() + " (offline): "+patientInfoOffline[3]);
-//
-//                                        Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
-//                                        call.enqueue(new Callback<JsonObject>() {
-//                                            @Override
-//                                            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-//                                                try {
-//
-//                                                } catch (Exception e) {
-//                                                    e.printStackTrace();
-//                                                }
-//                                            }
-//
-//                                            @Override
-//                                            public void onFailure(Call<JsonObject> call, Throwable error) {
-//                                                sendNotification("Please turn on internet connectionxxxx");
-//                                            }
-//                                        });
-//
-//                                    }
-//
-//                                }
-//                            }
-//
-//                        }
-//                    }
-//                }
-//                editor.putString("listPatientsAndLocations-WeTrack2", savedData);
-//                editor.commit();
-//            }
-//        }
 
     }
 
@@ -310,7 +256,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         .setSmallIcon(R.drawable.icon).setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addNextIntent(new Intent(this, MainActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+
+        stackBuilder.addNextIntent(intent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
                         0,
@@ -329,32 +277,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
-
-//            Identifier identifier = Identifier.parse(REGION_UUID2);
-//            Identifier identifierx = Identifier.parse("58949");
-//            Region region = new Region("green2", identifier, identifierx, null);
-//            try {
-//                mBeaconmanager.startMonitoringBeaconsInRegion(region);
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//            Identifier identifier2 = Identifier.parse(REGION_UUID2);
-//            Identifier identifiery = Identifier.parse("52689");
-//            Region region2 = new Region("blue2", identifier2, identifiery, null);
-//            try {
-//                mBeaconmanager.startMonitoringBeaconsInRegion(region2);
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
-//
-//            mHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    sendNotification(mBeaconmanager.getMonitoredRegions().size() + "");
-//                }
-//            }, 3000);
 
             beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
                 @Override
@@ -376,7 +298,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                 @Override
                 public void onFailure(Call<List<Patients>> call, Throwable t) {
-                    sendNotification("Please turn on internet connection 1");
+//                    sendNotification("Please turn on internet connection 1");
                     Gson gson = new Gson();
                     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                     String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
@@ -404,6 +326,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 }
             }
 
+
             regionBootstrap = new RegionBootstrap(tmp, regionList);
 
             mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getBaseContext());
@@ -415,33 +338,29 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             mBeaconmanager.setBackgroundBetweenScanPeriod(60000l);
             mBeaconmanager.setBackgroundScanPeriod(10000l);
 
-            sendNotification(regionList.size() + " | " + " | " + mBeaconmanager.getMonitoredRegions().size());
+//            LocationListener locationListener = new LocationListener() {
+//                public void onLocationChanged(Location location) {
+//                    mLocation = location;
+//                }
+//
+//                public void onStatusChanged(String provider, int status, Bundle extras) {
+//                    Log.i("locationListener", "changed" + provider);
+//                }
+//
+//                public void onProviderEnabled(String provider) {
+//                    Log.i("locationListener", "enabled" + provider);
+//                }
+//
+//                public void onProviderDisabled(String provider) {
+//                    Log.i("locationListener", "disabled" + provider);
+//                }
+//            };
 
-            LocationListener locationListener = new LocationListener() {
-                public void onLocationChanged(Location location) {
-                    mLocation = location;
-                }
-
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                    Log.i("locationListener", "changed" + provider);
-                }
-
-                public void onProviderEnabled(String provider) {
-                    Log.i("locationListener", "enabled" + provider);
-                }
-
-                public void onProviderDisabled(String provider) {
-                    Log.i("locationListener", "disabled" + provider);
-                }
-            };
-
-            if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
-            mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
+//            if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                return;
+//            }
+//
+//            mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             if (checkInternetOn()) {
                 SharedPreferences sharedPref3 = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -468,7 +387,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                                     .create();
                                             JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
 
-                                            sendNotification(patient.getFullname() + " (offline): "+patientInfoOffline[3]);
+                                            sendNotification(patient.getFullname() + " (offline): " + patientInfoOffline[3]);
 
                                             Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
                                             call.enqueue(new Callback<JsonObject>() {
@@ -483,7 +402,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                                                 @Override
                                                 public void onFailure(Call<JsonObject> call, Throwable error) {
-                                                    sendNotification("Please turn on internet connectionxxxx");
+//                                                    sendNotification("Please turn on internet connection");
                                                 }
                                             });
 

@@ -2,8 +2,6 @@ package com.example.hoanglong.wetrack.utils;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
  * Created by hoanglong on 10/08/2016.
  */

@@ -4,10 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
         android:name="com.example.hoanglong.wetrack.BeaconScanActivation"
@@ -28,35 +30,32 @@
             </intent-filter>
         </activity>
 
-        <!--<service-->
-            <!--android:name=".BeaconScanService"-->
-            <!--android:enabled="true"-->
-            <!--/>-->
+        <service
+        android:name=".BeaconScanService"
+        android:enabled="true"
+        />
 
         <!--<service-->
-            <!--android:name=".BeaconMonitoringService"-->
-            <!--android:enabled="false"-->
-            <!--/>-->
+        <!--android:name=".BeaconMonitoringService"-->
+        <!--android:enabled="false"-->
+        <!--/>-->
 
         <receiver
             android:name=".receiver.BeaconBroadcastReceiver"
             android:enabled="true"
             android:exported="true"
-           android:permission="">
+            android:permission="">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.FOUND" />
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
                 <action android:name="android.bluetooth.device.action.BOND_STATE_CHANGED" />
                 <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
                 <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+
             </intent-filter>
         </receiver>
-
-        <!--<service-->
-            <!--android:name=".TestService"-->
-            <!--android:enabled="true"-->
-            <!--android:launchMode="singleInstance" />-->
-
 
     </application>
 

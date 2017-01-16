@@ -1,6 +1,5 @@
 package com.example.hoanglong.wetrack.utils;
 
-import com.example.hoanglong.wetrack.utils.Beacons;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

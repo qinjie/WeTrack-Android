@@ -1,6 +1,5 @@
 package com.example.hoanglong.wetrack;
 
-import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,7 @@ import android.widget.TextView;
  * Created by hoanglong on 06-Dec-16.
  */
 
-public class HomeFragment  extends Fragment {
+public class HomeFragment extends Fragment {
     TextView tvTitle;
 
     public static HomeFragment newInstance(String title) {

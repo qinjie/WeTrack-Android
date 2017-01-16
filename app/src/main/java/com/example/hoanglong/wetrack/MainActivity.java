@@ -1,15 +1,11 @@
 package com.example.hoanglong.wetrack;
 
-import android.*;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -19,9 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -34,20 +27,10 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
-import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
 
 //import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
 //import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
@@ -94,8 +77,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
 
-//        Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
+//        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
 //        getBaseContext().startService(in);
+
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
 
 
@@ -217,9 +201,9 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
 
             case REQUEST_ENABLE_LOCATION: {
-                Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
-                getBaseContext().startService(in);
-                Toast.makeText(getBaseContext(),"hahaxxxx",Toast.LENGTH_SHORT).show();
+//                Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
+//                getBaseContext().startService(in);
+//                Toast.makeText(getBaseContext(),"hahaxxxx",Toast.LENGTH_SHORT).show();
             }
             break;
 
@@ -232,9 +216,9 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
 
             case REQUEST_ENABLE_LOCATION: {
-                Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
-                getBaseContext().startService(in);
-                Toast.makeText(getBaseContext(),"hahayyyyyyyy",Toast.LENGTH_SHORT).show();
+//                Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
+//                getBaseContext().startService(in);
+//                Toast.makeText(getBaseContext(),"hahayyyyyyyy",Toast.LENGTH_SHORT).show();
             }
             break;
 
@@ -302,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
 //                adapterDevice.notifyDataSetChanged();
+//                listBeacon.add("hj");
 //                adapterDevice.add(listBeacon, listBeaconAndRange);
 //                adapterDevice.setBeacons(listBeacon);
             }

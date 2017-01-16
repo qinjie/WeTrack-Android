@@ -1,6 +1,5 @@
 package com.example.hoanglong.wetrack;
 
-import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,17 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//import static com.example.hoanglong.wetrack.BluetoothReceiver.adapterDevice;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
+
+//import static com.example.hoanglong.wetrack.BluetoothReceiver.adapterDevice;
 //import static com.example.hoanglong.wetrack.MainActivity.listBeacon;
 
 /**

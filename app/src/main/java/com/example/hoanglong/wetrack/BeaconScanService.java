@@ -26,8 +26,8 @@ import android.widget.Toast;
 
 import com.example.hoanglong.wetrack.api.BeaconAPI;
 import com.example.hoanglong.wetrack.api.BeaconLocation;
-import com.example.hoanglong.wetrack.utils.Patients;
 import com.example.hoanglong.wetrack.api.RetrofitUtils;
+import com.example.hoanglong.wetrack.utils.Patients;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -41,8 +41,6 @@ import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.lang.reflect.Type;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -176,7 +174,6 @@ public class BeaconScanService extends Service implements BeaconConsumer {
 //        startService(it);
 //        BeaconScanActivation tmp = new BeaconScanActivation();
 //        tmp.();
-
 
 
         beaconManager.addRangeNotifier(new RangeNotifier() {
