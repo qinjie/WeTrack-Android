@@ -8,13 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -40,13 +39,11 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -167,6 +164,17 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             editor.apply();
         }
 
+        //TODO
+        for (Region allRegion : mBeaconmanager.getMonitoredRegions()) {
+            if (!regionList.contains(allRegion)) {
+                try {
+                    mBeaconmanager.stopMonitoringBeaconsInRegion(allRegion);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
 
 //        sendNotification("enter: " + region.getUniqueId() + " | " + mBeaconmanager.getMonitoredRegions().size());
 
@@ -178,11 +186,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
         mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-
         Date aDate = new Date();
         SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateObj = curFormatter.format(aDate);
-
 
         if (patientList != null && !patientList.equals("") && patientList.size() > 0 && mLocation != null) {
 
@@ -338,6 +344,18 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             mBeaconmanager.setBackgroundBetweenScanPeriod(60000l);
             mBeaconmanager.setBackgroundScanPeriod(10000l);
 
+//            //TODO
+//            for(Region allRegion : mBeaconmanager.getMonitoredRegions()){
+//                    if(!regionList.contains(allRegion)){
+//                        try {
+//                            mBeaconmanager.stopMonitoringBeaconsInRegion(allRegion);
+//                        } catch (RemoteException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//            }
+
 //            LocationListener locationListener = new LocationListener() {
 //                public void onLocationChanged(Location location) {
 //                    mLocation = location;
@@ -418,6 +436,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                     editor.commit();
                 }
             }
+
+//            sendNotification(mBeaconmanager.getMonitoredRegions().size() + " | " + regionList.size());
 
             mHandler.postDelayed(mStatusChecker, mInterval);
 
