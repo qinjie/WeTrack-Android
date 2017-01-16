@@ -8,5 +8,5 @@
     android:gravity="center_vertical"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     />
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->

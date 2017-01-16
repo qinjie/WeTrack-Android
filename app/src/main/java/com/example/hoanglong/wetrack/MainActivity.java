@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -12,10 +13,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -56,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.btnSearch)
     FloatingActionButton btnSearch;
 
-//    @BindView(R.id.btnSearch)
-//    Button btnSearch;
-
     FragmentPagerAdapter adapterViewPager;
 
     BluetoothAdapter bluetoothAdapter;
@@ -77,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.viewpager, HomeFragment.newInstance("Welcome to We Track")).commit();
+
+
 
         Intent in = new Intent(getBaseContext(), BeaconScanService.class);
         getBaseContext().startService(in);
@@ -132,16 +133,14 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (position == 0) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.viewpager, HomeFragment.newInstance("Home")).commit();
                 } else {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Beacon List")).commit();
-//                    findViewById(R.id.beaconListLayout).getLayoutParams().height =
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.viewpager, BeaconListFragment.newInstance("Beacon List")).commit();
                 }
             }
 

@@ -3,8 +3,10 @@ package com.example.hoanglong.wetrack;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +18,6 @@ import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
 
-//import static com.example.hoanglong.wetrack.BluetoothReceiver.adapterDevice;
-//import static com.example.hoanglong.wetrack.MainActivity.listBeacon;
-
 /**
  * Created by hoanglong on 06-Dec-16.
  */
@@ -27,6 +26,7 @@ public class BeaconListFragment extends Fragment {
 
     @BindView(R.id.rvBeacons)
     RecyclerView rvBeacons;
+
 
     public static BeaconListFragment newInstance(String title) {
         Bundle args = new Bundle();
@@ -80,15 +80,4 @@ public class BeaconListFragment extends Fragment {
         super.onPause();
     }
 
-//    public void setTextViewText(String value){
-//        tvBeacon.setText(value);
-//    }
-//
-//    public void hideTextview(){
-//        tvBeacon.setVisibility(View.INVISIBLE);
-//    }
-//
-//    public void showTextview(){
-//        tvBeacon.setVisibility(View.VISIBLE);
-//    }
 }

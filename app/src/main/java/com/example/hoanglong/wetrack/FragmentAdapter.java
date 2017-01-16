@@ -18,9 +18,9 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
-                return HomeFragment.newInstance(String.valueOf(position));
+                return HomeFragment.newInstance("");
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                return BeaconListFragment.newInstance(String.valueOf(position));
+                return BeaconListFragment.newInstance("");
         }
 
         return HomeFragment.newInstance(String.valueOf(position));
