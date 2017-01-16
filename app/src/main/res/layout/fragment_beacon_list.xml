@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/beaconListLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="600dp"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    >
     <!--<ListView-->
     <!--android:id="@+id/listView"-->
     <!--android:paddingTop="5dp"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"/>-->
     <!--<TextView-->
-        <!--android:id="@+id/tvBeaconNotification"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:fontFamily="sans-serif-medium"-->
-        <!--android:text="Please turn on bluetooth"-->
-        <!--android:textSize="20sp"-->
-        <!--android:textStyle="italic" />-->
+    <!--android:id="@+id/tvBeaconNotification"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:fontFamily="sans-serif-medium"-->
+    <!--android:text="Please turn on bluetooth"-->
+    <!--android:textSize="20sp"-->
+    <!--android:textStyle="italic" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvBeacons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/accent"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</RelativeLayout>
+
+</LinearLayout>

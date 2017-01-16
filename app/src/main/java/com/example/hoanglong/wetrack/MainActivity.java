@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -31,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
+import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 
 //import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
 //import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
@@ -77,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
 
-//        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
-//        getBaseContext().startService(in);
+        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
+        getBaseContext().startService(in);
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
 
@@ -129,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapterViewPager);
         tabLayout.setupWithViewPager(viewPager);
 
+
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -137,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Beacon List")).commit();
+//                    findViewById(R.id.beaconListLayout).getLayoutParams().height =
                 }
             }
 
@@ -286,8 +291,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
 //                adapterDevice.notifyDataSetChanged();
-//                listBeacon.add("hj");
-//                adapterDevice.add(listBeacon, listBeaconAndRange);
+                listBeacon.add("hj");
+                adapterDevice.add(listBeacon, listBeaconAndRange);
 //                adapterDevice.setBeacons(listBeacon);
             }
         });
