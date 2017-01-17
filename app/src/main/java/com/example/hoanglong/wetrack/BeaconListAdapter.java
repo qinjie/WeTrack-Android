@@ -6,6 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.hoanglong.wetrack.utils.Beacons;
+import com.example.hoanglong.wetrack.utils.Patients;
+
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -17,13 +21,19 @@ import butterknife.ButterKnife;
  */
 
 public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<String> beacons;
-    private LinkedHashMap<String, Double> beaconsMap = new LinkedHashMap<>();
+    //    private List<String> beacons;
+//    private LinkedHashMap<String, Double> beaconsMap = new LinkedHashMap<>();
+    private List<Patients> patientList = new ArrayList<>();
+    private List<Beacons> beaconList = new ArrayList<>();
 
+//    public BeaconListAdapter(List<String> beacons, LinkedHashMap<String, Double> beaconsMap) {
+//        this.beacons = beacons;
+//        this.beaconsMap = beaconsMap;
+//    }
 
-    public BeaconListAdapter(List<String> beacons, LinkedHashMap<String, Double> beaconsMap) {
-        this.beacons = beacons;
-        this.beaconsMap = beaconsMap;
+    public BeaconListAdapter(List<Patients> patientList, List<Beacons> beaconList) {
+        this.patientList = patientList;
+        this.beaconList = beaconList;
     }
 
     @Override
@@ -36,24 +46,29 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        String beacon = beacons.get(position);
-        bindBeacon(beacon, (BeaconViewHolder) holder);
+        Patients patient = patientList.get(position);
+        Beacons beacon = beaconList.get(position);
+        bindBeacon(patient, beacon, (BeaconViewHolder) holder);
     }
 
 
-    private void bindBeacon(final String beacon, final BeaconViewHolder viewHolder) {
-        viewHolder.tvBeacon.setText(beacon + " is " + beaconsMap.get(beacon) + " meters away.");
+    private void bindBeacon(final Patients patient, final Beacons beacon, final BeaconViewHolder viewHolder) {
+        viewHolder.tvPatient.setText(patient.getFullname());
+        viewHolder.tvBeacon.setText("Beacon [00"+beacon.getId() + "] is detected.");
     }
 
 
     @Override
     public int getItemCount() {
-        return beacons.size();
+        return beaconList.size();
     }
 
     public class BeaconViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvBeacon)
         public TextView tvBeacon;
+
+        @BindView(R.id.tvPatient)
+        public TextView tvPatient;
 
         public BeaconViewHolder(View itemView) {
             super(itemView);
@@ -61,9 +76,9 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public void add(List<String> beacon, LinkedHashMap<String, Double> beaconsMap) {
-        this.beacons = beacon;
-        this.beaconsMap = beaconsMap;
+    public void add(List<Patients> patientList, List<Beacons> beaconList) {
+        this.patientList = patientList;
+        this.beaconList = beaconList;
         notifyDataSetChanged();
     }
 

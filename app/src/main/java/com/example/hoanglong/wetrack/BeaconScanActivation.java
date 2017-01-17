@@ -61,7 +61,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     private BeaconManager mBeaconmanager;
 
     private BeaconAPI beaconAPI;
-    List<Patients> patientList = null;
+    List<Patients> patientList = new ArrayList<>();
+    public static List<Patients> detectedPatientList = new ArrayList<>();
+    public static List<Beacons> detectedBeaconList = new ArrayList<>();
 
     Location mLocation;
     LocationManager locationManager;
@@ -71,6 +73,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     ArrayList<Region> toAdd = new ArrayList();
     final BootstrapNotifier tmp = this;
     private Handler mHandler;
+    MainActivity forDisplay = new MainActivity();
 
     @Override
     public void onCreate() {
@@ -78,6 +81,15 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
         Toast.makeText(getBaseContext(), "onCreate beaconScanActivation", Toast.LENGTH_SHORT).show();
 
+
+        mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getBaseContext());
+        mBeaconmanager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+
+        mBeaconmanager.setBackgroundMode(true);
+        backgroundPowerSaver = new BackgroundPowerSaver(getBaseContext());
+
+        mBeaconmanager.setBackgroundBetweenScanPeriod(30000l);
+        mBeaconmanager.setBackgroundScanPeriod(20000l);
 
 //        Identifier identifier = Identifier.parse(REGION_UUID2);
 //        Identifier identifierx = Identifier.parse("58949");
@@ -196,7 +208,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             Log.i("Service monitoring", regionInfo[0] + " | " + regionInfo[1]);
 
             for (final Patients patient : patientList) {
-                for (Beacons aBeacon : patient.getPatientBeacon()) {
+                for (final Beacons aBeacon : patient.getPatientBeacon()) {
                     if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                         if (!checkInternetOn()) {
@@ -221,7 +233,25 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             @Override
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
-//                                    sendNotification(patient.getFullname() + " | " + mBeaconmanager.getMonitoredRegions().size() + " | " + regionList.size());
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
+                                    forDisplay.logToDisplay();
                                     sendNotification("Sending info of " + patient.getFullname() + " successfully");
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -249,8 +279,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
         sendNotification("exit: " + region.getUniqueId() + " | " + mBeaconmanager.getMonitoredRegions().size());
 
-//        this.stopService
-//                (new Intent(this, BeaconMonitoringService.class));
     }
 
 
@@ -279,7 +307,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     int x = 0;
 
 
-    private int mInterval = 20000;
+    private int mInterval = 10000;
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
@@ -335,14 +363,14 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             regionBootstrap = new RegionBootstrap(tmp, regionList);
 
-            mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getBaseContext());
-            mBeaconmanager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
-
-            mBeaconmanager.setBackgroundMode(true);
-            backgroundPowerSaver = new BackgroundPowerSaver(getBaseContext());
-
-            mBeaconmanager.setBackgroundBetweenScanPeriod(60000l);
-            mBeaconmanager.setBackgroundScanPeriod(10000l);
+//            mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getBaseContext());
+//            mBeaconmanager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+//
+//            mBeaconmanager.setBackgroundMode(true);
+//            backgroundPowerSaver = new BackgroundPowerSaver(getBaseContext());
+//
+//            mBeaconmanager.setBackgroundBetweenScanPeriod(60000l);
+//            mBeaconmanager.setBackgroundScanPeriod(10000l);
 
 //            //TODO
 //            for(Region allRegion : mBeaconmanager.getMonitoredRegions()){

@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tvBeacon"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:gravity="center_vertical"
-    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    />
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    android:layout_margin="6dp"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/ivAvatar"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvPatient"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="hihihihihihi" />
+
+        <TextView
+            android:id="@+id/tvBeacon"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:gravity="top"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:text="hahahahahaha" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/thumbnail" />
+</RelativeLayout>

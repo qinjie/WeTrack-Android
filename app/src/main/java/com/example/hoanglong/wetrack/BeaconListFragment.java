@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedBeaconList;
+import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedPatientList;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
 import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
@@ -42,9 +44,8 @@ public class BeaconListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_beacon_list, container, false);
         ButterKnife.bind(this, rootView);
         rvBeacons.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
-        adapterDevice = new BeaconListAdapter(listBeacon, listBeaconAndRange);
+        adapterDevice = new BeaconListAdapter(detectedPatientList,detectedBeaconList );
         rvBeacons.setAdapter(adapterDevice);
-
 
         return rootView;
     }
