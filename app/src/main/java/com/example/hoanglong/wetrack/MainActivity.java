@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,10 +12,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -33,13 +30,11 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
+import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedBeaconList;
+import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedPatientList;
 
 //import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
 //import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
-import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedBeaconList;
-import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedPatientList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -77,52 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track\nfgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf\n" +
-                "fgdf")).commit();
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
 
 //        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
 //        getBaseContext().startService(in);
@@ -201,6 +152,26 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.getTabAt(i).setText(null);
         }
 
+
+        Intent detailIntent = getIntent();
+        if (detailIntent != null) {
+            Bundle b = detailIntent.getExtras();
+            if (b != null) {
+                boolean tmp = b.getBoolean("isFromDetailActivity", false);
+                if (tmp) {
+                    TabLayout.Tab tab = tabLayout.getTabAt(1);
+                    tab.select();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("hihi")).commit();
+                    detailIntent.putExtra("isFromDetailActivity",false);
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+                }
+            }
+        }
+
+
+
+
         IntentFilter intentFilter = new IntentFilter();
 
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -245,18 +216,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        switch (requestCode) {
-
-            case REQUEST_ENABLE_LOCATION: {
-//                Intent in = new Intent(getBaseContext(), BeaconMonitoringService.class);
-//                getBaseContext().startService(in);
-//                Toast.makeText(getBaseContext(),"hahaxxxx",Toast.LENGTH_SHORT).show();
-            }
-            break;
-
-        }
         super.onActivityResult(requestCode, resultCode, data);
+
+//        switch (requestCode) {
+//
+//            case 101: {
+//                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Beacon List")).commit();
+//
+//            }
+//            break;
+//
+//        }
     }
 
     @Override
@@ -335,11 +305,19 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 //                adapterDevice.notifyDataSetChanged();
 //                listBeacon.add("hj");
-                adapterDevice.add(detectedPatientList,detectedBeaconList);
+                adapterDevice.add(detectedPatientList, detectedBeaconList);
 //                adapterDevice.setBeacons(listBeacon);
             }
         });
     }
 
-
+//
+//    @Subscribe
+//    public void onEvent(BeaconListAdapter.OpenEvent event) {
+//        Intent intent = new Intent(this,PatientDetailActivity.class);
+//        intent.putExtra("user", event.patient);
+//        intent.putExtra("position", event.position);
+//        startActivityForResult(intent, 69);
+////        Toast.makeText(this, "ahihi", Toast.LENGTH_SHORT).show();
+//    }
 }

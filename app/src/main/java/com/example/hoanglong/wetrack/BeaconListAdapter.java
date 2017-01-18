@@ -1,14 +1,25 @@
 package com.example.hoanglong.wetrack;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hoanglong.wetrack.utils.Beacons;
 import com.example.hoanglong.wetrack.utils.Patients;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -55,8 +66,24 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private void bindBeacon(final Patients patient, final Beacons beacon, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
         viewHolder.tvBeacon.setText("Beacon [00"+beacon.getId() + "] is detected.");
+        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/"+patient.getAvatar(), viewHolder.ivAvatar).execute();
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new OpenEvent(patientList.indexOf(patient), patient));
+            }
+        });
     }
 
+    public class OpenEvent {
+        public final int position;
+        public final Patients patient;
+
+        public OpenEvent(int position, Patients patient) {
+            this.position = position;
+            this.patient = patient;
+        }
+    }
 
     @Override
     public int getItemCount() {
@@ -70,6 +97,9 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.tvPatient)
         public TextView tvPatient;
 
+        @BindView(R.id.ivAvatar)
+        public ImageView ivAvatar;
+
         public BeaconViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -81,6 +111,61 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.beaconList = beaconList;
         notifyDataSetChanged();
     }
+
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            Log.e("src",src);
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            Log.e("Bitmap","returned");
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("Exception",e.getMessage());
+            return null;
+        }
+    }
+
+
+//    public class ImageLoadTask2 extends AsyncTask<Void, Void, Bitmap> {
+//
+//        private String url;
+//        private ImageView imageView;
+//
+//        public ImageLoadTask2(String url, ImageView imageView) {
+//            this.url = url;
+//            this.imageView = imageView;
+//        }
+//
+//        @Override
+//        protected Bitmap doInBackground(Void... params) {
+//            try {
+//                URL urlConnection = new URL(url);
+//                HttpURLConnection connection = (HttpURLConnection) urlConnection
+//                        .openConnection();
+//                connection.setDoInput(true);
+//                connection.connect();
+//                InputStream input = connection.getInputStream();
+//                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+//                return myBitmap;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap result) {
+//            super.onPostExecute(result);
+//            imageView.setImageBitmap(result);
+//        }
+//
+//    }
 
 
 }

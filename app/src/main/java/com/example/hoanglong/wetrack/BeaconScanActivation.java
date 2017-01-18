@@ -209,10 +209,12 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             String[] regionInfo = region.getUniqueId().split(";");
             Log.i("Service monitoring", regionInfo[0] + " | " + regionInfo[1]);
+            Log.i("Service monitoringzzz", region.getId1()+"");
+            Log.i("Service monitoringyyy", region.getId2()+"");
 
             for (final Patients patient : patientList) {
                 for (final Beacons aBeacon : patient.getPatientBeacon()) {
-                    if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
+                    if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                         if (!checkInternetOn()) {
                             String firstBeaconIdentifiers = regionInfo[1] + aBeacon.getMajor() + aBeacon.getMinor();
@@ -237,22 +239,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
                                     if (adapterDevice != null) {
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
                                         detectedPatientList.add(patient);
                                         detectedBeaconList.add(aBeacon);
                                         forDisplay.logToDisplay();
@@ -337,7 +323,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                 @Override
                 public void onFailure(Call<List<Patients>> call, Throwable t) {
-                    sendNotification("Please turn on internet connection 1");
+//                    sendNotification("Please turn on internet connection 1");
 //                    sendNotification(t.getMessage());
                     t.printStackTrace();
                     Gson gson = new Gson();
