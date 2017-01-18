@@ -170,8 +170,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
         IntentFilter intentFilter = new IntentFilter();
 
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
