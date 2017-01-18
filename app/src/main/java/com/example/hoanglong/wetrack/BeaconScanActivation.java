@@ -50,6 +50,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
+
 /**
  * Created by hoanglong on 21-Dec-16.
  */
@@ -129,6 +131,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             @Override
             public void onFailure(Call<List<Patients>> call, Throwable t) {
                 sendNotification("Please turn on internet connection 1");
+//                sendNotification(t.getMessage());
                 Gson gson = new Gson();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
@@ -233,25 +236,27 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             @Override
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    forDisplay.logToDisplay();
+                                    if (adapterDevice != null) {
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        forDisplay.logToDisplay();
+                                    }
                                     sendNotification("Sending info of " + patient.getFullname() + " successfully");
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -332,7 +337,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                 @Override
                 public void onFailure(Call<List<Patients>> call, Throwable t) {
-//                    sendNotification("Please turn on internet connection 1");
+                    sendNotification("Please turn on internet connection 1");
+//                    sendNotification(t.getMessage());
+                    t.printStackTrace();
                     Gson gson = new Gson();
                     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                     String jsonPatients = sharedPref.getString("patientList-WeTrack", "");

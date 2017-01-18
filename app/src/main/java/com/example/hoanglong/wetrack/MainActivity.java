@@ -77,7 +77,51 @@ public class MainActivity extends AppCompatActivity {
 
 
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track\nfgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf\n" +
+                "fgdf")).commit();
 
 
 //        Intent in = new Intent(getBaseContext(), BeaconScanService.class);

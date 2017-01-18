@@ -1,37 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--android:id="@+id/beaconListLayout"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="6000dp"-->
-<!--android:background="@color/colorPrimary"-->
-<!--android:orientation="vertical"-->
-<!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-<!--&gt;-->
-<!--<ListView-->
-<!--android:id="@+id/listView"-->
-<!--android:paddingTop="5dp"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="match_parent"/>-->
-<!--<TextView-->
-<!--android:id="@+id/tvBeaconNotification"-->
-<!--android:layout_width="wrap_content"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:layout_centerInParent="true"-->
-<!--android:fontFamily="sans-serif-medium"-->
-<!--android:text="Please turn on bluetooth"-->
-<!--android:textSize="20sp"-->
-<!--android:textStyle="italic" />-->
-
-<android.support.v7.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rvBeacons"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clipToPadding="false"
-    android:paddingBottom="50dp"/>
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+    android:paddingBottom="50dp"
+   />
 
-
-    <!--</LinearLayout>-->
