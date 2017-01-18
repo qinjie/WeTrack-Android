@@ -24,10 +24,10 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.hoanglong.wetrack.api.BeaconAPI;
-import com.example.hoanglong.wetrack.api.BeaconLocation;
+import com.example.hoanglong.wetrack.api.ServerApi;
+import com.example.hoanglong.wetrack.model.BeaconLocation;
 import com.example.hoanglong.wetrack.api.RetrofitUtils;
-import com.example.hoanglong.wetrack.utils.Patients;
+import com.example.hoanglong.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -62,8 +62,8 @@ public class BeaconScanService extends Service implements BeaconConsumer {
     public static List<String> listBeacon = new ArrayList<String>();
     public static LinkedHashMap<String, Double> listBeaconAndRange = new LinkedHashMap<>();
 
-    private BeaconAPI beaconAPI;
-    List<Patients> patientList = null;
+    private ServerApi beaconAPI;
+    List<Resident> patientList = null;
 
     Location mLocation;
     LocationManager locationManager;
@@ -127,7 +127,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                 setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
         beaconManager.bind(this);
 
-        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+        beaconAPI = RetrofitUtils.get().create(ServerApi.class);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -189,10 +189,10 @@ public class BeaconScanService extends Service implements BeaconConsumer {
 
                     String line = firstBeacon.getId1() + "," + firstBeacon.getId2() + "," + firstBeacon.getId3() + "," + firstBeacon.getBluetoothAddress();
 
-                    beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
+                    beaconAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
 
                         @Override
-                        public void onResponse(Call<List<Patients>> call, Response<List<Patients>> response) {
+                        public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                             try {
                                 patientList = response.body();
 
@@ -209,12 +209,12 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                         }
 
                         @Override
-                        public void onFailure(Call<List<Patients>> call, Throwable t) {
+                        public void onFailure(Call<List<Resident>> call, Throwable t) {
                             sendNotification("Please turn on internet connection");
                             Gson gson = new Gson();
                             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                             String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                            Type type = new TypeToken<List<Patients>>() {
+                            Type type = new TypeToken<List<Resident>>() {
                             }.getType();
                             patientList = gson.fromJson(jsonPatients, type);
                         }
@@ -253,7 +253,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                         }
 
                         if (patientList != null && patientList.size() > 0) {
-                            for (final Patients patients : patientList) {
+                            for (final Resident patients : patientList) {
                                 for (Beacon firstBeacon1 : beacons) {
                                     String nearbyBeaconIdentifiers = firstBeacon1.getId1().toString() + firstBeacon1.getId2().toString() + firstBeacon1.getId3().toString();
                                     try {
@@ -270,7 +270,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
 
                                                 sendNotification(patients.getFullname());
 
-                                                beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+                                                beaconAPI = RetrofitUtils.get().create(ServerApi.class);
                                                 Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
                                                 call.enqueue(new Callback<JsonObject>() {
                                                     @Override
@@ -317,7 +317,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                             }
 
                             if (patientList.size() > 0) {
-                                for (final Patients patient : patientList) {
+                                for (final Resident patient : patientList) {
                                     if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
                                         String patientBeaconIdentifiers = patient.getPatientBeacon().get(0).getUuid() + patient.getPatientBeacon().get(0).getMajor() + patient.getPatientBeacon().get(0).getMinor();
                                         if (patientInfo[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1) {
@@ -330,7 +330,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                                             sendNotification(patient.getFullname() + "offline");
 
 
-//                                        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+//                                        beaconAPI = RetrofitUtils.get().create(ServerApi.class);
                                             Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
                                             call.enqueue(new Callback<JsonObject>() {
                                                 @Override

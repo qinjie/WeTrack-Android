@@ -21,11 +21,11 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.hoanglong.wetrack.api.BeaconAPI;
-import com.example.hoanglong.wetrack.api.BeaconLocation;
+import com.example.hoanglong.wetrack.api.ServerApi;
+import com.example.hoanglong.wetrack.model.BeaconLocation;
 import com.example.hoanglong.wetrack.api.RetrofitUtils;
-import com.example.hoanglong.wetrack.utils.Beacons;
-import com.example.hoanglong.wetrack.utils.Patients;
+import com.example.hoanglong.wetrack.model.BeaconInfo;
+import com.example.hoanglong.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -62,10 +62,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     private BackgroundPowerSaver backgroundPowerSaver;
     private BeaconManager mBeaconmanager;
 
-    private BeaconAPI beaconAPI;
-    List<Patients> patientList = new ArrayList<>();
-    public static List<Patients> detectedPatientList = new ArrayList<>();
-    public static List<Beacons> detectedBeaconList = new ArrayList<>();
+    private ServerApi beaconAPI;
+    List<Resident> patientList = new ArrayList<>();
+    public static List<Resident> detectedPatientList = new ArrayList<>();
+    public static List<BeaconInfo> detectedBeaconList = new ArrayList<>();
 
     Location mLocation;
     LocationManager locationManager;
@@ -109,10 +109,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
-        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
-        beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
+        beaconAPI = RetrofitUtils.get().create(ServerApi.class);
+        beaconAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
             @Override
-            public void onResponse(Call<List<Patients>> call, Response<List<Patients>> response) {
+            public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                 try {
                     patientList = response.body();
 
@@ -129,13 +129,13 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             }
 
             @Override
-            public void onFailure(Call<List<Patients>> call, Throwable t) {
+            public void onFailure(Call<List<Resident>> call, Throwable t) {
                 sendNotification("Please turn on internet connection 1");
 //                sendNotification(t.getMessage());
                 Gson gson = new Gson();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                Type type = new TypeToken<List<Patients>>() {
+                Type type = new TypeToken<List<Resident>>() {
                 }.getType();
                 patientList = gson.fromJson(jsonPatients, type);
             }
@@ -210,8 +210,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             String[] regionInfo = region.getUniqueId().split(";");
             Log.i("Service monitoring", regionInfo[0] + " | " + regionInfo[1]);
 
-            for (final Patients patient : patientList) {
-                for (final Beacons aBeacon : patient.getPatientBeacon()) {
+            for (final Resident patient : patientList) {
+                for (final BeaconInfo aBeacon : patient.getPatientBeacon()) {
                     if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                         if (!checkInternetOn()) {
@@ -317,9 +317,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         @Override
         public void run() {
 
-            beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
+            beaconAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
                 @Override
-                public void onResponse(Call<List<Patients>> call, Response<List<Patients>> response) {
+                public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                     try {
                         patientList = response.body();
 
@@ -336,22 +336,22 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 }
 
                 @Override
-                public void onFailure(Call<List<Patients>> call, Throwable t) {
+                public void onFailure(Call<List<Resident>> call, Throwable t) {
                     sendNotification("Please turn on internet connection 1");
 //                    sendNotification(t.getMessage());
                     t.printStackTrace();
                     Gson gson = new Gson();
                     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                     String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                    Type type = new TypeToken<List<Patients>>() {
+                    Type type = new TypeToken<List<Resident>>() {
                     }.getType();
                     patientList = gson.fromJson(jsonPatients, type);
                 }
             });
 
             if (patientList != null && !patientList.equals("") && patientList.size() > 0 && tmp != null) {
-                for (Patients aPatient : patientList) {
-                    for (Beacons aBeacon : aPatient.getPatientBeacon()) {
+                for (Resident aPatient : patientList) {
+                    for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
                         if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
                             //if change region in this part, remember also change region below
                             String uuid = aBeacon.getUuid();
@@ -429,8 +429,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         }
 
                         if (patientList.size() > 0) {
-                            for (final Patients patient : patientList) {
-                                for (Beacons aBeacon : patient.getPatientBeacon()) {
+                            for (final Resident patient : patientList) {
+                                for (BeaconInfo aBeacon : patient.getPatientBeacon()) {
                                     if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
                                         String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
                                         if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {

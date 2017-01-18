@@ -25,11 +25,11 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.hoanglong.wetrack.api.BeaconAPI;
-import com.example.hoanglong.wetrack.api.BeaconLocation;
+import com.example.hoanglong.wetrack.api.ServerApi;
+import com.example.hoanglong.wetrack.model.BeaconLocation;
 import com.example.hoanglong.wetrack.api.RetrofitUtils;
-import com.example.hoanglong.wetrack.utils.Beacons;
-import com.example.hoanglong.wetrack.utils.Patients;
+import com.example.hoanglong.wetrack.model.BeaconInfo;
+import com.example.hoanglong.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -61,8 +61,8 @@ import retrofit2.Response;
 public class BeaconMonitoringService extends Service implements BeaconConsumer {
     public static BeaconManager beaconManager;
 
-    private BeaconAPI beaconAPI;
-    List<Patients> patientList = null;
+    private ServerApi beaconAPI;
+    List<Resident> patientList = null;
 
     Location mLocation;
     LocationManager locationManager;
@@ -109,10 +109,10 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 
         Toast.makeText(getBaseContext(), "monitoring create", Toast.LENGTH_SHORT).show();
 
-        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
-        beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
+        beaconAPI = RetrofitUtils.get().create(ServerApi.class);
+        beaconAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
             @Override
-            public void onResponse(Call<List<Patients>> call, Response<List<Patients>> response) {
+            public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                 try {
                     patientList = response.body();
 
@@ -129,12 +129,12 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
             }
 
             @Override
-            public void onFailure(Call<List<Patients>> call, Throwable t) {
+            public void onFailure(Call<List<Resident>> call, Throwable t) {
                 sendNotification("Please turn on internet connection 1");
                 Gson gson = new Gson();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                Type type = new TypeToken<List<Patients>>() {
+                Type type = new TypeToken<List<Resident>>() {
                 }.getType();
                 patientList = gson.fromJson(jsonPatients, type);
             }
@@ -166,8 +166,8 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                 }
 
                 if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                    for (Patients aPatient : patientList) {
-                        for (Beacons aBeacon : aPatient.getPatientBeacon()) {
+                    for (Resident aPatient : patientList) {
+                        for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
                             if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
                                 //if change region in this part, remember also change region below
                                 String uuid = aBeacon.getUuid();
@@ -194,11 +194,11 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 
                     @Override
                     public void didDetermineStateForRegion(final int status, final Region region) {
-//                        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+//                        beaconAPI = RetrofitUtils.get().create(ServerApi.class);
 
-                        beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
+                        beaconAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
                             @Override
-                            public void onResponse(Call<List<Patients>> call, Response<List<Patients>> response) {
+                            public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                                 try {
                                     patientList = response.body();
 
@@ -215,12 +215,12 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                             }
 
                             @Override
-                            public void onFailure(Call<List<Patients>> call, Throwable t) {
+                            public void onFailure(Call<List<Resident>> call, Throwable t) {
                                 sendNotification("Please turn on internet connection 2");
                                 Gson gson = new Gson();
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                                 String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                                Type type = new TypeToken<List<Patients>>() {
+                                Type type = new TypeToken<List<Resident>>() {
                                 }.getType();
                                 patientList = gson.fromJson(jsonPatients, type);
                             }
@@ -232,8 +232,8 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 //                            public void run() {
 
                         if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                            for (Patients aPatient : patientList) {
-                                for (Beacons aBeacon : aPatient.getPatientBeacon()) {
+                            for (Resident aPatient : patientList) {
+                                for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
                                     if (aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
                                         String uuid = aBeacon.getUuid();
                                         Identifier identifier = Identifier.parse(uuid);
@@ -301,8 +301,8 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                             String[] regionInfo = region.getUniqueId().split(";");
                             Log.i("Service monitoring", regionInfo[0] + " | " + regionInfo[1]);
 
-                            for (final Patients patient : patientList) {
-                                for (Beacons aBeacon : patient.getPatientBeacon()) {
+                            for (final Resident patient : patientList) {
+                                for (BeaconInfo aBeacon : patient.getPatientBeacon()) {
                                     if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid()) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                                         if (!checkInternetOn()) {
@@ -363,8 +363,8 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
                                     }
 
                                     if (patientList.size() > 0) {
-                                        for (final Patients patient : patientList) {
-                                            for (Beacons aBeacon : patient.getPatientBeacon()) {
+                                        for (final Resident patient : patientList) {
+                                            for (BeaconInfo aBeacon : patient.getPatientBeacon()) {
                                                 if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
                                                     String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
                                                     if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
@@ -376,7 +376,7 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 
                                                         sendNotification(patient.getFullname() + "offline");
 
-//                                                        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+//                                                        beaconAPI = RetrofitUtils.get().create(ServerApi.class);
 
                                                         Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
                                                         call.enqueue(new Callback<JsonObject>() {
@@ -443,8 +443,8 @@ public class BeaconMonitoringService extends Service implements BeaconConsumer {
 
 //            if (regionList.size() == 0) {
 //                if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-//                    for (Patients aPatient : patientList) {
-//                        for (Beacons aBeacon : aPatient.getPatientBeacon()) {
+//                    for (Resident aPatient : patientList) {
+//                        for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
 //                            if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
 //                                //if change region in this part, remember also change region below
 //                                String uuid = aBeacon.getUuid();
