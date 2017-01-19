@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,7 +28,6 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
@@ -37,6 +37,7 @@ import butterknife.ButterKnife;
 
 import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedBeaconList;
 import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedPatientList;
+import static com.example.hoanglong.wetrack.BeaconScanActivation.missingPatientList;
 
 //import static com.example.hoanglong.wetrack.BeaconScanService.beaconManager;
 //import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_LOCATION = 1994;
     //    public static ArrayAdapter<String> adapterDevice;
     public static BeaconListAdapter adapterDevice;
+
+    public static HomeAdapter homeAdapter;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Welcome to We Track")).commit();
 
 //        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
 //        getBaseContext().startService(in);
@@ -87,6 +89,16 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int height = displaymetrics.heightPixels;
 
+//        final TypedArray styledAttributes = getBaseContext().getTheme().obtainStyledAttributes(
+//                new int[]{android.R.attr.actionBarSize});
+//        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+//        styledAttributes.recycle();
+
+        //Get height of actionbar
+        TypedValue tv = new TypedValue();
+        getBaseContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
+        int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
+
         // Gets layout
         CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
         // Gets the layout params that will allow you to resize the layout
@@ -94,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         // Changes the height and width to the specified *pixels*
         Resources r = getResources();
 //        int px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
-        params.height = height- 145;
+        params.height = height - (actionBarHeight*4/3 + actionBarHeight*2/19) ;
         layout.setLayoutParams(params);
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
@@ -103,10 +115,6 @@ public class MainActivity extends AppCompatActivity {
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.singapore)
-                .addProfiles(
-                        new ProfileDrawerItem().withName("Long Pham")
-                                .withEmail("longpham@gmail.com").withIcon(getResources().getDrawable(R.drawable.my_avt))
-                )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
@@ -116,10 +124,10 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(0).withName("Homepage").withIcon(R.drawable.ic_home_black);
-        PrimaryDrawerItem info = new PrimaryDrawerItem().withIdentifier(1).withName("Change email and password").withIcon(R.drawable.ic_account);
-        PrimaryDrawerItem myBeaconList = new PrimaryDrawerItem().withIdentifier(2).withName("My beacon list").withIcon(R.drawable.ic_list);
+        PrimaryDrawerItem info = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
+        PrimaryDrawerItem myBeaconList = new PrimaryDrawerItem().withIdentifier(2).withName("About").withIcon(R.drawable.ic_info);
         SecondaryDrawerItem setting = new SecondaryDrawerItem().withIdentifier(3).withName("Setting").withIcon(R.drawable.ic_settings);
-        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Logout").withIcon(R.drawable.ic_power);
+        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Exit").withIcon(R.drawable.ic_power);
 
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
@@ -183,11 +191,12 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("hihi")).commit();
                     detailIntent.putExtra("isFromDetailActivity", false);
                 } else {
+                    TabLayout.Tab tab = tabLayout.getTabAt(0);
+                    tab.select();
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
                 }
             }
         }
-
 
         IntentFilter intentFilter = new IntentFilter();
 
@@ -218,9 +227,9 @@ public class MainActivity extends AppCompatActivity {
             btnSearch.setImageResource(R.drawable.ic_pause);
         }
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
 
     }
-
 
     private void initBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -275,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
                     case BluetoothAdapter.STATE_OFF:
                         btnSearch.setImageResource(R.drawable.ic_play_arrow);
                         adapterDevice.notifyDataSetChanged();
+                        homeAdapter.notifyDataSetChanged();
                         break;
 
                     case BluetoothAdapter.STATE_ON:
@@ -323,6 +333,19 @@ public class MainActivity extends AppCompatActivity {
 //                adapterDevice.notifyDataSetChanged();
 //                listBeacon.add("hj");
                 adapterDevice.add(detectedPatientList, detectedBeaconList);
+//                homeAdapter.add(missingPatientList);
+
+//                adapterDevice.setBeacons(listBeacon);
+            }
+        });
+    }
+
+    public void logToDisplay2() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+//                adapterDevice.notifyDataSetChanged();
+//                listBeacon.add("hj");
+                homeAdapter.add(missingPatientList);
 //                adapterDevice.setBeacons(listBeacon);
             }
         });

@@ -137,4 +137,15 @@ public class Resident implements Parcelable {
         dest.writeString(created);
 
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        Resident other = (Resident) obj;
+
+        return fullname.equals(other.fullname) && id == other.id && nric.equals(other.nric);
+    }
 }

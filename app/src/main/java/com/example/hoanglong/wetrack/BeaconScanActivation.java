@@ -63,7 +63,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     private BeaconManager mBeaconmanager;
 
     private ServerAPI serverAPI;
-    List<Resident> patientList = new ArrayList<>();
+    public static List<Resident> patientList = new ArrayList<>();
+    public static List<Resident> missingPatientList = new ArrayList<>();
     public static List<Resident> detectedPatientList = new ArrayList<>();
     public static List<BeaconInfo> detectedBeaconList = new ArrayList<>();
 
@@ -426,7 +427,13 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 for (Resident aPatient : patientList) {
                     for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
                         if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
-                            //if change region in this part, remember also change region below
+
+//                            if (!missingPatientList.contains(aPatient)) {
+//                                missingPatientList.add(aPatient);
+//                                forDisplay.logToDisplay2();
+//                            }
+
+
                             String uuid = aBeacon.getUuid();
                             Identifier identifier = Identifier.parse(uuid);
                             Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
@@ -434,12 +441,16 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             if (!regionList.contains(region)) {
                                 regionList.add(region);
                             }
+                        }else{
+//                            if (missingPatientList.contains(aPatient)) {
+//                                missingPatientList.remove(aPatient);
+//                                forDisplay.logToDisplay2();
+//                            }
                         }
                     }
 
                 }
             }
-
 
             regionBootstrap = new RegionBootstrap(tmp, regionList);
 

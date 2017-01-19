@@ -2,9 +2,11 @@ package com.example.hoanglong.wetrack;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +35,10 @@ public class BeaconListFragment extends Fragment {
     @BindView(R.id.rvBeacons)
     RecyclerView rvBeacons;
 
+    private Handler handler;
+    @BindView(R.id.srlUsers)
+    SwipeRefreshLayout srlUser;
+
 
     public static BeaconListFragment newInstance(String title) {
         Bundle args = new Bundle();
@@ -50,6 +56,24 @@ public class BeaconListFragment extends Fragment {
         rvBeacons.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         adapterDevice = new BeaconListAdapter(detectedPatientList,detectedBeaconList );
         rvBeacons.setAdapter(adapterDevice);
+
+
+        handler = new Handler();
+        srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapterDevice = new BeaconListAdapter(detectedPatientList,detectedBeaconList );
+                        rvBeacons.setAdapter(adapterDevice);
+                        srlUser.setRefreshing(false);
+                    }
+                }, 1000);
+
+            }
+        });
 
         return rootView;
     }
