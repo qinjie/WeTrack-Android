@@ -1,4 +1,4 @@
-package com.example.hoanglong.wetrack.utils;
+package com.example.hoanglong.wetrack.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,7 +11,7 @@ import java.util.List;
  * Created by hoanglong on 14-Dec-16.
  */
 
-public class Patients implements Parcelable {
+public class Resident implements Parcelable {
     @SerializedName("id")
     private int id;
 
@@ -25,7 +25,7 @@ public class Patients implements Parcelable {
     private int status;
 
     @SerializedName("beacons")
-    private List<Beacons> patientBeacon;
+    private List<BeaconInfo> patientBeacon;
 
     @SerializedName("thumbnail_path")
     private String avatar;
@@ -68,11 +68,11 @@ public class Patients implements Parcelable {
         this.status = status;
     }
 
-    public List<Beacons> getPatientBeacon() {
+    public List<BeaconInfo> getPatientBeacon() {
         return patientBeacon;
     }
 
-    public void setPatientBeacon(List<Beacons> patientBeacon) {
+    public void setPatientBeacon(List<BeaconInfo> patientBeacon) {
         this.patientBeacon = patientBeacon;
     }
 
@@ -100,7 +100,7 @@ public class Patients implements Parcelable {
         this.created = created;
     }
 
-    protected Patients(Parcel in) {
+    protected Resident(Parcel in) {
         fullname = in.readString();
         avatar = in.readString();
         status = in.readInt();
@@ -110,15 +110,15 @@ public class Patients implements Parcelable {
     }
 
 
-    public static final Creator<Patients> CREATOR = new Creator<Patients>() {
+    public static final Creator<Resident> CREATOR = new Creator<Resident>() {
         @Override
-        public Patients createFromParcel(Parcel in)  {
-            return new Patients(in);
+        public Resident createFromParcel(Parcel in)  {
+            return new Resident(in);
         }
 
         @Override
-        public Patients[] newArray(int size) {
-            return new Patients[size];
+        public Resident[] newArray(int size) {
+            return new Resident[size];
         }
     };
 

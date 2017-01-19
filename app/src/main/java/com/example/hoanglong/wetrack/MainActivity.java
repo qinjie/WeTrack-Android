@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -14,7 +16,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -77,6 +82,20 @@ public class MainActivity extends AppCompatActivity {
 
 //        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
 //        getBaseContext().startService(in);
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+
+        // Gets layout
+        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
+        // Gets the layout params that will allow you to resize the layout
+        ViewGroup.LayoutParams params = layout.getLayoutParams();
+        // Changes the height and width to the specified *pixels*
+        Resources r = getResources();
+//        int px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+        params.height = height- 145;
+        layout.setLayoutParams(params);
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
 
@@ -162,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     TabLayout.Tab tab = tabLayout.getTabAt(1);
                     tab.select();
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("hihi")).commit();
-                    detailIntent.putExtra("isFromDetailActivity",false);
+                    detailIntent.putExtra("isFromDetailActivity", false);
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
                 }

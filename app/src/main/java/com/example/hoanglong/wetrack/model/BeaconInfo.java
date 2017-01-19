@@ -1,4 +1,4 @@
-package com.example.hoanglong.wetrack.utils;
+package com.example.hoanglong.wetrack.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by hoanglong on 10/08/2016.
  */
 
-public class Beacons {
+public class BeaconInfo {
     @SerializedName("id")
     private int id;
 

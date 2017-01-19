@@ -2,7 +2,6 @@ package com.example.hoanglong.wetrack;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hoanglong.wetrack.utils.Beacons;
-import com.example.hoanglong.wetrack.utils.Patients;
+import com.example.hoanglong.wetrack.model.BeaconInfo;
+import com.example.hoanglong.wetrack.model.Resident;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -21,7 +20,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,15 +32,15 @@ import butterknife.ButterKnife;
 public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //    private List<String> beacons;
 //    private LinkedHashMap<String, Double> beaconsMap = new LinkedHashMap<>();
-    private List<Patients> patientList = new ArrayList<>();
-    private List<Beacons> beaconList = new ArrayList<>();
+    private List<Resident> patientList = new ArrayList<>();
+    private List<BeaconInfo> beaconList = new ArrayList<>();
 
 //    public BeaconListAdapter(List<String> beacons, LinkedHashMap<String, Double> beaconsMap) {
 //        this.beacons = beacons;
 //        this.beaconsMap = beaconsMap;
 //    }
 
-    public BeaconListAdapter(List<Patients> patientList, List<Beacons> beaconList) {
+    public BeaconListAdapter(List<Resident> patientList, List<BeaconInfo> beaconList) {
         this.patientList = patientList;
         this.beaconList = beaconList;
     }
@@ -57,13 +55,13 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Patients patient = patientList.get(position);
-        Beacons beacon = beaconList.get(position);
+        Resident patient = patientList.get(position);
+        BeaconInfo beacon = beaconList.get(position);
         bindBeacon(patient, beacon, (BeaconViewHolder) holder);
     }
 
 
-    private void bindBeacon(final Patients patient, final Beacons beacon, final BeaconViewHolder viewHolder) {
+    private void bindBeacon(final Resident patient, final BeaconInfo beacon, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
         viewHolder.tvBeacon.setText("Beacon [00"+beacon.getId() + "] is detected.");
         new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/"+patient.getAvatar(), viewHolder.ivAvatar).execute();
@@ -77,9 +75,9 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public class OpenEvent {
         public final int position;
-        public final Patients patient;
+        public final Resident patient;
 
-        public OpenEvent(int position, Patients patient) {
+        public OpenEvent(int position, Resident patient) {
             this.position = position;
             this.patient = patient;
         }
@@ -106,7 +104,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public void add(List<Patients> patientList, List<Beacons> beaconList) {
+    public void add(List<Resident> patientList, List<BeaconInfo> beaconList) {
         this.patientList = patientList;
         this.beaconList = beaconList;
         notifyDataSetChanged();

@@ -3,11 +3,10 @@ package com.example.hoanglong.wetrack;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hoanglong.wetrack.utils.Patients;
+import com.example.hoanglong.wetrack.model.Resident;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +37,7 @@ public class PatientDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_detail);
         ButterKnife.bind(this);
-        Patients patient = getIntent().getParcelableExtra("patient");
+        Resident patient = getIntent().getParcelableExtra("patient");
         if(patient!=null) {
             name.setText(patient.getFullname());
             new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/"+patient.getAvatar().replace("thumbnail_",""), avt).execute();
