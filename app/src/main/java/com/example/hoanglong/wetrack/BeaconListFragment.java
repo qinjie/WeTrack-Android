@@ -5,25 +5,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
-import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedBeaconList;
 import static com.example.hoanglong.wetrack.BeaconScanActivation.detectedPatientList;
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeacon;
-import static com.example.hoanglong.wetrack.BeaconScanService.listBeaconAndRange;
 import static com.example.hoanglong.wetrack.MainActivity.adapterDevice;
 
 /**
@@ -36,7 +33,7 @@ public class BeaconListFragment extends Fragment {
     RecyclerView rvBeacons;
 
     private Handler handler;
-    @BindView(R.id.srlUsers)
+    @BindView(R.id.srlUsers2)
     SwipeRefreshLayout srlUser;
 
 
@@ -54,11 +51,12 @@ public class BeaconListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_beacon_list, container, false);
         ButterKnife.bind(this, rootView);
         rvBeacons.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
-        adapterDevice = new BeaconListAdapter(detectedPatientList,detectedBeaconList );
+        adapterDevice = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
         rvBeacons.setAdapter(adapterDevice);
 
 
         handler = new Handler();
+        srlUser.setDistanceToTriggerSync(550);
         srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
@@ -66,16 +64,39 @@ public class BeaconListFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        adapterDevice = new BeaconListAdapter(detectedPatientList,detectedBeaconList );
+                        adapterDevice = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
                         rvBeacons.setAdapter(adapterDevice);
                         srlUser.setRefreshing(false);
                     }
                 }, 1000);
 
+                if (getActivity() != null) {
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+
             }
         });
 
+        mHandler = new Handler();
+        startRepeatingTask();
         return rootView;
+    }
+
+    private Handler mHandler;
+    private int mInterval = 2000;
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            if (getActivity() != null) {
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            mHandler.postDelayed(mStatusChecker, mInterval);
+        }
+    };
+
+    void startRepeatingTask() {
+        mStatusChecker.run();
     }
 
 
@@ -111,13 +132,14 @@ public class BeaconListFragment extends Fragment {
         super.onPause();
     }
 
-    final int EDIT_USER=69;
+    final int EDIT_USER = 69;
 
     @Subscribe
     public void onEvent(BeaconListAdapter.OpenEvent event) {
-        Intent intent = new Intent(getActivity(),PatientDetailActivity.class);
+        Intent intent = new Intent(getActivity(), PatientDetailActivity.class);
         intent.putExtra("patient", event.patient);
         intent.putExtra("position", event.position);
+        intent.putExtra("fromWhat", "detected");
         startActivityForResult(intent, EDIT_USER);
 //        Toast.makeText(this, "ahihi", Toast.LENGTH_SHORT).show();
     }

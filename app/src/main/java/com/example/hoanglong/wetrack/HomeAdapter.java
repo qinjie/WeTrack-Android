@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hoanglong.wetrack.model.BeaconInfo;
 import com.example.hoanglong.wetrack.model.Resident;
@@ -53,13 +54,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    private void bindResident(final Resident patient, final HomeAdapter.BeaconViewHolder viewHolder) {
+    private void bindResident(final Resident patient, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
         new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new HomeAdapter.OpenEvent(residentList.indexOf(patient), patient));
+                EventBus.getDefault().post(new OpenEvent(residentList.indexOf(patient), patient));
             }
         });
     }

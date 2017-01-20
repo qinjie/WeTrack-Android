@@ -56,7 +56,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".PatientDetailActivity"></activity>
+        <activity android:name=".PatientDetailActivity" />
     </application>
 
 </manifest>

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -19,8 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.btnSearch)
     FloatingActionButton btnSearch;
 
+    Drawer result;
+
     FragmentPagerAdapter adapterViewPager;
 
     BluetoothAdapter bluetoothAdapter;
@@ -77,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         ButterKnife.bind(this);
 
 
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         // Changes the height and width to the specified *pixels*
         Resources r = getResources();
 //        int px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
-        params.height = height - (actionBarHeight*4/3 + actionBarHeight*2/19) ;
+        params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
         layout.setLayoutParams(params);
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
@@ -124,25 +125,57 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(0).withName("Homepage").withIcon(R.drawable.ic_home_black);
-        PrimaryDrawerItem info = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
-        PrimaryDrawerItem myBeaconList = new PrimaryDrawerItem().withIdentifier(2).withName("About").withIcon(R.drawable.ic_info);
+        PrimaryDrawerItem faq = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
+        PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(2).withName("About").withIcon(R.drawable.ic_info);
         SecondaryDrawerItem setting = new SecondaryDrawerItem().withIdentifier(3).withName("Setting").withIcon(R.drawable.ic_settings);
         SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Exit").withIcon(R.drawable.ic_power);
 
-        Drawer result = new DrawerBuilder()
+
+        result = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(headerResult)
                 .withToolbar(toolbar)
                 .addDrawerItems(home,
-                        info,
-                        myBeaconList,
+                        faq,
+                        about,
                         new DividerDrawerItem(),
                         setting,
                         logout)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        // do something with the clicked item :D
+                        switch (position) {
+                            case 1: {
+//                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+//                                startActivityForResult(intent, 0);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("About")).commit();
+                                result.closeDrawer();
+                                TabLayout.Tab tab = tabLayout.getTabAt(0);
+                                tab.select();
+                                toolbar.setTitle("Missing Residents");
+                                tabLayout.setVisibility(View.VISIBLE);
+                                btnSearch.setVisibility(View.VISIBLE);
+                            }
+                            break;
+                            case 2: {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, FAQFragment.newInstance("About")).commit();
+                                result.closeDrawer();
+                                toolbar.setTitle("FAQ");
+                                tabLayout.setVisibility(View.GONE);
+                                btnSearch.setVisibility(View.GONE);
+                            }
+                            break;
+                            case 3: {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, AboutFragment.newInstance("About")).commit();
+                                result.closeDrawer();
+                                toolbar.setTitle("About");
+                                tabLayout.setVisibility(View.GONE);
+                                btnSearch.setVisibility(View.GONE);
+                            }
+                            break;
+
+                        }
+
                         return true;
                     }
                 })
@@ -160,8 +193,10 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 if (position == 0) {
+                    toolbar.setTitle("Missing Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
                 } else {
+                    toolbar.setTitle("Nearby Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Beacon List")).commit();
                 }
             }
@@ -188,14 +223,26 @@ public class MainActivity extends AppCompatActivity {
                 if (tmp) {
                     TabLayout.Tab tab = tabLayout.getTabAt(1);
                     tab.select();
+                    toolbar.setTitle("Nearby Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("hihi")).commit();
                     detailIntent.putExtra("isFromDetailActivity", false);
                 } else {
                     TabLayout.Tab tab = tabLayout.getTabAt(0);
                     tab.select();
+                    toolbar.setTitle("Missing Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
                 }
+            } else {
+                TabLayout.Tab tab = tabLayout.getTabAt(0);
+                tab.select();
+                toolbar.setTitle("Missing Residents");
+                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
             }
+        } else {
+            TabLayout.Tab tab = tabLayout.getTabAt(0);
+            tab.select();
+            toolbar.setTitle("Missing Residents");
+            getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
         }
 
         IntentFilter intentFilter = new IntentFilter();
@@ -227,7 +274,6 @@ public class MainActivity extends AppCompatActivity {
             btnSearch.setImageResource(R.drawable.ic_pause);
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
 
     }
 
@@ -351,13 +397,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//
-//    @Subscribe
-//    public void onEvent(BeaconListAdapter.OpenEvent event) {
-//        Intent intent = new Intent(this,PatientDetailActivity.class);
-//        intent.putExtra("user", event.patient);
-//        intent.putExtra("position", event.position);
-//        startActivityForResult(intent, 69);
-////        Toast.makeText(this, "ahihi", Toast.LENGTH_SHORT).show();
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (isRefeshing) {
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//            isRefeshing = false;
+//        }
+//        return super.onTouchEvent(event);
 //    }
 }

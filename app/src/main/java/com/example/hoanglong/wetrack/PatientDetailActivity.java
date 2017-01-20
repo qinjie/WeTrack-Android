@@ -42,7 +42,13 @@ public class PatientDetailActivity extends AppCompatActivity {
             name.setText(patient.getFullname());
             new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/"+patient.getAvatar().replace("thumbnail_",""), avt).execute();
             nric.setText(patient.getNric());
-            status.setText(String.valueOf(patient.getStatus()));
+            String tmp="";
+            if(patient.getStatus()==1){
+                tmp="Missing";
+            }else{
+                tmp = "Available";
+            }
+            status.setText(tmp);
             dob.setText(patient.getDob());
             created.setText(patient.getCreated());
         }
@@ -50,17 +56,41 @@ public class PatientDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("isFromDetailActivity", true);
-        startActivityForResult(intent, 101);
+        Intent detailIntent = getIntent();
+        if (detailIntent != null) {
+            Bundle b = detailIntent.getExtras();
+            if (b != null) {
+                String tmp = b.getString("fromWhat");
+                Intent intent = new Intent(this,MainActivity.class);
+                if(tmp.equals("home")){
+                    intent.putExtra("isFromDetailActivity", false);
+                }else{
+                    intent.putExtra("isFromDetailActivity", true);
+                }
+                startActivityForResult(intent, 101);
+            }
+        }
+
+
 
     }
 
     @OnClick(R.id.btnUpdate)
     public void onUpdateClick(){
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("isFromDetailActivity", true);
-        startActivityForResult(intent, 101);
+        Intent detailIntent = getIntent();
+        if (detailIntent != null) {
+            Bundle b = detailIntent.getExtras();
+            if (b != null) {
+                String tmp = b.getString("fromWhat");
+                Intent intent = new Intent(this,MainActivity.class);
+                if(tmp.equals("home")){
+                    intent.putExtra("isFromDetailActivity", false);
+                }else{
+                    intent.putExtra("isFromDetailActivity", true);
+                }
+                startActivityForResult(intent, 101);
+            }
+        }
 
     }
 }

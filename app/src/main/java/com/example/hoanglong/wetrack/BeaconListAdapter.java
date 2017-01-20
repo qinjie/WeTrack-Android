@@ -57,7 +57,9 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void bindBeacon(final Resident patient, final BeaconInfo beacon, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
-        viewHolder.tvBeacon.setText("Beacon [00"+beacon.getId() + "] is detected.");
+//        viewHolder.tvBeacon.setText("Beacon [00"+beacon.getId() + "] is detected.");
+        viewHolder.tvBeacon.setText("is nearby.");
+
         new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/"+patient.getAvatar(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

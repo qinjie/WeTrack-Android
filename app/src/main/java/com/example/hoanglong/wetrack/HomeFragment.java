@@ -1,5 +1,6 @@
 package com.example.hoanglong.wetrack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -10,9 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.example.hoanglong.wetrack.model.BeaconInfo;
 import com.example.hoanglong.wetrack.model.Resident;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,9 +46,10 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.srlUsers)
     SwipeRefreshLayout srlUser;
 
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 //        tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
         ButterKnife.bind(this, rootView);
@@ -52,6 +58,7 @@ public class HomeFragment extends Fragment {
         rvResident.setAdapter(homeAdapter);
 
         handler = new Handler();
+        srlUser.setDistanceToTriggerSync(550);
         srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
@@ -85,13 +92,36 @@ public class HomeFragment extends Fragment {
 
                         rvResident.setAdapter(homeAdapter);
                         srlUser.setRefreshing(false);
+
                     }
                 }, 1000);
+                if (getActivity() != null) {
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
 
             }
         });
 
+        mHandler = new Handler();
+        startRepeatingTask();
         return rootView;
+    }
+
+    private Handler mHandler;
+    private int mInterval = 2000;
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            if (getActivity() != null) {
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            mHandler.postDelayed(mStatusChecker, mInterval);
+        }
+    };
+
+    void startRepeatingTask() {
+        mStatusChecker.run();
     }
 
     @Override
@@ -119,10 +149,23 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    final int EDIT_USER = 69;
+
+    @Subscribe
+    public void onEvent(HomeAdapter.OpenEvent event) {
+        Intent intent = new Intent(getActivity(), PatientDetailActivity.class);
+        intent.putExtra("patient", event.patient);
+        intent.putExtra("position", event.position);
+        intent.putExtra("fromWhat", "home");
+        startActivityForResult(intent, EDIT_USER);
+//        Toast.makeText(this, "ahihi", Toast.LENGTH_SHORT).show();
     }
 }
