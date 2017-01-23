@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         PrimaryDrawerItem faq = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
         PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(2).withName("About").withIcon(R.drawable.ic_info);
         SecondaryDrawerItem setting = new SecondaryDrawerItem().withIdentifier(3).withName("Setting").withIcon(R.drawable.ic_settings);
-        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Exit").withIcon(R.drawable.ic_power);
+//        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Exit").withIcon(R.drawable.ic_power);
 
 
         result = new DrawerBuilder()
@@ -139,8 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         faq,
                         about,
                         new DividerDrawerItem(),
-                        setting,
-                        logout)
+                        setting)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {

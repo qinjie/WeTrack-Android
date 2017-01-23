@@ -194,12 +194,17 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onFailure(Call<List<Resident>> call, Throwable t) {
                     t.printStackTrace();
-                    Gson gson = new Gson();
-                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                    Type type = new TypeToken<List<Resident>>() {
-                    }.getType();
-                    patientList = gson.fromJson(jsonPatients, type);
+                    try {
+                        Gson gson = new Gson();
+                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
+                        Type type = new TypeToken<List<Resident>>() {
+                        }.getType();
+                        patientList = gson.fromJson(jsonPatients, type);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
                 }
             });
 

@@ -33,6 +33,7 @@ public class BeaconListFragment extends Fragment {
     RecyclerView rvBeacons;
 
     private Handler handler;
+
     @BindView(R.id.srlUsers2)
     SwipeRefreshLayout srlUser;
 

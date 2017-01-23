@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,6 +58,9 @@ public class PatientDetailActivity extends AppCompatActivity {
     private Handler handler;
 
     private ServerAPI serverAPI;
+
+    @BindView(R.id.srlUsers)
+    SwipeRefreshLayout srlUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +142,94 @@ public class PatientDetailActivity extends AppCompatActivity {
                 }
             }
         }, 2000);
+
+
+        srlUser.setDistanceToTriggerSync(550);
+        srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        dialog.show();
+
+                        serverAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
+                            @Override
+                            public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
+                                try {
+                                    patientList = response.body();
+
+                                    Gson gson = new Gson();
+                                    String jsonPatients = gson.toJson(patientList);
+                                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("patientList-WeTrack", jsonPatients);
+                                    editor.commit();
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Resident>> call, Throwable t) {
+                                t.printStackTrace();
+                                Gson gson = new Gson();
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                                String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
+                                Type type = new TypeToken<List<Resident>>() {
+                                }.getType();
+                                patientList = gson.fromJson(jsonPatients, type);
+                            }
+                        });
+
+
+                        handler = new Handler();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (patient != null) {
+                                    if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
+                                        for (Resident aPatient : patientList) {
+                                            if (aPatient.getFullname().equals(patient.getFullname())) {
+                                                name.setText(aPatient.getFullname());
+                                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getAvatar().replace("thumbnail_", ""), avt).execute();
+                                                nric.setText(aPatient.getNric());
+                                                String tmp = "";
+                                                if (aPatient.getStatus() == 1) {
+                                                    tmp = "Missing";
+                                                } else {
+                                                    tmp = "Available";
+                                                }
+                                                status.setText(tmp);
+                                                dob.setText(aPatient.getDob());
+                                                created.setText(aPatient.getCreated());
+                                                if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
+                                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreated());
+                                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddr());
+                                                } else {
+                                                    lastSeen.setText("Unknown");
+                                                    lastLocation.setText("Unknown");
+                                                }
+
+                                            }
+
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }
+                            }
+                        }, 2000);
+
+
+                        srlUser.setRefreshing(false);
+
+                    }
+//                }, 100);
+//            }
+        });
 
     }
 

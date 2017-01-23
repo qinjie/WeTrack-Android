@@ -94,19 +94,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         mBeaconmanager.setBackgroundBetweenScanPeriod(25000l);
         mBeaconmanager.setBackgroundScanPeriod(20000l);
 
-//        Identifier identifier = Identifier.parse(REGION_UUID2);
-//        Identifier identifierx = Identifier.parse("58949");
-//        Region region = new Region("green", identifier, identifierx, null);
-//        regionList.add(region);
-//
-//        Identifier identifier2 = Identifier.parse(REGION_UUID2);
-//        Identifier identifiery = Identifier.parse("52689");
-//        Region region2 = new Region("blue", identifier2, identifiery, null);
-//        regionList.add(region2);
-
-//        Region region3 = new Region("AnyBeacon", null, null, null);
-//        regionBootstrap = new RegionBootstrap(this, region3);
-
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
@@ -142,23 +129,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             }
         });
 
-
         mHandler = new Handler();
         startRepeatingTask();
-
-//        tmp = this;
-
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-
-
-//            }
-//        }, 10000);
-
-
-//        this.startService
-//                (new Intent(this, BeaconMonitoringService.class));
 
     }
 
@@ -170,36 +142,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
     @Override
     public void didEnterRegion(Region region) {
-//        serverAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
-//            @Override
-//            public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
-//                try {
-//                    patientList = response.body();
-//
-//                    Gson gson = new Gson();
-//                    String jsonPatients = gson.toJson(patientList);
-//                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-//                    SharedPreferences.Editor editor = sharedPref.edit();
-//                    editor.putString("patientList-WeTrack", jsonPatients);
-//                    editor.commit();
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Resident>> call, Throwable t) {
-//                sendNotification("Please turn on internet connection");
-////                sendNotification(t.getMessage());
-//                Gson gson = new Gson();
-//                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-//                String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-//                Type type = new TypeToken<List<Resident>>() {
-//                }.getType();
-//                patientList = gson.fromJson(jsonPatients, type);
-//            }
-//        });
 
         //TODO
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -265,9 +207,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             @Override
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
+                                    detectedPatientList.add(patient);
+                                    detectedBeaconList.add(aBeacon);
                                     if (adapterDevice != null) {
-                                        detectedPatientList.add(patient);
-                                        detectedBeaconList.add(aBeacon);
+
                                         forDisplay.logToDisplay();
                                     }
                                 } catch (Exception e) {
@@ -475,7 +418,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                     for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
                         if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
 
-//                            if (!missingPatientList.contains(aPatient)) {
 //                                missingPatientList.add(aPatient);
 //                                forDisplay.logToDisplay2();
 //                            }
@@ -557,7 +499,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 }
             }
 
-//            sendNotification(mBeaconmanager.getMonitoredRegions().size() + " | " + regionList.size());
+//            sendNotification(mBeaconmanager.getMonitoredRegions().size() + " | " + detectedBeaconList.size());
 
             if (adapterDevice != null) {
                 forDisplay.logToDisplay();
