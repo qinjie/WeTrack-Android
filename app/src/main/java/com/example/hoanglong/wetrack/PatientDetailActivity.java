@@ -1,8 +1,8 @@
 package com.example.hoanglong.wetrack;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,25 +32,39 @@ public class PatientDetailActivity extends AppCompatActivity {
     @BindView(R.id.created)
     TextView created;
 
+    @BindView(R.id.lastSeen)
+    TextView lastSeen;
+
+    @BindView(R.id.lastLocation)
+    TextView lastLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_detail);
         ButterKnife.bind(this);
         Resident patient = getIntent().getParcelableExtra("patient");
-        if(patient!=null) {
+        if (patient != null) {
             name.setText(patient.getFullname());
-            new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/"+patient.getAvatar().replace("thumbnail_",""), avt).execute();
+            new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar().replace("thumbnail_", ""), avt).execute();
             nric.setText(patient.getNric());
-            String tmp="";
-            if(patient.getStatus()==1){
-                tmp="Missing";
-            }else{
+            String tmp = "";
+            if (patient.getStatus() == 1) {
+                tmp = "Missing";
+            } else {
                 tmp = "Available";
             }
             status.setText(tmp);
             dob.setText(patient.getDob());
             created.setText(patient.getCreated());
+            if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0){
+                lastSeen.setText(patient.getLatestLocation().get(0).getCreated());
+                lastLocation.setText(patient.getLatestLocation().get(0).getAddr());
+            }else{
+                lastSeen.setText("Unknown");
+                lastLocation.setText("Unknown");
+            }
+
         }
     }
 
@@ -61,10 +75,10 @@ public class PatientDetailActivity extends AppCompatActivity {
             Bundle b = detailIntent.getExtras();
             if (b != null) {
                 String tmp = b.getString("fromWhat");
-                Intent intent = new Intent(this,MainActivity.class);
-                if(tmp.equals("home")){
+                Intent intent = new Intent(this, MainActivity.class);
+                if (tmp.equals("home")) {
                     intent.putExtra("isFromDetailActivity", false);
-                }else{
+                } else {
                     intent.putExtra("isFromDetailActivity", true);
                 }
                 startActivityForResult(intent, 101);
@@ -72,20 +86,19 @@ public class PatientDetailActivity extends AppCompatActivity {
         }
 
 
-
     }
 
     @OnClick(R.id.btnUpdate)
-    public void onUpdateClick(){
+    public void onUpdateClick() {
         Intent detailIntent = getIntent();
         if (detailIntent != null) {
             Bundle b = detailIntent.getExtras();
             if (b != null) {
                 String tmp = b.getString("fromWhat");
-                Intent intent = new Intent(this,MainActivity.class);
-                if(tmp.equals("home")){
+                Intent intent = new Intent(this, MainActivity.class);
+                if (tmp.equals("home")) {
                     intent.putExtra("isFromDetailActivity", false);
-                }else{
+                } else {
                     intent.putExtra("isFromDetailActivity", true);
                 }
                 startActivityForResult(intent, 101);

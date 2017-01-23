@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +36,9 @@ public class Resident implements Parcelable {
 
     @SerializedName("created_at")
     private String created;
+
+    @SerializedName("latestLocation")
+    private List<Location> latestLocation;
 
     public int getId() {
         return id;
@@ -100,6 +104,14 @@ public class Resident implements Parcelable {
         this.created = created;
     }
 
+    public List<Location> getLatestLocation() {
+        return latestLocation;
+    }
+
+    public void setLatestLocation(List<Location> latestLocation) {
+        this.latestLocation = latestLocation;
+    }
+
     protected Resident(Parcel in) {
         fullname = in.readString();
         avatar = in.readString();
@@ -107,6 +119,8 @@ public class Resident implements Parcelable {
         nric = in.readString();
         dob = in.readString();
         created = in.readString();
+        latestLocation= new ArrayList<Location>();
+        in.readTypedList(latestLocation,Location.CREATOR);
     }
 
 
@@ -122,6 +136,7 @@ public class Resident implements Parcelable {
         }
     };
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -135,6 +150,7 @@ public class Resident implements Parcelable {
         dest.writeString(nric);
         dest.writeString(dob);
         dest.writeString(created);
+        dest.writeTypedList(latestLocation);
 
     }
 

@@ -17,10 +17,10 @@ import retrofit2.http.POST;
  */
 
 public interface ServerAPI {
-    @GET("v1/resident?expand=beacons")
+    @GET("v1/resident?expand=beacons,latestLocation")
     Call<List<Resident>> getPatientList();
 
-    @POST("v1/location-history/create")
+    @POST("v1/location-history")
     Call<JsonObject> sendBeaconLocation(@Header("Authorization") String authorization, @Header("Content-Type") String type, @Body JsonObject beaconList);
 
 

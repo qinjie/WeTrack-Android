@@ -1,25 +1,16 @@
 package com.example.hoanglong.wetrack;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.hoanglong.wetrack.model.BeaconInfo;
 import com.example.hoanglong.wetrack.model.Resident;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +41,17 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Resident patient = residentList.get(position);
-        bindResident(patient,(HomeAdapter.BeaconViewHolder) holder);
+        bindResident(patient, (HomeAdapter.BeaconViewHolder) holder);
     }
 
 
     private void bindResident(final Resident patient, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
+        if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0) {
+            viewHolder.tvBeacon.setText("Last seen at " + patient.getLatestLocation().get(0).getCreated());
+        }else{
+            viewHolder.tvBeacon.setText("No report yet");
+        }
         new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

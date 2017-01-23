@@ -212,7 +212,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             for (final Resident patient : patientList) {
                 for (final BeaconInfo aBeacon : patient.getPatientBeacon()) {
-                    if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
+                    if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && regionInfo[2].equals(String.valueOf(aBeacon.getMajor())) && regionInfo[3].equals(String.valueOf(aBeacon.getMinor())) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                         if (!checkInternetOn()) {
                             String firstBeaconIdentifiers = regionInfo[1] + aBeacon.getMajor() + aBeacon.getMinor();
@@ -224,7 +224,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             editor.commit();
                         }
 
-                        BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), patient.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+                        BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
 
                         sendNotification(patient.getFullname() + " is nearby.");
 
@@ -286,7 +286,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             for (final Resident patient : patientList) {
                 for (final BeaconInfo aBeacon : patient.getPatientBeacon()) {
-                    if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
+                    if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && regionInfo[2].equals(String.valueOf(aBeacon.getMajor())) && regionInfo[3].equals(String.valueOf(aBeacon.getMinor())) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                         if (!checkInternetOn()) {
                             String firstBeaconIdentifiers = regionInfo[1] + aBeacon.getMajor() + aBeacon.getMinor();
@@ -298,7 +298,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             editor.commit();
                         }
 
-                        BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), patient.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+                        BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
 
                         sendNotification(patient.getFullname() + " is out of range.");
 
@@ -437,11 +437,12 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             String uuid = aBeacon.getUuid();
                             Identifier identifier = Identifier.parse(uuid);
                             Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
-                            Region region = new Region(aPatient.getId() + ";" + identifier, identifier, identifier2, null);
+                            Identifier identifier3 = Identifier.parse(String.valueOf(aBeacon.getMinor()));
+                            Region region = new Region(aPatient.getId() + ";" + identifier + ";" + identifier2 + ";" + identifier3, identifier, identifier2, identifier3);
                             if (!regionList.contains(region)) {
                                 regionList.add(region);
                             }
-                        }else{
+                        } else {
 //                            if (missingPatientList.contains(aPatient)) {
 //                                missingPatientList.remove(aPatient);
 //                                forDisplay.logToDisplay2();
@@ -454,50 +455,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             regionBootstrap = new RegionBootstrap(tmp, regionList);
 
-//            mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getBaseContext());
-//            mBeaconmanager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
-//
-//            mBeaconmanager.setBackgroundMode(true);
-//            backgroundPowerSaver = new BackgroundPowerSaver(getBaseContext());
-//
-//            mBeaconmanager.setBackgroundBetweenScanPeriod(60000l);
-//            mBeaconmanager.setBackgroundScanPeriod(10000l);
-
-//            //TODO
-//            for(Region allRegion : mBeaconmanager.getMonitoredRegions()){
-//                    if(!regionList.contains(allRegion)){
-//                        try {
-//                            mBeaconmanager.stopMonitoringBeaconsInRegion(allRegion);
-//                        } catch (RemoteException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//            }
-
-//            LocationListener locationListener = new LocationListener() {
-//                public void onLocationChanged(Location location) {
-//                    mLocation = location;
-//                }
-//
-//                public void onStatusChanged(String provider, int status, Bundle extras) {
-//                    Log.i("locationListener", "changed" + provider);
-//                }
-//
-//                public void onProviderEnabled(String provider) {
-//                    Log.i("locationListener", "enabled" + provider);
-//                }
-//
-//                public void onProviderDisabled(String provider) {
-//                    Log.i("locationListener", "disabled" + provider);
-//                }
-//            };
-
-//            if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                return;
-//            }
-//
-//            mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             if (checkInternetOn()) {
                 SharedPreferences sharedPref3 = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -518,13 +475,11 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                     if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
                                         String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
                                         if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
-                                            BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), patient.getId(), Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
+                                            BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
                                             Gson gson = new GsonBuilder()
                                                     .setLenient()
                                                     .create();
                                             JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
-
-//                                            sendNotification(patient.getFullname() + " (offline): " + patientInfoOffline[3]);
 
                                             Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
                                             call.enqueue(new Callback<JsonObject>() {

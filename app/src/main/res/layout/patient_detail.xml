@@ -144,6 +144,63 @@
                     android:text="dd-mm-yyyy"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:gravity="start"
+                    android:paddingStart="12dp"
+                    android:text="Last seen:"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/lastSeen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="start"
+                    android:text="dd-mm-yyyy"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:gravity="start"
+                    android:paddingStart="12dp"
+                    android:text="Last location:"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/lastLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="start"
+                    android:text="Singapore"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
             <Button

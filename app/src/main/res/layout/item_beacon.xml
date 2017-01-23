@@ -24,7 +24,7 @@
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:paddingStart="?android:attr/listPreferredItemPaddingStart"
             android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             tools:text="hihihihihihi" />
 
@@ -36,7 +36,7 @@
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:paddingStart="?android:attr/listPreferredItemPaddingStart"
             android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="italic"
             tools:text="hahahahahaha" />
     </LinearLayout>
