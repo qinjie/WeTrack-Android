@@ -358,6 +358,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     }
 
     private void sendNotification2(Resident aResident, String msg) {
+//        Resident r = new Resident(aResident);
+
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setContentTitle("We Track")
@@ -365,7 +367,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         .setSmallIcon(R.drawable.icon).setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, PatientDetailActivity.class);
+//        intent.putExtra("patient", r);
         intent.putExtra("patient", aResident);
         stackBuilder.addNextIntent(intent);
         PendingIntent resultPendingIntent =

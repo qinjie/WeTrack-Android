@@ -123,6 +123,17 @@ public class Resident implements Parcelable {
         in.readTypedList(latestLocation,Location.CREATOR);
     }
 
+//    public Resident(Resident r) {
+//        this.id = r.id;
+//        this.fullname = r.fullname;
+//        this.nric = r.nric;
+//        this.status = r.status;
+//        this.patientBeacon = r.patientBeacon;
+//        this.avatar = r.avatar;
+//        this.dob = r.dob;
+//        this.created = r.created;
+//        this.latestLocation = r.latestLocation;
+//    }
 
     public static final Creator<Resident> CREATOR = new Creator<Resident>() {
         @Override
