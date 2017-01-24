@@ -24,10 +24,10 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.hoanglong.wetrack.api.BeaconAPI;
-import com.example.hoanglong.wetrack.api.BeaconLocation;
-import com.example.hoanglong.wetrack.utils.Patients;
+import com.example.hoanglong.wetrack.api.ServerAPI;
+import com.example.hoanglong.wetrack.model.BeaconLocation;
 import com.example.hoanglong.wetrack.api.RetrofitUtils;
+import com.example.hoanglong.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -41,8 +41,6 @@ import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.lang.reflect.Type;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,8 +62,8 @@ public class BeaconScanService extends Service implements BeaconConsumer {
     public static List<String> listBeacon = new ArrayList<String>();
     public static LinkedHashMap<String, Double> listBeaconAndRange = new LinkedHashMap<>();
 
-    private BeaconAPI beaconAPI;
-    List<Patients> patientList = null;
+    private ServerAPI serverAPI;
+    List<Resident> patientList = null;
 
     Location mLocation;
     LocationManager locationManager;
@@ -129,7 +127,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                 setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
         beaconManager.bind(this);
 
-        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
+        serverAPI = RetrofitUtils.get().create(ServerAPI.class);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -170,6 +168,14 @@ public class BeaconScanService extends Service implements BeaconConsumer {
 
         final MainActivity test = new MainActivity();
 
+//        Intent it= new Intent(getApplicationContext(),BeaconScanActivation.class);
+//        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////        startActivity(it);
+//        startService(it);
+//        BeaconScanActivation tmp = new BeaconScanActivation();
+//        tmp.();
+
+
         beaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
@@ -183,10 +189,10 @@ public class BeaconScanService extends Service implements BeaconConsumer {
 
                     String line = firstBeacon.getId1() + "," + firstBeacon.getId2() + "," + firstBeacon.getId3() + "," + firstBeacon.getBluetoothAddress();
 
-                    beaconAPI.getPatientList().enqueue(new Callback<List<Patients>>() {
+                    serverAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
 
                         @Override
-                        public void onResponse(Call<List<Patients>> call, Response<List<Patients>> response) {
+                        public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                             try {
                                 patientList = response.body();
 
@@ -203,16 +209,17 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                         }
 
                         @Override
-                        public void onFailure(Call<List<Patients>> call, Throwable t) {
+                        public void onFailure(Call<List<Resident>> call, Throwable t) {
                             sendNotification("Please turn on internet connection");
                             Gson gson = new Gson();
                             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                             String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                            Type type = new TypeToken<List<Patients>>() {
+                            Type type = new TypeToken<List<Resident>>() {
                             }.getType();
                             patientList = gson.fromJson(jsonPatients, type);
                         }
                     });
+
 
                     if (!listBeacon.contains(line)) {
                         listBeacon.add(line);
@@ -246,25 +253,25 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                         }
 
                         if (patientList != null && patientList.size() > 0) {
-                            for (final Patients patients : patientList) {
+                            for (final Resident resident : patientList) {
                                 for (Beacon firstBeacon1 : beacons) {
                                     String nearbyBeaconIdentifiers = firstBeacon1.getId1().toString() + firstBeacon1.getId2().toString() + firstBeacon1.getId3().toString();
                                     try {
-                                        if (patients.getPatientBeacon() != null && patients.getPatientBeacon().size() > 0) {
-                                            String patientBeaconIdentifiers = patients.getPatientBeacon().get(0).getUuid() + patients.getPatientBeacon().get(0).getMajor() + patients.getPatientBeacon().get(0).getMinor();
-                                            if (patientBeaconIdentifiers.equals(nearbyBeaconIdentifiers) && patients.getStatus() == 1) {
+                                        if (resident.getPatientBeacon() != null && resident.getPatientBeacon().size() > 0) {
+                                            String patientBeaconIdentifiers = resident.getPatientBeacon().get(0).getUuid() + resident.getPatientBeacon().get(0).getMajor() + resident.getPatientBeacon().get(0).getMinor();
+                                            if (patientBeaconIdentifiers.equals(nearbyBeaconIdentifiers) && resident.getStatus() == 1) {
 
-                                                BeaconLocation aLocation = new BeaconLocation(patients.getPatientBeacon().get(0).getId(), patients.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+                                                BeaconLocation aLocation = new BeaconLocation(resident.getPatientBeacon().get(0).getId(), resident.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
 
                                                 Gson gson = new GsonBuilder()
                                                         .setLenient()
                                                         .create();
                                                 JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
 
-                                                sendNotification(patients.getFullname());
+                                                sendNotification(resident.getFullname());
 
-                                                beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
-                                                Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
+                                                serverAPI = RetrofitUtils.get().create(ServerAPI.class);
+                                                Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
                                                 call.enqueue(new Callback<JsonObject>() {
                                                     @Override
                                                     public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
@@ -310,7 +317,7 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                             }
 
                             if (patientList.size() > 0) {
-                                for (final Patients patient : patientList) {
+                                for (final Resident patient : patientList) {
                                     if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
                                         String patientBeaconIdentifiers = patient.getPatientBeacon().get(0).getUuid() + patient.getPatientBeacon().get(0).getMajor() + patient.getPatientBeacon().get(0).getMinor();
                                         if (patientInfo[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1) {
@@ -323,8 +330,8 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                                             sendNotification(patient.getFullname() + "offline");
 
 
-//                                        beaconAPI = RetrofitUtils.get().create(BeaconAPI.class);
-                                            Call<JsonObject> call = beaconAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
+//                                        serverAPI = RetrofitUtils.get().create(ServerAPI.class);
+                                            Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer wRe82EIau4STc35oVBF8XyAfF2UVJM8u", "application/json", obj);
                                             call.enqueue(new Callback<JsonObject>() {
                                                 @Override
                                                 public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
@@ -362,7 +369,6 @@ public class BeaconScanService extends Service implements BeaconConsumer {
             e.printStackTrace();
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
 
     }
 

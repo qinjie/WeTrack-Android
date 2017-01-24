@@ -36,6 +36,8 @@ dependencies {
         transitive = true
     }
     compile 'org.altbeacon:android-beacon-library:2.9.2'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'me.biubiubiu.justifytext:library:1.1'
     testCompile 'junit:junit:4.12'
 
 

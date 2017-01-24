@@ -1,11 +1,8 @@
 package com.example.hoanglong.wetrack.api;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -14,8 +11,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitUtils {
+    private static OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20,TimeUnit.SECONDS).build();
     private static Retrofit.Builder builder = new Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL).addConverterFactory(GsonConverterFactory.create());
+            .baseUrl(Constant.BASE_URL).client(client).addConverterFactory(GsonConverterFactory.create());
 
     public static Retrofit get() {
         return builder.build();

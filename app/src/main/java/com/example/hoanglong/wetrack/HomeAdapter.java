@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hoanglong.wetrack.model.BeaconInfo;
 import com.example.hoanglong.wetrack.model.Resident;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,45 +18,45 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by hoanglong on 10/06/2016.
+ * Created by hoanglong on 19-Jan-17.
  */
 
-public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    //    private List<String> beacons;
+//    private LinkedHashMap<String, Double> beaconsMap = new LinkedHashMap<>();
+    private List<Resident> residentList = new ArrayList<>();
 
-    private List<Resident> patientList = new ArrayList<>();
-    private List<BeaconInfo> beaconList = new ArrayList<>();
-
-
-    public BeaconListAdapter(List<Resident> patientList, List<BeaconInfo> beaconList) {
-        this.patientList = patientList;
-        this.beaconList = beaconList;
+    public HomeAdapter(List<Resident> residentList) {
+        this.residentList = residentList;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
         itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_beacon, parent, false);
-        return new BeaconViewHolder(itemView);
+        return new HomeAdapter.BeaconViewHolder(itemView);
 
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Resident patient = patientList.get(position);
-        BeaconInfo beacon = beaconList.get(position);
-        bindBeacon(patient, beacon, (BeaconViewHolder) holder);
+        Resident patient = residentList.get(position);
+        bindResident(patient, (HomeAdapter.BeaconViewHolder) holder);
     }
 
 
-    private void bindBeacon(final Resident patient, final BeaconInfo beacon, final BeaconViewHolder viewHolder) {
+    private void bindResident(final Resident patient, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
-        viewHolder.tvBeacon.setText("is nearby.");
-
+        if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0) {
+            viewHolder.tvBeacon.setText("Last seen at " + patient.getLatestLocation().get(0).getCreated());
+        }else{
+            viewHolder.tvBeacon.setText("No report yet");
+        }
         new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new OpenEvent(patientList.indexOf(patient), patient));
+                EventBus.getDefault().post(new OpenEvent(residentList.indexOf(patient), patient));
             }
         });
     }
@@ -74,7 +73,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return beaconList.size();
+        return residentList.size();
     }
 
     public class BeaconViewHolder extends RecyclerView.ViewHolder {
@@ -93,10 +92,10 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public void add(List<Resident> patientList, List<BeaconInfo> beaconList) {
-        this.patientList = patientList;
-        this.beaconList = beaconList;
+    public void add(List<Resident> patientList) {
+        this.residentList = patientList;
         notifyDataSetChanged();
     }
 
 }
+
