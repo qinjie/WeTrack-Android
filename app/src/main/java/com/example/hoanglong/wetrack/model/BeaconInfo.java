@@ -72,4 +72,15 @@ public class BeaconInfo {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        BeaconInfo other = (BeaconInfo) obj;
+
+        return other.major == major && other.uuid.equals(uuid) && other.minor == minor;
+    }
 }
