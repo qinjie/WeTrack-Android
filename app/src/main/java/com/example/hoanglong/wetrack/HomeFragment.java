@@ -169,80 +169,80 @@ public class HomeFragment extends Fragment {
     };
 
 
-    private int mInterval2 = 10000;
-    Runnable mRefreshlist = new Runnable() {
-        @Override
-        public void run() {
-            serverAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
-                @Override
-                public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
-                    try {
-                        patientList = response.body();
-
-                        Gson gson = new Gson();
-                        String jsonPatients = gson.toJson(patientList);
-                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("patientList-WeTrack", jsonPatients);
-                        editor.commit();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Resident>> call, Throwable t) {
-                    t.printStackTrace();
-                    try {
-                        Gson gson = new Gson();
-                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
-                        Type type = new TypeToken<List<Resident>>() {
-                        }.getType();
-                        patientList = gson.fromJson(jsonPatients, type);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-
-                    }
-                }
-            });
-
-            homeAdapter = new HomeAdapter(missingPatientList);
-
-            if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                for (Resident aPatient : patientList) {
-                    for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
-                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
-
-                            if (!missingPatientList.contains(aPatient)) {
-                                missingPatientList.add(aPatient);
-                            } else {
-                                missingPatientList.set(missingPatientList.indexOf(aPatient), aPatient);
-                            }
-
-                        } else {
-                            if (missingPatientList.contains(aPatient)) {
-                                missingPatientList.remove(aPatient);
-//                                            forDisplay.logToDisplay2();
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            rvResident.setAdapter(homeAdapter);
-
-
-            mHandler.postDelayed(mRefreshlist, mInterval2);
-        }
-    };
+//    private int mInterval2 = 10000;
+//    Runnable mRefreshlist = new Runnable() {
+//        @Override
+//        public void run() {
+//            serverAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
+//                @Override
+//                public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
+//                    try {
+//                        patientList = response.body();
+//
+//                        Gson gson = new Gson();
+//                        String jsonPatients = gson.toJson(patientList);
+//                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+//                        SharedPreferences.Editor editor = sharedPref.edit();
+//                        editor.putString("patientList-WeTrack", jsonPatients);
+//                        editor.commit();
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<List<Resident>> call, Throwable t) {
+//                    t.printStackTrace();
+//                    try {
+//                        Gson gson = new Gson();
+//                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+//                        String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
+//                        Type type = new TypeToken<List<Resident>>() {
+//                        }.getType();
+//                        patientList = gson.fromJson(jsonPatients, type);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//
+//                    }
+//                }
+//            });
+//
+//            homeAdapter = new HomeAdapter(missingPatientList);
+//
+//            if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
+//                for (Resident aPatient : patientList) {
+//                    for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
+//                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+//
+//                            if (!missingPatientList.contains(aPatient)) {
+//                                missingPatientList.add(aPatient);
+//                            } else {
+//                                missingPatientList.set(missingPatientList.indexOf(aPatient), aPatient);
+//                            }
+//
+//                        } else {
+//                            if (missingPatientList.contains(aPatient)) {
+//                                missingPatientList.remove(aPatient);
+////                                            forDisplay.logToDisplay2();
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
+//
+//            rvResident.setAdapter(homeAdapter);
+//
+//
+//            mHandler.postDelayed(mRefreshlist, mInterval2);
+//        }
+//    };
 
 
     void startRepeatingTask() {
         mStatusChecker.run();
-        mRefreshlist.run();
+//        mRefreshlist.run();
     }
 
     @Override

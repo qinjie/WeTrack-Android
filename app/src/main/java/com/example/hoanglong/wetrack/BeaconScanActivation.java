@@ -207,6 +207,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             @Override
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
+//                                    if(detectedBeaconList.contains(a))
                                     detectedPatientList.add(patient);
                                     detectedBeaconList.add(aBeacon);
                                     if (adapterDevice != null) {
@@ -274,26 +275,29 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                         List<Resident> residentToRemove = new ArrayList<>();
                         List<BeaconInfo> beaconToRemove = new ArrayList<>();
+
+                        for (Resident aResident : detectedPatientList) {
+                            if (aResident.getId() == patient.getId()) {
+                                residentToRemove.add(aResident);
+                                break;
+                            }
+                        }
+
+                        for (BeaconInfo removeBeacon : detectedBeaconList) {
+                            if (removeBeacon.getId() == aBeacon.getId()) {
+                                beaconToRemove.add(removeBeacon);
+                                break;
+                            }
+                        }
+
+                        detectedPatientList.removeAll(residentToRemove);
+                        detectedBeaconList.removeAll(beaconToRemove);
+
+                        residentToRemove.clear();
+                        beaconToRemove.clear();
+
+
                         if (adapterDevice != null) {
-                            for (Resident aResident : detectedPatientList) {
-                                if (aResident.getId() == patient.getId()) {
-                                    residentToRemove.add(aResident);
-                                    break;
-                                }
-                            }
-
-                            for (BeaconInfo removeBeacon : detectedBeaconList) {
-                                if (removeBeacon.getId() == aBeacon.getId()) {
-                                    beaconToRemove.add(removeBeacon);
-                                    break;
-                                }
-                            }
-
-                            detectedPatientList.removeAll(residentToRemove);
-                            detectedBeaconList.removeAll(beaconToRemove);
-
-                            residentToRemove.clear();
-                            beaconToRemove.clear();
 
                             forDisplay.logToDisplay();
 
@@ -354,6 +358,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     }
 
     private void sendNotification2(Resident aResident, String msg) {
+//        Resident r = new Resident(aResident);
+
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setContentTitle("We Track")
@@ -362,6 +368,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         Intent intent = new Intent(this, PatientDetailActivity.class);
+//        intent.putExtra("patient", r);
         intent.putExtra("patient", aResident);
         stackBuilder.addNextIntent(intent);
         PendingIntent resultPendingIntent =

@@ -144,7 +144,7 @@ public class PatientDetailActivity extends AppCompatActivity {
         }, 2000);
 
 
-        srlUser.setDistanceToTriggerSync(550);
+        srlUser.setDistanceToTriggerSync(400);
         srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
