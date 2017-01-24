@@ -3,7 +3,7 @@
     <string name="about">Elderly folk suffering from dementia make up a significant number of missing cases reported every year in Singapore. Many of them never reunited with their family as they are often found without any identification and are unable to remember where they live. By 2030, the number of elderly with dimentia in Singapore will more than double to 103k.\n\nThis project uses Bluetooth Low Energy (BLE) beacons to tag elderlies with dimentia. But installing this app, you are helping to locate missing elderlies through your mobile phone.\n\n*How it Works*\n - Dimentia elderlies are tagged with beacons and registered in system\n - Missing elderlies are flagged in the system for tracking.\n - App on your phone will be triggered when there is missing elderly nearby.\n - The detected beacon info and GPS location will be send to server via the application (the internet service and location service are required to turn on).\s\s\s</string>
     <string name="FAQ">*Do I need to register an account to use the app?\nNo, no registration is required. You can help by simply installing the app.\n\n
 
-*Why do I need to turn on Bluetooth on the phone all the time?*\nBeacon is a bluetooth device. The app uses bluetooth to sense nearby beacons.\n\n
+*Why do I need to turn on Bluetooth on the phone all the time?\nBeacon is a bluetooth device. The app uses bluetooth to sense nearby beacons.\n\n
 
 *Does the app drain lots of power?\nThe app only gets activated when there is interested beacon nearby. Turning on Bluetooth does not drain too much battery. You may check its battery usage through Settings/Battery usage.\n\n
 

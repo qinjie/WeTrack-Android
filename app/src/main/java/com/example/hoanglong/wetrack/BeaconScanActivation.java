@@ -370,10 +370,11 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         Intent intent = new Intent(this, PatientDetailActivity.class);
 //        intent.putExtra("patient", r);
         intent.putExtra("patient", aResident);
+//        intent.putExtra("fromNotification", aResident.getId()+"");
         stackBuilder.addNextIntent(intent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
-                        0,
+                        aResident.getId(),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         builder.setContentIntent(resultPendingIntent);
