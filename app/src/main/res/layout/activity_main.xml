@@ -12,7 +12,7 @@
         android:id="@+id/activity_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="511dp"
-        tools:context="com.example.hoanglong.wetrack.MainActivity">
+        tools:context="edu.np.ece.wetrack.MainActivity">
 
 
         <android.support.design.widget.AppBarLayout
