@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class BeaconInfo {
+public class BeaconInfo implements Parcelable {
     @SerializedName("id")
     private int id;
 
