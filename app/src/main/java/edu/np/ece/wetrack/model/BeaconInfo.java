@@ -1,10 +1,9 @@
 package edu.np.ece.wetrack.model;
 
-import com.google.gson.annotations.SerializedName;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-/**
- * Created by hoanglong on 10/08/2016.
- */
+import com.google.gson.annotations.SerializedName;
 
 public class BeaconInfo {
     @SerializedName("id")
@@ -24,6 +23,30 @@ public class BeaconInfo {
 
     @SerializedName("status")
     private int status;
+
+    @SerializedName("created_at")
+    private String createdAt;
+
+    public final static Parcelable.Creator<BeaconInfo> CREATOR = new Parcelable.Creator<BeaconInfo>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public BeaconInfo createFromParcel(Parcel in) {
+            BeaconInfo instance = new BeaconInfo();
+            instance.id = ((int) in.readValue((String.class.getClassLoader())));
+            instance.residentId = ((int) in.readValue((String.class.getClassLoader())));
+            instance.uuid = ((String) in.readValue((String.class.getClassLoader())));
+            instance.major = ((Integer) in.readValue((Integer.class.getClassLoader())));
+            instance.minor = ((Integer) in.readValue((Integer.class.getClassLoader())));
+            instance.status = ((Integer) in.readValue((Integer.class.getClassLoader())));
+            instance.createdAt = ((String) in.readValue((String.class.getClassLoader())));
+            return instance;
+        }
+
+        public BeaconInfo[] newArray(int size) {
+            return (new BeaconInfo[size]);
+        }
+    };
 
     public int getId() {
         return id;
@@ -73,7 +96,15 @@ public class BeaconInfo {
         this.status = status;
     }
 
-    @Override
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+   @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -82,5 +113,19 @@ public class BeaconInfo {
         BeaconInfo other = (BeaconInfo) obj;
 
         return other.major == major && other.uuid.equals(uuid) && other.minor == minor;
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(id);
+        dest.writeValue(residentId);
+        dest.writeValue(uuid);
+        dest.writeValue(major);
+        dest.writeValue(minor);
+        dest.writeValue(status);
+        dest.writeValue(createdAt);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 }

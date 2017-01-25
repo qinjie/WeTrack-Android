@@ -1,11 +1,11 @@
 package edu.np.ece.wetrack.api;
 
 
-import edu.np.ece.wetrack.model.Resident;
 import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import edu.np.ece.wetrack.model.Resident;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

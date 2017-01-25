@@ -21,11 +21,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import edu.np.ece.wetrack.api.RetrofitUtils;
-import edu.np.ece.wetrack.api.ServerAPI;
-import edu.np.ece.wetrack.model.BeaconInfo;
-import edu.np.ece.wetrack.model.BeaconLocation;
-import edu.np.ece.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -46,6 +41,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import edu.np.ece.wetrack.api.RetrofitUtils;
+import edu.np.ece.wetrack.api.ServerAPI;
+import edu.np.ece.wetrack.model.BeaconInfo;
+import edu.np.ece.wetrack.model.BeaconLocation;
+import edu.np.ece.wetrack.model.Resident;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -178,7 +178,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             String[] regionInfo = region.getUniqueId().split(";");
 
             for (final Resident patient : patientList) {
-                for (final BeaconInfo aBeacon : patient.getPatientBeacon()) {
+                for (final BeaconInfo aBeacon : patient.getBeacons()) {
                     if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && regionInfo[2].equals(String.valueOf(aBeacon.getMajor())) && regionInfo[3].equals(String.valueOf(aBeacon.getMinor())) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                         if (!checkInternetOn()) {
@@ -254,7 +254,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             String[] regionInfo = region.getUniqueId().split(";");
 
             for (final Resident patient : patientList) {
-                for (final BeaconInfo aBeacon : patient.getPatientBeacon()) {
+                for (final BeaconInfo aBeacon : patient.getBeacons()) {
                     if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && regionInfo[2].equals(String.valueOf(aBeacon.getMajor())) && regionInfo[3].equals(String.valueOf(aBeacon.getMinor())) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
 
                         if (!checkInternetOn()) {
@@ -421,8 +421,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             if (patientList != null && !patientList.equals("") && patientList.size() > 0 && tmp != null) {
                 for (Resident aPatient : patientList) {
-                    for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
-                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+                    for (BeaconInfo aBeacon : aPatient.getBeacons()) {
+                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 
 //                                missingPatientList.add(aPatient);
 //                                forDisplay.logToDisplay2();
@@ -465,8 +465,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                         if (patientList.size() > 0) {
                             for (final Resident patient : patientList) {
-                                for (BeaconInfo aBeacon : patient.getPatientBeacon()) {
-                                    if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
+                                for (BeaconInfo aBeacon : patient.getBeacons()) {
+                                    if (patient.getBeacons() != null && patient.getBeacons().size() > 0) {
                                         String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
                                         if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
                                             BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);

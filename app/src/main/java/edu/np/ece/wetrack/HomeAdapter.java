@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import edu.np.ece.wetrack.model.Resident;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -16,6 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.np.ece.wetrack.model.Resident;
 
 /**
  * Created by hoanglong on 19-Jan-17.
@@ -48,11 +47,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void bindResident(final Resident patient, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
         if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0) {
-            viewHolder.tvBeacon.setText("Last seen at " + patient.getLatestLocation().get(0).getCreated());
+            viewHolder.tvBeacon.setText("Last seen at " + patient.getLatestLocation().get(0).getCreatedAt());
         }else{
             viewHolder.tvBeacon.setText("No report yet");
         }
-        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
+        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getThumbnailPath(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

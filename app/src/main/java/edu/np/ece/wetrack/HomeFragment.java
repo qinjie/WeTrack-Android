@@ -15,10 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import edu.np.ece.wetrack.api.RetrofitUtils;
-import edu.np.ece.wetrack.api.ServerAPI;
-import edu.np.ece.wetrack.model.BeaconInfo;
-import edu.np.ece.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -30,6 +26,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.np.ece.wetrack.api.RetrofitUtils;
+import edu.np.ece.wetrack.api.ServerAPI;
+import edu.np.ece.wetrack.model.BeaconInfo;
+import edu.np.ece.wetrack.model.Resident;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,8 +115,8 @@ public class HomeFragment extends Fragment {
 
                         if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
                             for (Resident aPatient : patientList) {
-                                for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
-                                    if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+                                for (BeaconInfo aBeacon : aPatient.getBeacons()) {
+                                    if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 
                                         if (!missingPatientList.contains(aPatient)) {
                                             missingPatientList.add(aPatient);
@@ -193,8 +193,8 @@ public class HomeFragment extends Fragment {
 
             if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
                 for (Resident aPatient : patientList) {
-                    for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
-                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+                    for (BeaconInfo aBeacon : aPatient.getBeacons()) {
+                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 
                             if (!missingPatientList.contains(aPatient)) {
                                 missingPatientList.add(aPatient);
@@ -275,8 +275,8 @@ public class HomeFragment extends Fragment {
 //
 //            if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
 //                for (Resident aPatient : patientList) {
-//                    for (BeaconInfo aBeacon : aPatient.getPatientBeacon()) {
-//                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getPatientBeacon() != null && aPatient.getPatientBeacon().size() > 0) {
+//                    for (BeaconInfo aBeacon : aPatient.getBeacons()) {
+//                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 //
 //                            if (!missingPatientList.contains(aPatient)) {
 //                                missingPatientList.add(aPatient);

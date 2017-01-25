@@ -11,9 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import edu.np.ece.wetrack.api.RetrofitUtils;
-import edu.np.ece.wetrack.api.ServerAPI;
-import edu.np.ece.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,6 +20,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.np.ece.wetrack.api.RetrofitUtils;
+import edu.np.ece.wetrack.api.ServerAPI;
+import edu.np.ece.wetrack.model.Resident;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +35,7 @@ public class PatientDetailActivity extends AppCompatActivity {
     TextView name;
 
     @BindView(R.id.avatar)
-    ImageView avt;
+    ImageView avatar;
 
     @BindView(R.id.status)
     TextView status;
@@ -46,8 +46,8 @@ public class PatientDetailActivity extends AppCompatActivity {
     @BindView(R.id.dob)
     TextView dob;
 
-    @BindView(R.id.created)
-    TextView created;
+    @BindView(R.id.createdAt)
+    TextView createdAt;
 
     @BindView(R.id.lastSeen)
     TextView lastSeen;
@@ -124,7 +124,7 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                        for (Resident aPatient : patientList) {
 //                            if (aPatient.getFullname().equals(patient.getFullname())) {
 //                                name.setText(aPatient.getFullname());
-//                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getAvatar().replace("thumbnail_", ""), avt).execute();
+//                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_", ""), avatar).execute();
 //                                nric.setText(aPatient.getNric());
 //                                String tmp = "";
 //                                if (aPatient.getStatus() == 1) {
@@ -134,10 +134,10 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                                }
 //                                status.setText(tmp);
 //                                dob.setText(aPatient.getDob());
-//                                created.setText(aPatient.getCreated());
+//                                createdAt.setText(aPatient.getCreatedAt());
 //                                if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
-//                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreated());
-//                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddr());
+//                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
+//                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
 //                                } else {
 //                                    lastSeen.setText("Unknown");
 //                                    lastLocation.setText("Unknown");
@@ -224,7 +224,7 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                    for (Resident aPatient : patientList) {
 //                        if (String.valueOf(aPatient.getId()).equals(id)) {
 //                            name.setText(aPatient.getFullname());
-//                            new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getAvatar().replace("thumbnail_", ""), avt).execute();
+//                            new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_", ""), avatar).execute();
 //                            nric.setText(aPatient.getNric());
 //                            String tmp = "";
 //                            if (aPatient.getStatus() == 1) {
@@ -234,10 +234,10 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                            }
 //                            status.setText(tmp);
 //                            dob.setText(aPatient.getDob());
-//                            created.setText(aPatient.getCreated());
+//                            createdAt.setText(aPatient.getCreatedAt());
 //                            if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
-//                                lastSeen.setText(aPatient.getLatestLocation().get(0).getCreated());
-//                                lastLocation.setText(aPatient.getLatestLocation().get(0).getAddr());
+//                                lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
+//                                lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
 //                            } else {
 //                                lastSeen.setText("Unknown");
 //                                lastLocation.setText("Unknown");
@@ -296,7 +296,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                         for (Resident aPatient : patientList) {
                             if (aPatient.getFullname().equals(patient.getFullname())) {
                                 name.setText(aPatient.getFullname());
-                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getAvatar().replace("thumbnail_", ""), avt).execute();
+                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_", ""), avatar).execute();
                                 nric.setText(aPatient.getNric());
                                 String tmp = "";
                                 if (aPatient.getStatus() == 1) {
@@ -306,10 +306,10 @@ public class PatientDetailActivity extends AppCompatActivity {
                                 }
                                 status.setText(tmp);
                                 dob.setText(aPatient.getDob());
-                                created.setText(aPatient.getCreated());
+                                createdAt.setText(aPatient.getCreatedAt());
                                 if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
-                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreated());
-                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddr());
+                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
+                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
                                 } else {
                                     lastSeen.setText("Unknown");
                                     lastLocation.setText("Unknown");

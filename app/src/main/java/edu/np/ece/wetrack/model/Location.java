@@ -10,74 +10,131 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Location implements Parcelable {
+
     @SerializedName("id")
-    private int beaconID;
+    private int id;
+
+    @SerializedName("beacon_id")
+    private int beaconId;
+
+    @SerializedName("locator_id")
+    private int locatorId;
+
+    @SerializedName("user_id")
+    private int userId;
+
+    @SerializedName("longitude")
+    private double longitude;
+
+    @SerializedName("latitude")
+    private double latitude;
 
     @SerializedName("address")
-    private String addr;
+    private String address;
 
     @SerializedName("created_at")
-    private String created;
+    private String createdAt;
 
-    public Location(int beaconID, String addr, String created) {
-        this.beaconID = beaconID;
-        this.addr = addr;
-        this.created = created;
+    public final static Parcelable.Creator<Location> CREATOR = new Creator<Location>() {
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Location createFromParcel(Parcel in) {
+            Location instance = new Location();
+            instance.id = ((int) in.readValue((Integer.class.getClassLoader())));
+            instance.beaconId = ((int) in.readValue((Integer.class.getClassLoader())));
+            instance.locatorId = ((int) in.readValue((Integer.class.getClassLoader())));
+            instance.userId = ((int) in.readValue((String.class.getClassLoader())));
+            instance.longitude = ((double) in.readValue((Double.class.getClassLoader())));
+            instance.latitude = ((double) in.readValue((Double.class.getClassLoader())));
+            instance.address = ((String) in.readValue((String.class.getClassLoader())));
+            instance.createdAt = ((String) in.readValue((String.class.getClassLoader())));
+            return instance;
+        }
+
+        public Location[] newArray(int size) {
+            return (new Location[size]);
+        }
+    };
+
+    public int getId() {
+        return id;
     }
 
-    public int getBeaconID() {
-        return beaconID;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setBeaconID(int beaconID) {
-        this.beaconID = beaconID;
+    public int getBeaconId() {
+        return beaconId;
     }
 
-    public String getAddr() {
-        return addr;
+    public void setBeaconId(int beaconId) {
+        this.beaconId = beaconId;
     }
 
-    public void setAddr(String addr) {
-        this.addr = addr;
+    public int getLocatorId() {
+        return locatorId;
     }
 
-    public String getCreated() {
-        return created;
+    public void setLocatorId(int locatorId) {
+        this.locatorId = locatorId;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public int getUserId() {
+        return userId;
     }
 
-    @Override
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(id);
+        dest.writeValue(beaconId);
+        dest.writeValue(locatorId);
+        dest.writeValue(userId);
+        dest.writeValue(longitude);
+        dest.writeValue(latitude);
+        dest.writeValue(address);
+        dest.writeValue(createdAt);
+    }
+
+
     public int describeContents() {
         return 0;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int i) {
-        dest.writeInt(beaconID);
-        dest.writeString(addr);
-        dest.writeString(created);
-
-    }
-
-    protected Location(Parcel in) {
-        beaconID = in.readInt();
-        addr = in.readString();
-        created = in.readString();
-    }
-
-    public static final Creator<Location> CREATOR = new Creator<Location>() {
-        @Override
-        public Location createFromParcel(Parcel parcel) {
-            return new Location(parcel);
-        }
-
-        @Override
-        public Location[] newArray(int i) {
-            return new Location[i];
-        }
-    };
 
 }

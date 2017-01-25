@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,32 +12,73 @@ import java.util.List;
  */
 
 public class Resident implements Parcelable {
+
     @SerializedName("id")
     private int id;
 
     @SerializedName("fullname")
     private String fullname;
 
+    @SerializedName("dob")
+    private String dob;
+
     @SerializedName("nric")
     private String nric;
+
+    @SerializedName("image_path")
+    private String imagePath;
+
+    @SerializedName("thumbnail_path")
+    private String thumbnailPath;
 
     @SerializedName("status")
     private int status;
 
-    @SerializedName("beacons")
-    private List<BeaconInfo> patientBeacon;
-
-    @SerializedName("thumbnail_path")
-    private String avatar;
-
-    @SerializedName("dob")
-    private String dob;
-
     @SerializedName("created_at")
-    private String created;
+    private String createdAt;
+
+    @SerializedName("beacons")
+    private List<BeaconInfo> beacons = null;
+
+    @SerializedName("relatives")
+    private List<Relative> relatives = null;
+
+    @SerializedName("locations")
+    private List<Location> locations = null;
 
     @SerializedName("latestLocation")
-    private List<Location> latestLocation;
+    private List<Location> latestLocation = null;
+
+    @SerializedName("locationHistories")
+    private List<Location> locationHistories = null;
+
+    public final static Parcelable.Creator<Resident> CREATOR = new Creator<Resident>() {
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        public Resident createFromParcel(Parcel in) {
+            Resident instance = new Resident();
+            instance.id = ((int) in.readValue((int.class.getClassLoader())));
+            instance.fullname = ((String) in.readValue((String.class.getClassLoader())));
+            instance.dob = ((String) in.readValue((String.class.getClassLoader())));
+            instance.nric = ((String) in.readValue((String.class.getClassLoader())));
+            instance.imagePath = ((String) in.readValue((String.class.getClassLoader())));
+            instance.thumbnailPath = ((String) in.readValue((String.class.getClassLoader())));
+            instance.status = ((Integer) in.readValue((Integer.class.getClassLoader())));
+            instance.createdAt = ((String) in.readValue((String.class.getClassLoader())));
+            in.readList(instance.beacons, (edu.np.ece.wetrack.model.BeaconInfo.class.getClassLoader()));
+            in.readList(instance.relatives, (edu.np.ece.wetrack.model.Relative.class.getClassLoader()));
+            in.readList(instance.locations, (edu.np.ece.wetrack.model.Location.class.getClassLoader()));
+            in.readList(instance.latestLocation, (edu.np.ece.wetrack.model.Location.class.getClassLoader()));
+            in.readList(instance.locationHistories, (edu.np.ece.wetrack.model.Location.class.getClassLoader()));
+            return instance;
+        }
+
+        public Resident[] newArray(int size) {
+            return (new Resident[size]);
+        }
+    };
 
     public int getId() {
         return id;
@@ -56,12 +96,36 @@ public class Resident implements Parcelable {
         this.fullname = fullname;
     }
 
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     public String getNric() {
         return nric;
     }
 
     public void setNric(String nric) {
         this.nric = nric;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getThumbnailPath() {
+        return thumbnailPath;
+    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
     }
 
     public int getStatus() {
@@ -72,36 +136,36 @@ public class Resident implements Parcelable {
         this.status = status;
     }
 
-    public List<BeaconInfo> getPatientBeacon() {
-        return patientBeacon;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPatientBeacon(List<BeaconInfo> patientBeacon) {
-        this.patientBeacon = patientBeacon;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public List<BeaconInfo> getBeacons() {
+        return beacons;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setBeacons(List<BeaconInfo> beacons) {
+        this.beacons = beacons;
     }
 
-    public String getDob() {
-        return dob;
+    public List<Relative> getRelatives() {
+        return relatives;
     }
 
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setRelatives(List<Relative> relatives) {
+        this.relatives = relatives;
     }
 
-    public String getCreated() {
-        return created;
+    public List<Location> getLocations() {
+        return locations;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 
     public List<Location> getLatestLocation() {
@@ -112,57 +176,32 @@ public class Resident implements Parcelable {
         this.latestLocation = latestLocation;
     }
 
-    protected Resident(Parcel in) {
-        fullname = in.readString();
-        avatar = in.readString();
-        status = in.readInt();
-        nric = in.readString();
-        dob = in.readString();
-        created = in.readString();
-        latestLocation= new ArrayList<Location>();
-        in.readTypedList(latestLocation,Location.CREATOR);
+    public List<Location> getLocationHistories() {
+        return locationHistories;
     }
 
-//    public Resident(Resident r) {
-//        this.id = r.id;
-//        this.fullname = r.fullname;
-//        this.nric = r.nric;
-//        this.status = r.status;
-//        this.patientBeacon = r.patientBeacon;
-//        this.avatar = r.avatar;
-//        this.dob = r.dob;
-//        this.created = r.created;
-//        this.latestLocation = r.latestLocation;
-//    }
+    public void setLocationHistories(List<Location> locationHistories) {
+        this.locationHistories = locationHistories;
+    }
 
-    public static final Creator<Resident> CREATOR = new Creator<Resident>() {
-        @Override
-        public Resident createFromParcel(Parcel in)  {
-            return new Resident(in);
-        }
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(id);
+        dest.writeValue(fullname);
+        dest.writeValue(dob);
+        dest.writeValue(nric);
+        dest.writeValue(imagePath);
+        dest.writeValue(thumbnailPath);
+        dest.writeValue(status);
+        dest.writeValue(createdAt);
+        dest.writeList(beacons);
+        dest.writeList(relatives);
+        dest.writeList(locations);
+        dest.writeList(latestLocation);
+        dest.writeList(locationHistories);
+    }
 
-        @Override
-        public Resident[] newArray(int size) {
-            return new Resident[size];
-        }
-    };
-
-
-    @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int i) {
-        dest.writeString(fullname);
-        dest.writeString(avatar);
-        dest.writeInt(status);
-        dest.writeString(nric);
-        dest.writeString(dob);
-        dest.writeString(created);
-        dest.writeTypedList(latestLocation);
-
     }
 
     @Override
@@ -173,6 +212,7 @@ public class Resident implements Parcelable {
 
         Resident other = (Resident) obj;
 
-        return fullname.equals(other.fullname) && id == other.id && nric.equals(other.nric);
+        return fullname.equals(other.getFullname()) && id == other.getId() && nric.equals(other.getNric());
     }
+
 }

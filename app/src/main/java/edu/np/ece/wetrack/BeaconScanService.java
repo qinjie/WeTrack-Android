@@ -24,10 +24,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import edu.np.ece.wetrack.api.ServerAPI;
-import edu.np.ece.wetrack.model.BeaconLocation;
-import edu.np.ece.wetrack.api.RetrofitUtils;
-import edu.np.ece.wetrack.model.Resident;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -49,6 +45,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import edu.np.ece.wetrack.api.RetrofitUtils;
+import edu.np.ece.wetrack.api.ServerAPI;
+import edu.np.ece.wetrack.model.BeaconLocation;
+import edu.np.ece.wetrack.model.Resident;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -257,11 +257,11 @@ public class BeaconScanService extends Service implements BeaconConsumer {
                                 for (Beacon firstBeacon1 : beacons) {
                                     String nearbyBeaconIdentifiers = firstBeacon1.getId1().toString() + firstBeacon1.getId2().toString() + firstBeacon1.getId3().toString();
                                     try {
-                                        if (resident.getPatientBeacon() != null && resident.getPatientBeacon().size() > 0) {
-                                            String patientBeaconIdentifiers = resident.getPatientBeacon().get(0).getUuid() + resident.getPatientBeacon().get(0).getMajor() + resident.getPatientBeacon().get(0).getMinor();
+                                        if (resident.getBeacons() != null && resident.getBeacons().size() > 0) {
+                                            String patientBeaconIdentifiers = resident.getBeacons().get(0).getUuid() + resident.getBeacons().get(0).getMajor() + resident.getBeacons().get(0).getMinor();
                                             if (patientBeaconIdentifiers.equals(nearbyBeaconIdentifiers) && resident.getStatus() == 1) {
 
-                                                BeaconLocation aLocation = new BeaconLocation(resident.getPatientBeacon().get(0).getId(), resident.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+                                                BeaconLocation aLocation = new BeaconLocation(resident.getBeacons().get(0).getId(), resident.getId(), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
 
                                                 Gson gson = new GsonBuilder()
                                                         .setLenient()
@@ -318,10 +318,10 @@ public class BeaconScanService extends Service implements BeaconConsumer {
 
                             if (patientList.size() > 0) {
                                 for (final Resident patient : patientList) {
-                                    if (patient.getPatientBeacon() != null && patient.getPatientBeacon().size() > 0) {
-                                        String patientBeaconIdentifiers = patient.getPatientBeacon().get(0).getUuid() + patient.getPatientBeacon().get(0).getMajor() + patient.getPatientBeacon().get(0).getMinor();
+                                    if (patient.getBeacons() != null && patient.getBeacons().size() > 0) {
+                                        String patientBeaconIdentifiers = patient.getBeacons().get(0).getUuid() + patient.getBeacons().get(0).getMajor() + patient.getBeacons().get(0).getMinor();
                                         if (patientInfo[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1) {
-                                            BeaconLocation aLocation = new BeaconLocation(patient.getPatientBeacon().get(0).getId(), 696, Double.parseDouble(patientInfo[1]), Double.parseDouble(patientInfo[2]), patientInfo[3]);
+                                            BeaconLocation aLocation = new BeaconLocation(patient.getBeacons().get(0).getId(), 696, Double.parseDouble(patientInfo[1]), Double.parseDouble(patientInfo[2]), patientInfo[3]);
                                             Gson gson = new GsonBuilder()
                                                     .setLenient()
                                                     .create();

@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import edu.np.ece.wetrack.R;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -18,9 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.np.ece.wetrack.model.BeaconInfo;
 import edu.np.ece.wetrack.model.Resident;
-
-.wetrack.R;
-        .wetrack.R;
 
 /**
  * Created by hoanglong on 10/06/2016.
@@ -57,7 +52,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         viewHolder.tvPatient.setText(patient.getFullname());
         viewHolder.tvBeacon.setText("is nearby.");
 
-        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
+        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getThumbnailPath(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
