@@ -1,6 +1,7 @@
 package edu.np.ece.wetrack;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.model.BeaconInfo;
 import edu.np.ece.wetrack.model.Resident;
 
@@ -50,9 +52,10 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void bindBeacon(final Resident patient, final BeaconInfo beacon, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(patient.getFullname());
-        viewHolder.tvBeacon.setText("is nearby.");
+        viewHolder.tvInfo.setText("is nearby.");
 
-        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getThumbnailPath(), viewHolder.ivAvatar).execute();
+        if (!TextUtils.isEmpty(patient.getThumbnailPath()))
+            new ImageLoadTask(Constant.BACKEND_URL + patient.getThumbnailPath(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,10 +80,10 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public class BeaconViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvBeacon)
-        public TextView tvBeacon;
+        @BindView(R.id.tvInfo)
+        public TextView tvInfo;
 
-        @BindView(R.id.tvPatient)
+        @BindView(R.id.tvResident)
         public TextView tvPatient;
 
         @BindView(R.id.ivAvatar)

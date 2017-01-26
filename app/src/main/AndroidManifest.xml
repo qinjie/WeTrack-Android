@@ -56,7 +56,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="edu.np.ece.wetrack.PatientDetailActivity" />
+        <activity android:name="edu.np.ece.wetrack.ResidentDetailActivity" />
     </application>
 
 </manifest>

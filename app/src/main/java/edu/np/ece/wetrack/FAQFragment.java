@@ -15,12 +15,12 @@ import me.biubiubiu.justifytext.library.JustifyTextView;
  * Created by hoanglong on 20-Jan-17.
  */
 
-public class FAQFragment  extends Fragment {
+public class FaqFragment extends Fragment {
 
-    public static FAQFragment newInstance(String title) {
+    public static FaqFragment newInstance(String title) {
         Bundle args = new Bundle();
         args.putString("title", title);
-        FAQFragment fragment = new FAQFragment();
+        FaqFragment fragment = new FaqFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -32,7 +32,7 @@ public class FAQFragment  extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_faq, container, false);
         ButterKnife.bind(this, rootView);
         jtv.setText(getResources().getString(R.string.FAQ));
 

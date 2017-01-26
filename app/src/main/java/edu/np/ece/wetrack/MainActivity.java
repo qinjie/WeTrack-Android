@@ -5,10 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -16,10 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -80,33 +75,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
-//        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
-//        getBaseContext().startService(in);
-
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
-
-//        final TypedArray styledAttributes = getBaseContext().getTheme().obtainStyledAttributes(
-//                new int[]{android.R.attr.actionBarSize});
-//        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
-//        styledAttributes.recycle();
-
-        //Get height of actionbar
-        TypedValue tv = new TypedValue();
-        getBaseContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
-        int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
-
-        // Gets layout
-        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
-        // Gets the layout params that will allow you to resize the layout
-        ViewGroup.LayoutParams params = layout.getLayoutParams();
-        // Changes the height and width to the specified *pixels*
-        Resources r = getResources();
-//        int px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
-        params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
-        layout.setLayoutParams(params);
+//
+////        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
+////        getBaseContext().startService(in);
+//
+//        DisplayMetrics displaymetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//        int height = displaymetrics.heightPixels;
+//
+////        final TypedArray styledAttributes = getBaseContext().getTheme().obtainStyledAttributes(
+////                new int[]{android.R.attr.actionBarSize});
+////        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+////        styledAttributes.recycle();
+//
+//        //Get height of actionbar
+//        TypedValue tv = new TypedValue();
+//        getBaseContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
+//        int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
+//
+//        // Gets layout
+//        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
+//        // Gets the layout params that will allow you to resize the layout
+//        ViewGroup.LayoutParams params = layout.getLayoutParams();
+//        // Changes the height and width to the specified *pixels*
+//        Resources r = getResources();
+////        int px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+//        params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
+//        layout.setLayoutParams(params);
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
 
@@ -155,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             break;
                             case 2: {
-                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, FAQFragment.newInstance("About")).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, FaqFragment.newInstance("About")).commit();
                                 result.closeDrawer();
                                 toolbar.setTitle("FAQ");
                                 tabLayout.setVisibility(View.GONE);

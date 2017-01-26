@@ -25,9 +25,8 @@
         android:layout_toEndOf="@id/ivAvatar"
         android:gravity="center_vertical"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-        android:paddingTop="2dp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:text="tvResident" />
 
@@ -35,15 +34,28 @@
         android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/ivAvatar"
+        android:layout_alignParentEnd="true"
         android:layout_below="@id/tvResident"
         android:layout_toEndOf="@id/ivAvatar"
         android:gravity="center_vertical"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textSize="18sp"
-        android:textStyle="italic"
+        android:textSize="13sp"
         tools:text="tvInfo" />
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/ivAvatar"
+        android:layout_below="@id/tvInfo"
+        android:layout_toEndOf="@id/ivAvatar"
+        android:gravity="center_vertical"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textSize="11sp"
+        android:textStyle="italic"
+        tools:text="tvLocation" />
 
 </RelativeLayout>

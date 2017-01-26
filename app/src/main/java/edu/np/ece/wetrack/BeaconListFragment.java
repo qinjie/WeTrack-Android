@@ -136,7 +136,7 @@ public class BeaconListFragment extends Fragment {
 
     @Subscribe
     public void onEvent(BeaconListAdapter.OpenEvent event) {
-        Intent intent = new Intent(getActivity(), PatientDetailActivity.class);
+        Intent intent = new Intent(getActivity(), ResidentDetailActivity.class);
         intent.putExtra("patient", event.patient);
         intent.putExtra("position", event.position);
         intent.putExtra("fromWhat", "detected");

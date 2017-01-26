@@ -345,7 +345,7 @@ public class HomeFragment extends Fragment {
 
     @Subscribe
     public void onEvent(HomeAdapter.OpenEvent event) {
-        Intent intent = new Intent(getActivity(), PatientDetailActivity.class);
+        Intent intent = new Intent(getActivity(), ResidentDetailActivity.class);
         intent.putExtra("patient", event.patient);
         intent.putExtra("position", event.position);
         intent.putExtra("fromWhat", "home");

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,23 +35,29 @@ public class Resident implements Parcelable {
     @SerializedName("status")
     private int status;
 
+    @SerializedName("remark")
+    private String remark;
+
+    @SerializedName("reported_at")
+    private String reportedAt;
+
     @SerializedName("created_at")
     private String createdAt;
 
     @SerializedName("beacons")
-    private List<BeaconInfo> beacons = null;
+    private List<BeaconInfo> beacons = new ArrayList<BeaconInfo>();
 
     @SerializedName("relatives")
-    private List<Relative> relatives = null;
+    private List<Relative> relatives = new ArrayList<Relative>();
 
     @SerializedName("locations")
-    private List<Location> locations = null;
+    private List<Location> locations = new ArrayList<Location>();
 
     @SerializedName("latestLocation")
-    private List<Location> latestLocation = null;
+    private List<Location> latestLocation = new ArrayList<Location>();
 
     @SerializedName("locationHistories")
-    private List<Location> locationHistories = null;
+    private List<Location> locationHistories = new ArrayList<Location>();
 
     public final static Parcelable.Creator<Resident> CREATOR = new Creator<Resident>() {
 
@@ -66,6 +73,8 @@ public class Resident implements Parcelable {
             instance.imagePath = ((String) in.readValue((String.class.getClassLoader())));
             instance.thumbnailPath = ((String) in.readValue((String.class.getClassLoader())));
             instance.status = ((Integer) in.readValue((Integer.class.getClassLoader())));
+            instance.remark = ((String) in.readValue((String.class.getClassLoader())));
+            instance.reportedAt = ((String) in.readValue((String.class.getClassLoader())));
             instance.createdAt = ((String) in.readValue((String.class.getClassLoader())));
             in.readList(instance.beacons, (edu.np.ece.wetrack.model.BeaconInfo.class.getClassLoader()));
             in.readList(instance.relatives, (edu.np.ece.wetrack.model.Relative.class.getClassLoader()));
@@ -136,6 +145,22 @@ public class Resident implements Parcelable {
         this.status = status;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getReportedAt() {
+        return reportedAt;
+    }
+
+    public void setReportedAt(String reportedAt) {
+        this.reportedAt = reportedAt;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -192,6 +217,8 @@ public class Resident implements Parcelable {
         dest.writeValue(imagePath);
         dest.writeValue(thumbnailPath);
         dest.writeValue(status);
+        dest.writeValue(remark);
+        dest.writeValue(reportedAt);
         dest.writeValue(createdAt);
         dest.writeList(beacons);
         dest.writeList(relatives);

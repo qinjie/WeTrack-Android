@@ -1,6 +1,7 @@
 package edu.np.ece.wetrack;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.np.ece.wetrack.api.Constant;
+import edu.np.ece.wetrack.model.Location;
 import edu.np.ece.wetrack.model.Resident;
 
 /**
@@ -32,9 +35,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
-        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_beacon, parent, false);
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_resident, parent, false);
         return new HomeAdapter.BeaconViewHolder(itemView);
-
     }
 
     @Override
@@ -44,18 +46,22 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    private void bindResident(final Resident patient, final BeaconViewHolder viewHolder) {
-        viewHolder.tvPatient.setText(patient.getFullname());
-        if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0) {
-            viewHolder.tvBeacon.setText("Last seen at " + patient.getLatestLocation().get(0).getCreatedAt());
-        }else{
-            viewHolder.tvBeacon.setText("No report yet");
+    private void bindResident(final Resident resident, final BeaconViewHolder viewHolder) {
+        viewHolder.tvPatient.setText(resident.getFullname());
+        if (resident.getLatestLocation() != null && resident.getLatestLocation().size() > 0) {
+            Location i = resident.getLatestLocation().get(0);
+            viewHolder.tvInfo.setText("Last seen at " + i.getCreatedAt());
+            viewHolder.tvLocation.setText(i.getAddress());
+        } else {
+            viewHolder.tvInfo.setText("No report yet");
+            viewHolder.tvLocation.setText("");
         }
-        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getThumbnailPath(), viewHolder.ivAvatar).execute();
+        if (!TextUtils.isEmpty(resident.getThumbnailPath()))
+            new ImageLoadTask(Constant.BACKEND_URL + resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new OpenEvent(residentList.indexOf(patient), patient));
+                EventBus.getDefault().post(new OpenEvent(residentList.indexOf(resident), resident));
             }
         });
     }
@@ -76,10 +82,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class BeaconViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvBeacon)
-        public TextView tvBeacon;
+        @BindView(R.id.tvInfo)
+        public TextView tvInfo;
 
-        @BindView(R.id.tvPatient)
+        @BindView(R.id.tvLocation)
+        public TextView tvLocation;
+
+        @BindView(R.id.tvResident)
         public TextView tvPatient;
 
         @BindView(R.id.ivAvatar)

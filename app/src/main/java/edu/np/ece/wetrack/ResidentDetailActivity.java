@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.api.RetrofitUtils;
 import edu.np.ece.wetrack.api.ServerAPI;
 import edu.np.ece.wetrack.model.Resident;
@@ -29,7 +30,7 @@ import retrofit2.Response;
 
 import static edu.np.ece.wetrack.BeaconScanActivation.patientList;
 
-public class PatientDetailActivity extends AppCompatActivity {
+public class ResidentDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.name)
     TextView name;
@@ -37,17 +38,20 @@ public class PatientDetailActivity extends AppCompatActivity {
     @BindView(R.id.avatar)
     ImageView avatar;
 
-    @BindView(R.id.status)
-    TextView status;
-
     @BindView(R.id.nric)
     TextView nric;
 
     @BindView(R.id.dob)
     TextView dob;
 
-    @BindView(R.id.createdAt)
-    TextView createdAt;
+    @BindView(R.id.status)
+    TextView status;
+
+    @BindView(R.id.reportedAt)
+    TextView reportedAt;
+
+    @BindView(R.id.remark)
+    TextView remark;
 
     @BindView(R.id.lastSeen)
     TextView lastSeen;
@@ -65,7 +69,7 @@ public class PatientDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.patient_detail);
+        setContentView(R.layout.activity_resident_detail);
         ButterKnife.bind(this);
         final ProgressDialog dialog = ProgressDialog.show(this, "We Track",
                 "Loading...Please wait...", true, false);
@@ -124,7 +128,7 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                        for (Resident aPatient : patientList) {
 //                            if (aPatient.getFullname().equals(patient.getFullname())) {
 //                                name.setText(aPatient.getFullname());
-//                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_", ""), avatar).execute();
+//                                new ImageLoadTask(Constant.BACKEND_URL + aPatient.getImagePath(), avatar).execute();
 //                                nric.setText(aPatient.getNric());
 //                                String tmp = "";
 //                                if (aPatient.getStatus() == 1) {
@@ -134,7 +138,7 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                                }
 //                                status.setText(tmp);
 //                                dob.setText(aPatient.getDob());
-//                                createdAt.setText(aPatient.getCreatedAt());
+//                                reportedAt.setText(aPatient.getCreatedAt());
 //                                if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
 //                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
 //                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
@@ -224,7 +228,7 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                    for (Resident aPatient : patientList) {
 //                        if (String.valueOf(aPatient.getId()).equals(id)) {
 //                            name.setText(aPatient.getFullname());
-//                            new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_", ""), avatar).execute();
+//                            new ImageLoadTask(Constant.BACKEND_URL + aPatient.getImagePath(), avatar).execute();
 //                            nric.setText(aPatient.getNric());
 //                            String tmp = "";
 //                            if (aPatient.getStatus() == 1) {
@@ -234,7 +238,7 @@ public class PatientDetailActivity extends AppCompatActivity {
 //                            }
 //                            status.setText(tmp);
 //                            dob.setText(aPatient.getDob());
-//                            createdAt.setText(aPatient.getCreatedAt());
+//                            reportedAt.setText(aPatient.getCreatedAt());
 //                            if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
 //                                lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
 //                                lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
@@ -292,34 +296,27 @@ public class PatientDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (patient != null) {
-                    if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                        for (Resident aPatient : patientList) {
-                            if (aPatient.getFullname().equals(patient.getFullname())) {
-                                name.setText(aPatient.getFullname());
-                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_", ""), avatar).execute();
-                                nric.setText(aPatient.getNric());
-                                String tmp = "";
-                                if (aPatient.getStatus() == 1) {
-                                    tmp = "Missing";
-                                } else {
-                                    tmp = "Available";
-                                }
-                                status.setText(tmp);
-                                dob.setText(aPatient.getDob());
-                                createdAt.setText(aPatient.getCreatedAt());
-                                if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
-                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
-                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
-                                } else {
-                                    lastSeen.setText("Unknown");
-                                    lastLocation.setText("Unknown");
-                                }
-
-                            }
-
-                        }
-                        dialog.dismiss();
+                    name.setText(patient.getFullname());
+                    if (!TextUtils.isEmpty(patient.getImagePath()))
+                        new ImageLoadTask(Constant.BACKEND_URL + patient.getImagePath(), avatar).execute();
+                    nric.setText(patient.getNric());
+                    String tmp;
+                    if (patient.getStatus() == 1) {
+                        tmp = "Missing";
+                    } else {
+                        tmp = "Available";
                     }
+                    status.setText(tmp);
+                    dob.setText(patient.getDob());
+                    reportedAt.setText(patient.getCreatedAt());
+                    if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0) {
+                        lastSeen.setText(patient.getLatestLocation().get(0).getCreatedAt());
+                        lastLocation.setText(patient.getLatestLocation().get(0).getAddress());
+                    } else {
+                        lastSeen.setText("Unknown");
+                        lastLocation.setText("Unknown");
+                    }
+                    dialog.dismiss();
                 }
             }
         }, 2000);
@@ -360,22 +357,4 @@ public class PatientDetailActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.btnUpdate)
-    public void onUpdateClick() {
-        Intent detailIntent = getIntent();
-        if (detailIntent != null) {
-            Bundle b = detailIntent.getExtras();
-            if (b != null) {
-                String tmp = b.getString("fromWhat");
-                Intent intent = new Intent(this, MainActivity.class);
-                if (tmp.equals("home")) {
-                    intent.putExtra("isFromDetailActivity", false);
-                } else {
-                    intent.putExtra("isFromDetailActivity", true);
-                }
-                startActivityForResult(intent, 101);
-            }
-        }
-
-    }
 }

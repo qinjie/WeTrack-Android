@@ -365,7 +365,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         .setSmallIcon(R.drawable.icon).setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        Intent intent = new Intent(this, PatientDetailActivity.class);
+        Intent intent = new Intent(this, ResidentDetailActivity.class);
 //        intent.putExtra("patient", r);
         intent.putExtra("patient", aResident);
 //        intent.putExtra("fromNotification", aResident.getId()+"");
