@@ -140,17 +140,18 @@ public class HomeFragment extends Fragment {
 
                     }
                 }, 2000);
+
+
                 if (getActivity() != null) {
-                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
 
             }
         });
 
-        mHandler = new Handler();
-        startRepeatingTask();
-
+//        mHandler = new Handler();
+//        startRepeatingTask();
 
 
 
@@ -217,19 +218,19 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    private Handler mHandler;
-    private int mInterval = 2000;
-    Runnable mStatusChecker = new Runnable() {
-        @Override
-        public void run() {
-            if (getActivity() != null) {
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-
-
-            mHandler.postDelayed(mStatusChecker, mInterval);
-        }
-    };
+//    private Handler mHandler;
+//    private int mInterval = 3000;
+//    Runnable mStatusChecker = new Runnable() {
+//        @Override
+//        public void run() {
+//            if (getActivity() != null && !srlUser.isRefreshing()) {
+//                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//            }
+//
+//
+//            mHandler.postDelayed(mStatusChecker, mInterval);
+//        }
+//    };
 
 
 //    private int mInterval2 = 10000;
@@ -303,10 +304,10 @@ public class HomeFragment extends Fragment {
 //    };
 
 
-    void startRepeatingTask() {
-        mStatusChecker.run();
+//    void startRepeatingTask() {
+//        mStatusChecker.run();
 //        mRefreshlist.run();
-    }
+//    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

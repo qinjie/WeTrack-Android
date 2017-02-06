@@ -33,8 +33,8 @@ public class BeaconListFragment extends Fragment {
 
     private Handler handler;
 
-    @BindView(R.id.srlUsers2)
-    SwipeRefreshLayout srlUser;
+//    @BindView(R.id.srlUsers2)
+//    SwipeRefreshLayout srlUser;
 
 
     public static BeaconListFragment newInstance(String title) {
@@ -56,48 +56,48 @@ public class BeaconListFragment extends Fragment {
 
 
         handler = new Handler();
-        srlUser.setDistanceToTriggerSync(550);
-        srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//        srlUser.setDistanceToTriggerSync(550);
+//        srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//
+//            @Override
+//            public void onRefresh() {
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        MainActivity.adapterDevice = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
+//                        rvBeacons.setAdapter(MainActivity.adapterDevice);
+//                        srlUser.setRefreshing(false);
+//                    }
+//                }, 1000);
+//
+//                if (getActivity() != null) {
+//                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//                }
+//
+//            }
+//        });
 
-            @Override
-            public void onRefresh() {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        MainActivity.adapterDevice = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
-                        rvBeacons.setAdapter(MainActivity.adapterDevice);
-                        srlUser.setRefreshing(false);
-                    }
-                }, 1000);
-
-                if (getActivity() != null) {
-                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-
-            }
-        });
-
-        mHandler = new Handler();
-        startRepeatingTask();
+//        mHandler = new Handler();
+//        startRepeatingTask();
         return rootView;
     }
 
-    private Handler mHandler;
-    private int mInterval = 2000;
-    Runnable mStatusChecker = new Runnable() {
-        @Override
-        public void run() {
-            if (getActivity() != null) {
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-            mHandler.postDelayed(mStatusChecker, mInterval);
-        }
-    };
+//    private Handler mHandler;
+//    private int mInterval = 2000;
+//    Runnable mStatusChecker = new Runnable() {
+//        @Override
+//        public void run() {
+//            if (getActivity() != null) {
+//                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//            }
+//            mHandler.postDelayed(mStatusChecker, mInterval);
+//        }
+//    };
 
-    void startRepeatingTask() {
-        mStatusChecker.run();
-    }
+//    void startRepeatingTask() {
+//        mStatusChecker.run();
+//    }
 
 
     @Override
