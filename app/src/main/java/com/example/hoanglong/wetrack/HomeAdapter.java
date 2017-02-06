@@ -49,10 +49,16 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         viewHolder.tvPatient.setText(patient.getFullname());
         if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0) {
             viewHolder.tvBeacon.setText("Last seen at " + patient.getLatestLocation().get(0).getCreated());
-        }else{
+        } else {
             viewHolder.tvBeacon.setText("No report yet");
         }
-        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
+
+        if (patient.getAvatar() == null || patient.getAvatar().equals("")) {
+            viewHolder.ivAvatar.setImageResource(R.drawable.default_avt);
+        } else {
+            new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
+        }
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

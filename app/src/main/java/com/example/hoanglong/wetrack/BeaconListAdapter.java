@@ -53,7 +53,12 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         viewHolder.tvPatient.setText(patient.getFullname());
         viewHolder.tvBeacon.setText("is nearby.");
 
-        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar).execute();
+        if (patient.getAvatar() == null || patient.getAvatar().equals("")) {
+            viewHolder.ivAvatar2.setImageResource(R.drawable.default_avt);
+        } else {
+            new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getAvatar(), viewHolder.ivAvatar2).execute();
+        }
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +90,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public TextView tvPatient;
 
         @BindView(R.id.ivAvatar)
-        public ImageView ivAvatar;
+        public ImageView ivAvatar2;
 
         public BeaconViewHolder(View itemView) {
             super(itemView);
