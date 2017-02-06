@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.example.hoanglong.wetrack"
+        applicationId "edu.np.ece.wetrack"
         minSdkVersion 22
         targetSdkVersion 25
         versionCode 1
@@ -38,6 +38,8 @@ dependencies {
     compile 'org.altbeacon:android-beacon-library:2.9.2'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'me.biubiubiu.justifytext:library:1.1'
+    compile 'com.google.android.gms:play-services-location:10.0.1'
+
     testCompile 'junit:junit:4.12'
 
 
