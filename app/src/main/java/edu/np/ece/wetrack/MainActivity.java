@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +24,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -30,7 +34,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_place,
     };
 
+    GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        // [END configure_signin]
+
+        // [START build_client]
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
 
 //        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
 //        getBaseContext().startService(in);
@@ -137,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         PrimaryDrawerItem faq = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
         PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(2).withName("About").withIcon(R.drawable.ic_info);
         SecondaryDrawerItem setting = new SecondaryDrawerItem().withIdentifier(3).withName("Setting").withIcon(R.drawable.ic_settings);
-//        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Exit").withIcon(R.drawable.ic_power);
+        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Exit").withIcon(R.drawable.ic_power);
 
 
         result = new DrawerBuilder()
@@ -148,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
                         faq,
                         about,
                         new DividerDrawerItem(),
-                        setting)
+                        setting,
+                        logout)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -179,6 +199,26 @@ public class MainActivity extends AppCompatActivity {
                                 toolbar.setTitle("About");
                                 tabLayout.setVisibility(View.GONE);
                                 btnSearch.setVisibility(View.GONE);
+                            }
+                            break;
+                            case 5: {
+
+                            }
+                            break;
+                            case 6: {
+                                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                        new ResultCallback<Status>() {
+                                            @Override
+                                            public void onResult(Status status) {
+                                                result.closeDrawer();
+                                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                                                SharedPreferences.Editor editor = sharedPref.edit();
+                                                editor.putString("userToken-WeTrack", "anonymous");
+
+                                                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
                             }
                             break;
 
@@ -326,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
-                            status.startResolutionForResult(MainActivity.this,REQUEST_CHECK_SETTINGS);
+                            status.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
                         } catch (IntentSender.SendIntentException e) {
 //                            Log.i(TAG, "PendingIntent unable to execute request.");
                         }

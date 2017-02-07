@@ -107,7 +107,9 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
 
     private void displayDetail(final Resident patient, final ProgressDialog dialog) {
-        serverAPI.getPatientList().enqueue(new Callback<List<Resident>>() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String token= sharedPref.getString("userToken-WeTrack", "anonymous");
+        serverAPI.getPatientList(token).enqueue(new Callback<List<Resident>>() {
             @Override
             public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                 try {
@@ -144,47 +146,54 @@ public class ResidentDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (patient != null) {
-                    if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                        for (Resident aPatient : patientList) {
-                            if (aPatient.getFullname().equals(patient.getFullname())) {
-                                name.setText(aPatient.getFullname());
 
-                                if (patient.getThumbnailPath() == null || patient.getThumbnailPath().equals("")) {
-                                    avt.setImageResource(R.drawable.default_avt);
-                                } else {
-                                    new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getThumbnailPath().replace("thumbnail_", ""), avt).execute();
-                                }
+
+                    name.setText(patient.getFullname());
+
+                    if (patient.getThumbnailPath() == null || patient.getThumbnailPath().equals("")) {
+                        avt.setImageResource(R.drawable.default_avt);
+                    } else {
+                        new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + patient.getThumbnailPath().replace("thumbnail_", ""), avt).execute();
+                    }
 
 //                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getAvatar().replace("thumbnail_", ""), avt).execute();
 
-                                remark.setText(aPatient.getRemark());
+                    remark.setText(patient.getRemark());
 
-                                nric.setText(aPatient.getNric());
-                                String tmp = "";
-                                if (aPatient.getStatus() == 1) {
-                                    tmp = "Missing";
-                                } else {
-                                    tmp = "Available";
-                                }
-                                status.setText(tmp);
-                                dob.setText(aPatient.getDob());
-                                created.setText(aPatient.getCreatedAt());
-                                if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
-                                    lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
-                                    lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
-                                } else {
-                                    lastSeen.setText("Unknown");
-                                    lastLocation.setText("Unknown");
-                                }
-
-                                 uri = "http://maps.google.com/maps?q=loc:" + aPatient.getLatestLocation().get(0).getLatitude() + "," + aPatient.getLatestLocation().get(0).getLongitude() + " (" + patient.getFullname() + ")";
-
-
-                            }
-
-                        }
-                        dialog.dismiss();
+                    nric.setText(patient.getNric());
+                    String tmp = "";
+                    if (patient.getStatus() == 1) {
+                        tmp = "Missing";
+                    } else {
+                        tmp = "Available";
                     }
+                    status.setText(tmp);
+                    dob.setText(patient.getDob());
+                    created.setText(patient.getCreatedAt());
+                    if (patient.getLatestLocation() != null && patient.getLatestLocation().size() > 0) {
+                        lastSeen.setText(patient.getLatestLocation().get(0).getCreatedAt());
+                        lastLocation.setText(patient.getLatestLocation().get(0).getAddress());
+                    } else {
+                        lastSeen.setText("Unknown");
+                        lastLocation.setText("Unknown");
+                    }
+
+                    uri = "http://maps.google.com/maps?q=loc:" + patient.getLatestLocation().get(0).getLatitude() + "," + patient.getLatestLocation().get(0).getLongitude() + " (" + patient.getFullname() + ")";
+
+                    dialog.dismiss();
+
+
+
+
+//                    if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
+//                        for (Resident aPatient : patientList) {
+//                            if (aPatient.getFullname().equals(patient.getFullname())) {
+//
+//                            }
+//
+//                        }
+//
+//                    }
                 }
             }
         }, 2000);

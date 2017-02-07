@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import edu.np.ece.wetrack.model.EmailInfo;
 import edu.np.ece.wetrack.model.Resident;
+import edu.np.ece.wetrack.model.UserAccount;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,10 +20,13 @@ import retrofit2.http.POST;
 
 public interface ServerAPI {
     @GET("v1/resident?expand=beacons,latestLocation")
-    Call<List<Resident>> getPatientList();
+    Call<List<Resident>> getPatientList(@Header("Authorization") String authorization);
 
     @POST("v1/location-history")
     Call<JsonObject> sendBeaconLocation(@Header("Authorization") String authorization, @Header("Content-Type") String type, @Body JsonObject beaconList);
+
+    @POST("v1/user/login-email")
+    Call<UserAccount> loginViaEmail(@Body JsonObject email);
 
 
 }
