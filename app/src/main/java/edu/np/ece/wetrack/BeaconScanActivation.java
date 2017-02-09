@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
@@ -19,12 +21,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
@@ -84,6 +92,39 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         Toast.makeText(getBaseContext(), "onCreate beaconScanActivation", Toast.LENGTH_SHORT).show();
 
 
+        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder, String tag) {
+                Glide.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
+            }
+
+            @Override
+            public void cancel(ImageView imageView) {
+                Glide.clear(imageView);
+            }
+
+            @Override
+            public Drawable placeholder(Context ctx, String tag) {
+                //define different placeholders for different imageView targets
+                //default tags are accessible via the DrawerImageLoader.Tags
+                //custom ones can be checked via string. see the CustomUrlBasePrimaryDrawerItem LINE 111
+                if (DrawerImageLoader.Tags.PROFILE.name().equals(tag)) {
+                    return DrawerUIUtils.getPlaceHolder(ctx);
+                } else if (DrawerImageLoader.Tags.ACCOUNT_HEADER.name().equals(tag)) {
+                    return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(com.mikepenz.materialdrawer.R.color.primary).sizeDp(56);
+                } else if ("customUrlItem".equals(tag)) {
+                    return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(R.color.md_red_500).sizeDp(56);
+                }
+
+                //we use the default one for
+                //DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name()
+
+                return super.placeholder(ctx, tag);
+            }
+        });
+
+
+
         mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getBaseContext());
         mBeaconmanager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
 
@@ -99,7 +140,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         serverAPI = RetrofitUtils.get().create(ServerAPI.class);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String token= sharedPref.getString("userToken-WeTrack", "anonymous");
+        String token= sharedPref.getString("userToken-WeTrack", "");
 
         serverAPI.getPatientList("Bearer " + token).enqueue(new Callback<List<Resident>>() {
             @Override
@@ -198,7 +239,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                         BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
 
-                        sendNotification2(patient, "is nearby.");
 
                         Gson gson = new GsonBuilder()
                                 .setLenient()
@@ -206,12 +246,14 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
 
 
-                        String token= sharedPref.getString("userToken-WeTrack", "anonymous");
+                        String token= sharedPref.getString("userToken-WeTrack", "");
                         Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
                         call.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
+                                    sendNotification2(patient, "is nearby.");
+
 //                                    if(detectedBeaconList.contains(a))
                                     detectedPatientList.add(patient);
                                     detectedBeaconList.add(aBeacon);
@@ -313,7 +355,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                 .create();
                         JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
 
-                        String token= sharedPref.getString("userToken-WeTrack", "anonymous");
+                        String token= sharedPref.getString("userToken-WeTrack", "");
                         Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
                         call.enqueue(new Callback<JsonObject>() {
                             @Override
@@ -389,15 +431,13 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         notificationManager.notify(aResident.getId(), builder.build());
     }
 
-    int x = 0;
-
     private int mInterval = 10000;
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            String token= sharedPref.getString("userToken-WeTrack", "anonymous");
+            String token= sharedPref.getString("userToken-WeTrack", "");
 
             serverAPI.getPatientList("Bearer " + token).enqueue(new Callback<List<Resident>>() {
                 @Override
@@ -430,14 +470,12 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 }
             });
 
+
+
             if (patientList != null && !patientList.equals("") && patientList.size() > 0 && tmp != null) {
                 for (Resident aPatient : patientList) {
                     for (BeaconInfo aBeacon : aPatient.getBeacons()) {
                         if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
-
-//                                missingPatientList.add(aPatient);
-//                                forDisplay.logToDisplay2();
-//                            }
 
                             String uuid = aBeacon.getUuid();
                             Identifier identifier = Identifier.parse(uuid);
@@ -447,11 +485,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             if (!regionList.contains(region)) {
                                 regionList.add(region);
                             }
-                        } else {
-//                            if (missingPatientList.contains(aPatient)) {
-//                                missingPatientList.remove(aPatient);
-//                                forDisplay.logToDisplay2();
-//                            }
                         }
                     }
 

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,12 +17,10 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.api.RetrofitUtils;
 import edu.np.ece.wetrack.api.ServerAPI;
 import edu.np.ece.wetrack.model.Resident;
@@ -76,39 +73,49 @@ public class ResidentDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resident_detail);
         ButterKnife.bind(this);
-        final ProgressDialog dialog = ProgressDialog.show(this, "We Track",
-                "Loading...Please wait...", true, false);
 
-        final Resident patient = getIntent().getParcelableExtra("patient");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String token = sharedPref.getString("userToken-WeTrack", "");
+
+        if (token.equals("")) {
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
+        } else {
+            final ProgressDialog dialog = ProgressDialog.show(this, "We Track",
+                    "Loading...Please wait...", true, false);
+
+            final Resident patient = getIntent().getParcelableExtra("patient");
 
 
-        serverAPI = RetrofitUtils.get().create(ServerAPI.class);
+            serverAPI = RetrofitUtils.get().create(ServerAPI.class);
 
-        displayDetail(patient, dialog);
+            displayDetail(patient, dialog);
 
 
-        srlUser.setDistanceToTriggerSync(400);
-        srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            srlUser.setDistanceToTriggerSync(400);
+            srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-            @Override
-            public void onRefresh() {
-                dialog.show();
+                @Override
+                public void onRefresh() {
+                    dialog.show();
 
-                displayDetail(patient, dialog);
+                    displayDetail(patient, dialog);
 
-                srlUser.setRefreshing(false);
+                    srlUser.setRefreshing(false);
 
-            }
+                }
 //                }, 100);
 //            }
-        });
+            });
+        }
+
 
     }
 
 
     private void displayDetail(final Resident patient, final ProgressDialog dialog) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String token= sharedPref.getString("userToken-WeTrack", "anonymous");
+        String token = sharedPref.getString("userToken-WeTrack", "");
         serverAPI.getPatientList(token).enqueue(new Callback<List<Resident>>() {
             @Override
             public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
@@ -181,8 +188,6 @@ public class ResidentDetailActivity extends AppCompatActivity {
                     uri = "http://maps.google.com/maps?q=loc:" + patient.getLatestLocation().get(0).getLatitude() + "," + patient.getLatestLocation().get(0).getLongitude() + " (" + patient.getFullname() + ")";
 
                     dialog.dismiss();
-
-
 
 
 //                    if (patientList != null && !patientList.equals("") && patientList.size() > 0) {

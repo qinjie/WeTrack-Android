@@ -23,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -35,18 +36,24 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.lang.reflect.Type;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.np.ece.wetrack.model.EmailInfo;
 
 import static edu.np.ece.wetrack.BeaconScanActivation.detectedBeaconList;
 import static edu.np.ece.wetrack.BeaconScanActivation.detectedPatientList;
@@ -89,6 +96,30 @@ public class MainActivity extends AppCompatActivity {
     GoogleApiClient mGoogleApiClient;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        Gson gson = new Gson();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String jsonPatients = sharedPref.getString("userAccount-WeTrack", "");
+        Type type = new TypeToken<EmailInfo>() {
+        }.getType();
+        EmailInfo account = gson.fromJson(jsonPatients, type);
+        IProfile profile;
+        String token = sharedPref.getString("userToken-WeTrack", "");
+        if (!token.equals("anonymous")) {
+            profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(account.getAvatarUrl());
+        } else {
+            profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(R.drawable.default_avt);
+
+        }
+        headerResult.removeProfile(0);
+        headerResult.addProfile(profile, 0);
+    }
+
+    AccountHeader headerResult;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -110,17 +141,11 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleApiClient.connect();
 
-//        Intent in = new Intent(getBaseContext(), BeaconScanService.class);
-//        getBaseContext().startService(in);
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int height = displaymetrics.heightPixels;
 
-//        final TypedArray styledAttributes = getBaseContext().getTheme().obtainStyledAttributes(
-//                new int[]{android.R.attr.actionBarSize});
-//        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
-//        styledAttributes.recycle();
 
         //Get height of actionbar
         TypedValue tv = new TypedValue();
@@ -141,16 +166,37 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_ENABLE_LOCATION);
 
 
-        AccountHeader headerResult = new AccountHeaderBuilder()
+//        Gson gson = new Gson();
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//        String jsonPatients = sharedPref.getString("userAccount-WeTrack", "");
+//        Type type = new TypeToken<EmailInfo>() {
+//        }.getType();
+//        EmailInfo account = gson.fromJson(jsonPatients, type);
+
+        headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.singapore)
+                .withSelectionListEnabledForSingleProfile(false)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        Toast.makeText(getBaseContext(), "ahihi", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 })
                 .build();
+
+        //TODO
+//        String token = sharedPref.getString("userToken-WeTrack","");
+
+//        IProfile profile =new ProfileDrawerItem().withName("Anonymous").withEmail("anonymous").withIcon(R.drawable.my_avt);
+//
+//        if(!token.equals("anonymous")){
+//            IProfile profile =new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(account.getAvatarUrl());
+
+//        }
+
+//        headerResult.addProfile(profile,0);
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(0).withName("Homepage").withIcon(R.drawable.ic_home_black);
         PrimaryDrawerItem faq = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
@@ -161,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
         result = new DrawerBuilder()
                 .withActivity(this)
+                .withTranslucentStatusBar(true)
                 .withAccountHeader(headerResult)
                 .withToolbar(toolbar)
                 .addDrawerItems(home,
@@ -174,8 +221,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position) {
                             case 1: {
-//                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-//                                startActivityForResult(intent, 0);
+
                                 getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("About")).commit();
                                 result.closeDrawer();
                                 TabLayout.Tab tab = tabLayout.getTabAt(0);
@@ -210,11 +256,12 @@ public class MainActivity extends AppCompatActivity {
                                         new ResultCallback<Status>() {
                                             @Override
                                             public void onResult(Status status) {
+                                                result.setSelection(0);
                                                 result.closeDrawer();
                                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                                                 SharedPreferences.Editor editor = sharedPref.edit();
-                                                editor.putString("userToken-WeTrack", "anonymous");
-
+                                                editor.putString("userToken-WeTrack", "");
+                                                editor.commit();
                                                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                                 startActivity(intent);
                                             }

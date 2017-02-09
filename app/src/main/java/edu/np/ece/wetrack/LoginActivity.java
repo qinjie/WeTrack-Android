@@ -92,12 +92,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onStart();
 
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (opr.isDone()) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String token = sharedPref.getString("userToken-WeTrack","");
+        if (opr.isDone() || token.equals("anonymous")) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
             Log.d(TAG, "Got cached sign-in");
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
+            if(opr.isDone()) {
+                GoogleSignInResult result = opr.get();
+                handleSignInResult(result);
+            }
+
+            if(token.equals("anonymous")){
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent);
+            }
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -133,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
+            final GoogleSignInAccount acct = result.getSignInAccount();
 
             mStatusTextView.setText(acct.getDisplayName() + " ; " + acct.getEmail());
 
@@ -142,6 +151,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     .setLenient()
                     .create();
             JsonObject obj = gson.toJsonTree(email).getAsJsonObject();
+
 
 
             serverAPI.loginViaEmail(obj).enqueue(new Callback<UserAccount>() {
@@ -157,13 +167,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         editor.putString("userToken-WeTrack", userAccount.getToken());
                         editor.commit();
 
+                        EmailInfo account = new EmailInfo(acct.getEmail(),acct.getDisplayName(),acct.getPhotoUrl().toString());
+                        Gson gson2 = new Gson();
+                        String jsonAccount = gson2.toJson(account);
+                        editor.putString("userAccount-WeTrack", jsonAccount);
+                        editor.commit();
+
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
 
                     } else {
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("userToken-WeTrack", "anonymous");
+                        editor.putString("userToken-WeTrack", "");
+                        editor.commit();
                         signOut();
 
                         Toast.makeText(getBaseContext(), "Account has not registed yet", Toast.LENGTH_SHORT).show();
@@ -175,6 +192,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 }
             });
+
+
+
+
 
 //TODO
 //            if (userAccount.getResult()!=null && userAccount.getResult().equals("wrong")) {
@@ -269,6 +290,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 signIn();
                 break;
             case R.id.btnAnonymous:
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("userToken-WeTrack", "anonymous");
+
+                EmailInfo account = new EmailInfo("Anonymous","Anonymous",R.drawable.my_avt+"");
+                Gson gson2 = new Gson();
+                String jsonAccount = gson2.toJson(account);
+                editor.putString("userAccount-WeTrack", jsonAccount);
+
+                editor.commit();
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
                 break;
