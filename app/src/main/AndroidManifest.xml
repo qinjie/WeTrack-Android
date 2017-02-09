@@ -52,7 +52,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ResidentDetailActivity" />
+        <activity android:name=".ResidentDetailActivity"
+            android:theme="@style/AppTheme.NoActionbar"/>
         <activity android:name=".LoginActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionbar">

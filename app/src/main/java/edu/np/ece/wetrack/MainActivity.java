@@ -21,6 +21,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -186,23 +189,15 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .build();
 
-        //TODO
-//        String token = sharedPref.getString("userToken-WeTrack","");
 
-//        IProfile profile =new ProfileDrawerItem().withName("Anonymous").withEmail("anonymous").withIcon(R.drawable.my_avt);
-//
-//        if(!token.equals("anonymous")){
-//            IProfile profile =new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(account.getAvatarUrl());
-
-//        }
-
-//        headerResult.addProfile(profile,0);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("hahahah");
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(0).withName("Homepage").withIcon(R.drawable.ic_home_black);
         PrimaryDrawerItem faq = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
         PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(2).withName("About").withIcon(R.drawable.ic_info);
         SecondaryDrawerItem setting = new SecondaryDrawerItem().withIdentifier(3).withName("Setting").withIcon(R.drawable.ic_settings);
-        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Exit").withIcon(R.drawable.ic_power);
+        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Logout").withIcon(R.drawable.ic_power);
 
 
         result = new DrawerBuilder()
@@ -372,6 +367,26 @@ public class MainActivity extends AppCompatActivity {
         initBluetooth();
 
         displayLocationSettingsRequest(getBaseContext());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_1:
+                Toast.makeText(getBaseContext(),"this is about us",Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initBluetooth() {

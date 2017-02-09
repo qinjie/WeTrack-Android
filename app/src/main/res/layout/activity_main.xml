@@ -26,6 +26,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/Toolbar"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:title="We Track" />
 

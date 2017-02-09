@@ -7,8 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,6 +69,10 @@ public class ResidentDetailActivity extends AppCompatActivity {
     @BindView(R.id.srlUsers)
     SwipeRefreshLayout srlUser;
 
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     String uri;
 
     @Override
@@ -110,6 +117,21 @@ public class ResidentDetailActivity extends AppCompatActivity {
         }
 
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case  android.R.id.home:
+                onBackPressed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
