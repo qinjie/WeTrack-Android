@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -387,7 +388,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 new NotificationCompat.Builder(this)
                         .setContentTitle("We Track")
                         .setContentText(name)
-                        .setSmallIcon(R.drawable.icon).setAutoCancel(true);
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                                R.drawable.icon))
+                        .setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         Intent intent = new Intent(this, MainActivity.class);
@@ -411,7 +415,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 new NotificationCompat.Builder(this)
                         .setContentTitle("We Track")
                         .setContentText(aResident.getFullname() + " " + msg)
-                        .setSmallIcon(R.drawable.icon).setAutoCancel(true);
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                                R.drawable.icon))
+                        .setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         Intent intent = new Intent(this, ResidentDetailActivity.class);

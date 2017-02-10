@@ -43,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 new NotificationCompat.Builder(this)
                         .setContentTitle("Messaging Service")
                         .setContentText(name)
-                        .setSmallIcon(R.drawable.icon).setAutoCancel(true);
+                        .setSmallIcon(R.drawable.icon_noti).setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         Intent intent = new Intent(this, MainActivity.class);

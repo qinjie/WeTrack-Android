@@ -47,7 +47,7 @@ public class FirebaseIDService extends FirebaseInstanceIdService {
                 new NotificationCompat.Builder(this)
                         .setContentTitle("Refreshed token")
                         .setContentText(name)
-                        .setSmallIcon(R.drawable.icon).setAutoCancel(true);
+                        .setSmallIcon(R.drawable.icon_noti).setAutoCancel(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         Intent intent = new Intent(this, MainActivity.class);
