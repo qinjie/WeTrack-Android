@@ -60,7 +60,7 @@ import edu.np.ece.wetrack.model.EmailInfo;
 
 import static edu.np.ece.wetrack.BeaconScanActivation.detectedBeaconList;
 import static edu.np.ece.wetrack.BeaconScanActivation.detectedPatientList;
-import static edu.np.ece.wetrack.BeaconScanActivation.missingPatientList;
+//import static edu.np.ece.wetrack.BeaconScanActivation.missingPatientList;
 
 //import static BeaconScanService.beaconManager;
 //import static BeaconScanService.listBeacon;
@@ -68,10 +68,12 @@ import static edu.np.ece.wetrack.BeaconScanActivation.missingPatientList;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_LOCATION = 1994;
-    //    public static ArrayAdapter<String> adapterDevice;
-    public static BeaconListAdapter adapterDevice;
+    //    public static ArrayAdapter<String> beaconListAdapter;
+    public static BeaconListAdapter beaconListAdapter;
 
-    public static HomeAdapter homeAdapter;
+//    public static HomeAdapter homeAdapter;
+
+//    public static RelativesAdapter relativeAdapter;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     private int[] icons = new int[]{
             R.drawable.ic_home,
             R.drawable.ic_place,
+            R.drawable.ic_group
     };
 
     GoogleApiClient mGoogleApiClient;
@@ -118,6 +121,28 @@ public class MainActivity extends AppCompatActivity {
         }
         headerResult.removeProfile(0);
         headerResult.addProfile(profile, 0);
+
+
+
+        //tablayout
+        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(),token);
+        adapterViewPager.getItem(0);
+        viewPager.setAdapter(adapterViewPager);
+        tabLayout.setupWithViewPager(viewPager);
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            tabLayout.getTabAt(i).setIcon(icons[i]);
+            tabLayout.getTabAt(i).setText(null);
+        }
+//        if (token.equals("anonymous") && tabLayout.getTabCount() == 3) {
+//
+//
+//            tabLayout.removeTabAt(2);
+//        } else {
+//            if (tabLayout.getTabCount() == 2) {
+//                tabLayout.newTab().setIcon(R.drawable.ic_group);
+//            }
+//        }
     }
 
     AccountHeader headerResult;
@@ -195,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(0).withName("Homepage").withIcon(R.drawable.ic_home_black);
         PrimaryDrawerItem faq = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
-        PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(2).withName("About").withIcon(R.drawable.ic_info);
+        PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(2).withName("About the app").withIcon(R.drawable.ic_info);
         SecondaryDrawerItem setting = new SecondaryDrawerItem().withIdentifier(3).withName("Setting").withIcon(R.drawable.ic_settings);
         SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(4).withName("Logout").withIcon(R.drawable.ic_power);
 
@@ -217,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                         switch (position) {
                             case 1: {
 
-                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("About")).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
                                 result.closeDrawer();
                                 TabLayout.Tab tab = tabLayout.getTabAt(0);
                                 tab.select();
@@ -227,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             break;
                             case 2: {
-                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, FAQFragment.newInstance("About")).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, FAQFragment.newInstance("FAQ")).commit();
                                 result.closeDrawer();
                                 toolbar.setTitle("FAQ");
                                 tabLayout.setVisibility(View.GONE);
@@ -256,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
                                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                                                 SharedPreferences.Editor editor = sharedPref.edit();
                                                 editor.putString("userToken-WeTrack", "");
+                                                editor.putString("userID-WeTrack", "");
                                                 editor.commit();
                                                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                                 startActivity(intent);
@@ -271,11 +297,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .build();
 
-        //tablayout
-        adapterViewPager = new FragmentAdapter(getSupportFragmentManager());
-        adapterViewPager.getItem(0);
-        viewPager.setAdapter(adapterViewPager);
-        tabLayout.setupWithViewPager(viewPager);
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -285,9 +306,14 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     toolbar.setTitle("Missing Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
-                } else {
+                }
+                if (position == 1){
                     toolbar.setTitle("Nearby Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Beacon List")).commit();
+                }
+                if (position == 2){
+                    toolbar.setTitle("Relatives");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, RelativesFragment.newInstance("Relatives List")).commit();
                 }
             }
 
@@ -299,6 +325,15 @@ public class MainActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String token = sharedPref.getString("userToken-WeTrack", "");
+        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(),token);
+        adapterViewPager.getItem(0);
+        viewPager.setAdapter(adapterViewPager);
+        tabLayout.setupWithViewPager(viewPager);
+
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             tabLayout.getTabAt(i).setIcon(icons[i]);
             tabLayout.getTabAt(i).setText(null);
@@ -339,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
 
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 
-        registerReceiver(searchDevices, intentFilter);
+        registerReceiver(broadcastReceiver, intentFilter);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -381,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_1:
-                Toast.makeText(getBaseContext(),"this is about us",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "this is about us", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
@@ -459,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private BroadcastReceiver searchDevices = new BroadcastReceiver() {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -472,8 +507,8 @@ public class MainActivity extends AppCompatActivity {
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         btnSearch.setImageResource(R.drawable.ic_play_arrow);
-                        adapterDevice.notifyDataSetChanged();
-                        homeAdapter.notifyDataSetChanged();
+                        beaconListAdapter.notifyDataSetChanged();
+//                        homeAdapter.notifyDataSetChanged();
                         break;
 
                     case BluetoothAdapter.STATE_ON:
@@ -495,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
 
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 
-        registerReceiver(searchDevices, intentFilter);
+        registerReceiver(broadcastReceiver, intentFilter);
 
         if (!bluetoothAdapter.isEnabled()) {
             btnSearch.setImageResource(R.drawable.ic_play_arrow);
@@ -505,40 +540,40 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        listDevice.clear();
-//        adapterDevice.notifyDataSetChanged();
+//        beaconListAdapter.notifyDataSetChanged();
 //        bluetoothAdapter.startDiscovery();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        unregisterReceiver(searchDevices);
+        unregisterReceiver(broadcastReceiver);
         super.onPause();
     }
 
     public void logToDisplay() {
         runOnUiThread(new Runnable() {
             public void run() {
-//                adapterDevice.notifyDataSetChanged();
+//                beaconListAdapter.notifyDataSetChanged();
 //                listBeacon.add("hj");
-                adapterDevice.add(detectedPatientList, detectedBeaconList);
+                beaconListAdapter.add(detectedPatientList, detectedBeaconList);
 //                homeAdapter.add(missingPatientList);
 
-//                adapterDevice.setBeacons(listBeacon);
+//                beaconListAdapter.setBeacons(listBeacon);
             }
         });
     }
 
-    public void logToDisplay2() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-//                adapterDevice.notifyDataSetChanged();
-//                listBeacon.add("hj");
-                homeAdapter.add(missingPatientList);
-//                adapterDevice.setBeacons(listBeacon);
-            }
-        });
-    }
+//    public void logToDisplay2() {
+//        runOnUiThread(new Runnable() {
+//            public void run() {
+////                beaconListAdapter.notifyDataSetChanged();
+////                listBeacon.add("hj");
+//                homeAdapter.add(missingPatientList);
+////                beaconListAdapter.setBeacons(listBeacon);
+//            }
+//        });
+//    }
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event) {

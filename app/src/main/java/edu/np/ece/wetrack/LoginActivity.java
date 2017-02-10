@@ -165,6 +165,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("userToken-WeTrack", userAccount.getToken());
+                        editor.putString("userID-WeTrack", userAccount.getId()+"");
                         editor.commit();
 
                         EmailInfo account = new EmailInfo(acct.getEmail(),acct.getDisplayName(),acct.getPhotoUrl().toString());
@@ -180,6 +181,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("userToken-WeTrack", "");
+                        editor.putString("userID-WeTrack", "");
                         editor.commit();
                         signOut();
 
@@ -192,8 +194,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 }
             });
-
-
 
 
 
@@ -293,7 +293,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("userToken-WeTrack", "anonymous");
-
+                editor.putString("userID-WeTrack", "69");
                 EmailInfo account = new EmailInfo("Anonymous","Anonymous",R.drawable.my_avt+"");
                 Gson gson2 = new Gson();
                 String jsonAccount = gson2.toJson(account);

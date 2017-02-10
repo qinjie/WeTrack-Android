@@ -10,8 +10,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class FragmentAdapter extends FragmentPagerAdapter {
 
-    public FragmentAdapter(FragmentManager fm) {
+    String user;
+
+    public FragmentAdapter(FragmentManager fm, String user) {
         super(fm);
+        this.user = user;
     }
 
     @Override
@@ -19,18 +22,26 @@ public class FragmentAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
                 return HomeFragment.newInstance("");
-            case 1: // Fragment # 0 - This will show FirstFragment different title
+            case 1:
                 return BeaconListFragment.newInstance("");
+            case 2:
+                return RelativesFragment.newInstance("");
+            default:
+                return HomeFragment.newInstance("");
+
         }
 
-        return HomeFragment.newInstance(String.valueOf(position));
     }
 
 
     @Override
     public int getCount() {
-        return 2;
+        if (user.equals("anonymous")) {
+            return 2;
+        }
+        return 3;
     }
+
 
     @Override
     public CharSequence getPageTitle(int position) {

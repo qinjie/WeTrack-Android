@@ -71,7 +71,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
     private ServerAPI serverAPI;
     public static List<Resident> patientList = new ArrayList<>();
-    public static List<Resident> missingPatientList = new ArrayList<>();
     public static List<Resident> detectedPatientList = new ArrayList<>();
     public static List<BeaconInfo> detectedBeaconList = new ArrayList<>();
 
@@ -257,7 +256,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 //                                    if(detectedBeaconList.contains(a))
                                     detectedPatientList.add(patient);
                                     detectedBeaconList.add(aBeacon);
-                                    if (MainActivity.adapterDevice != null) {
+                                    if (MainActivity.beaconListAdapter != null) {
 
                                         forDisplay.logToDisplay();
                                     }
@@ -344,7 +343,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         beaconToRemove.clear();
 
 
-                        if (MainActivity.adapterDevice != null) {
+                        if (MainActivity.beaconListAdapter != null) {
 
                             forDisplay.logToDisplay();
 
@@ -552,7 +551,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
 //            sendNotification(mBeaconmanager.getMonitoredRegions().size() + " | " + detectedBeaconList.size());
 
-            if (MainActivity.adapterDevice != null) {
+            if (MainActivity.beaconListAdapter != null) {
                 forDisplay.logToDisplay();
             }
 

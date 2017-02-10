@@ -29,30 +29,28 @@ import butterknife.ButterKnife;
 import edu.np.ece.wetrack.api.RetrofitUtils;
 import edu.np.ece.wetrack.api.ServerAPI;
 import edu.np.ece.wetrack.model.BeaconInfo;
+import edu.np.ece.wetrack.model.Relative;
 import edu.np.ece.wetrack.model.Resident;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static edu.np.ece.wetrack.BeaconScanActivation.patientList;
-//import static edu.np.ece.wetrack.MainActivity.homeAdapter;
 
 /**
- * Created by hoanglong on 06-Dec-16.
+ * Created by hoanglong on 10-Feb-17.
  */
 
-public class HomeFragment extends Fragment {
+public class RelativesFragment extends Fragment {
     @BindView(R.id.rvMissingResident)
     RecyclerView rvResident;
-    private List<Resident> missingPatientList = new ArrayList<>();
 
-    private HomeAdapter homeAdapter;
+    private List<Resident> missingRelativesList = new ArrayList<>();
 
-
-    public static HomeFragment newInstance(String title) {
+    public static RelativesFragment newInstance(String title) {
         Bundle args = new Bundle();
         args.putString("title", title);
-        HomeFragment fragment = new HomeFragment();
+        RelativesFragment fragment = new RelativesFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -65,16 +63,15 @@ public class HomeFragment extends Fragment {
 
     private ServerAPI serverAPI;
 
+    private RelativesAdapter relativeAdapter;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-//        tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
+        View rootView = inflater.inflate(R.layout.fragment_relatives, container, false);
         ButterKnife.bind(this, rootView);
         rvResident.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
-//        MainActivity.homeAdapter = new HomeAdapter(missingPatientList);
-//        rvResident.setAdapter(MainActivity.homeAdapter);
 
         serverAPI = RetrofitUtils.get().create(ServerAPI.class);
 
@@ -122,34 +119,35 @@ public class HomeFragment extends Fragment {
                                 }
                             });
 
-//                            MainActivity.homeAdapter = new HomeAdapter(missingPatientList);
-
-                            homeAdapter = new HomeAdapter(missingPatientList);
+                            relativeAdapter = new RelativesAdapter(missingRelativesList);
+                            String userID = sharedPref.getString("userID-WeTrack", "");
 
                             if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
                                 for (Resident aPatient : patientList) {
                                     for (BeaconInfo aBeacon : aPatient.getBeacons()) {
-                                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
+                                        for (Relative aRelative : aPatient.getRelatives()) {
+                                            if (String.valueOf(aRelative.getId()).equals(userID) && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 
-                                            if (!missingPatientList.contains(aPatient)) {
-                                                missingPatientList.add(aPatient);
-                                            } else {
-                                                missingPatientList.set(missingPatientList.indexOf(aPatient), aPatient);
+                                                if (!missingRelativesList.contains(aPatient)) {
+                                                    missingRelativesList.add(aPatient);
+                                                } else {
+                                                    missingRelativesList.set(missingRelativesList.indexOf(aPatient), aPatient);
+                                                }
+
                                             }
 
-                                        } else {
-                                            if (missingPatientList.contains(aPatient)) {
-                                                missingPatientList.remove(aPatient);
-//                                            forDisplay.logToDisplay2();
-                                            }
+//                                            else {
+//                                                if (missingRelativesList.contains(aPatient)) {
+//                                                    missingRelativesList.remove(aPatient);
+//                                                }
+//                                            }
                                         }
                                     }
 
                                 }
                             }
 
-//                            rvResident.setAdapter(MainActivity.homeAdapter);
-                            rvResident.setAdapter(homeAdapter);
+                            rvResident.setAdapter(relativeAdapter);
                             srlUser.setRefreshing(false);
                         }
 
@@ -215,15 +213,15 @@ public class HomeFragment extends Fragment {
 //                for (BeaconInfo aBeacon : aPatient.getBeacons()) {
 //                    if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 //
-//                        if (!missingPatientList.contains(aPatient)) {
-//                            missingPatientList.add(aPatient);
+//                        if (!missingRelativesList.contains(aPatient)) {
+//                            missingRelativesList.add(aPatient);
 //                        } else {
-//                            missingPatientList.set(missingPatientList.indexOf(aPatient), aPatient);
+//                            missingRelativesList.set(missingRelativesList.indexOf(aPatient), aPatient);
 //                        }
 //
 //                    } else {
-//                        if (missingPatientList.contains(aPatient)) {
-//                            missingPatientList.remove(aPatient);
+//                        if (missingRelativesList.contains(aPatient)) {
+//                            missingRelativesList.remove(aPatient);
 //                        }
 //                    }
 //                }
@@ -232,38 +230,44 @@ public class HomeFragment extends Fragment {
 //        }
 
 
-        handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+//        handler.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+        //TODO
+        //thay the cai missing resident list
+        //chinh lai vong for
+        String userID = sharedPref.getString("userID-WeTrack", "");
+        if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
+            for (Resident aPatient : patientList) {
+                for (BeaconInfo aBeacon : aPatient.getBeacons()) {
+                    for (Relative aRelative : aPatient.getRelatives()) {
+                        if (String.valueOf(aRelative.getId()).equals(userID) && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 
-                                    if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
-                                        for (Resident aPatient : patientList) {
-                                            for (BeaconInfo aBeacon : aPatient.getBeacons()) {
-                                                if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
+                            if (!missingRelativesList.contains(aPatient)) {
+                                missingRelativesList.add(aPatient);
+                            } else {
+                                missingRelativesList.set(missingRelativesList.indexOf(aPatient), aPatient);
+                            }
 
-                                                    if (!missingPatientList.contains(aPatient)) {
-                                                        missingPatientList.add(aPatient);
-                                                    } else {
-                                                        missingPatientList.set(missingPatientList.indexOf(aPatient), aPatient);
-                                                    }
+                        }
+//                        else {
+//                            if (missingRelativesList.contains(aPatient)) {
+//                                missingRelativesList.remove(aPatient);
+//                            }
+//                        }
+                    }
+                }
 
-                                                } else {
-                                                    if (missingPatientList.contains(aPatient)) {
-                                                        missingPatientList.remove(aPatient);
-                                                    }
-                                                }
-                                            }
+            }
+        }
 
-                                        }
-                                    }
+        relativeAdapter = new RelativesAdapter(missingRelativesList);
+        rvResident.setAdapter(relativeAdapter);
 
-                                    homeAdapter = new HomeAdapter(missingPatientList);
-                                    rvResident.setAdapter(homeAdapter);
-
-                                }
-
-                            }, 500
-        );
+//                                }
+//
+//                            }, 500
+//        );
 
 
         return rootView;
@@ -324,22 +328,22 @@ public class HomeFragment extends Fragment {
 //                }
 //            });
 //
-//            homeAdapter = new HomeAdapter(missingPatientList);
+//            homeAdapter = new HomeAdapter(missingRelativesList);
 //
 //            if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
 //                for (Resident aPatient : patientList) {
 //                    for (BeaconInfo aBeacon : aPatient.getBeacons()) {
 //                        if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 //
-//                            if (!missingPatientList.contains(aPatient)) {
-//                                missingPatientList.add(aPatient);
+//                            if (!missingRelativesList.contains(aPatient)) {
+//                                missingRelativesList.add(aPatient);
 //                            } else {
-//                                missingPatientList.set(missingPatientList.indexOf(aPatient), aPatient);
+//                                missingRelativesList.set(missingRelativesList.indexOf(aPatient), aPatient);
 //                            }
 //
 //                        } else {
-//                            if (missingPatientList.contains(aPatient)) {
-//                                missingPatientList.remove(aPatient);
+//                            if (missingRelativesList.contains(aPatient)) {
+//                                missingRelativesList.remove(aPatient);
 ////                                            forDisplay.logToDisplay2();
 //                            }
 //                        }
@@ -399,7 +403,7 @@ public class HomeFragment extends Fragment {
     final int EDIT_USER = 69;
 
     @Subscribe
-    public void onEvent(HomeAdapter.OpenEvent event) {
+    public void onEvent(RelativesAdapter.OpenEvent event) {
         Intent intent = new Intent(getActivity(), ResidentDetailActivity.class);
         intent.putExtra("patient", event.patient);
         intent.putExtra("position", event.position);

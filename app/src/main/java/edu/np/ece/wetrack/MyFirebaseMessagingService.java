@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -18,6 +17,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FCM Service";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO: Handle FCM messages here.
@@ -25,16 +25,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated.
 //        Toast.makeText(getBaseContext(),remoteMessage.getNotification().getBody(),Toast.LENGTH_SHORT).show();
-        sendNotification(remoteMessage.getNotification().getBody());
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+        try {
+            sendNotification(remoteMessage.getNotification().getBody());
+            Log.d(TAG, "From: " + remoteMessage.getFrom());
+            Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        sendNotification(remoteMessage.getNotification().getBody());
+//        Log.d(TAG, "From: " + remoteMessage.getFrom());
+//        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
     }
 
 
     private void sendNotification(String name) {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
-                        .setContentTitle("We Track")
+                        .setContentTitle("Messaging Service")
                         .setContentText(name)
                         .setSmallIcon(R.drawable.icon).setAutoCancel(true);
 
@@ -50,6 +57,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setContentIntent(resultPendingIntent);
         NotificationManager notificationManager =
                 (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(999, builder.build());
+        notificationManager.notify(1000, builder.build());
     }
 }

@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,11 +49,11 @@ public class BeaconListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_beacon_list, container, false);
         ButterKnife.bind(this, rootView);
         rvBeacons.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
-        MainActivity.adapterDevice = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
-        rvBeacons.setAdapter(MainActivity.adapterDevice);
+        MainActivity.beaconListAdapter = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
+        rvBeacons.setAdapter(MainActivity.beaconListAdapter);
 
 
-        handler = new Handler();
+//        handler = new Handler();
 //        srlUser.setDistanceToTriggerSync(550);
 //        srlUser.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //
@@ -64,8 +62,8 @@ public class BeaconListFragment extends Fragment {
 //                handler.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
-//                        MainActivity.adapterDevice = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
-//                        rvBeacons.setAdapter(MainActivity.adapterDevice);
+//                        MainActivity.beaconListAdapter = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
+//                        rvBeacons.setAdapter(MainActivity.beaconListAdapter);
 //                        srlUser.setRefreshing(false);
 //                    }
 //                }, 1000);
