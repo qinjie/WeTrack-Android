@@ -226,7 +226,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
                                 final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                                 String userID = sharedPref.getString("userID-WeTrack", "");
-                                if (userID.equals("69")) {
+                                if (userID.equals("0")) {
                                     toggleButton.setVisibility(View.INVISIBLE);
                                 } else {
                                     if (!userID.equals("")) {

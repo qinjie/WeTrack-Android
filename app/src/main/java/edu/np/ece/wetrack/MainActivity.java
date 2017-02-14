@@ -271,8 +271,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                             break;
                             case 5: {
-
-                            }
+                                Intent intent = new Intent(getBaseContext(), SettingActivity.class);
+                                startActivity(intent);                            }
                             break;
                             case 6: {
                                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(

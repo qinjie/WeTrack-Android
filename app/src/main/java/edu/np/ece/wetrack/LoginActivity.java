@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -88,7 +94,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInButton.setScopes(gso.getScopeArray());
 
         serverAPI = RetrofitUtils.get().create(ServerAPI.class);
+
+
+//        mAuth = FirebaseAuth.getInstance();
+//
+//        mAuthListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//                    // User is signed in
+//                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+//                } else {
+//                    // User is signed out
+//                    Log.d(TAG, "onAuthStateChanged:signed_out");
+//                }
+//                // ...
+//            }
+//        };
+
     }
+//    private FirebaseAuth mAuth;
+//    private FirebaseAuth.AuthStateListener mAuthListener;
+
 
     @Override
     public void onStart() {
@@ -124,6 +152,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             });
         }
+
+//        mAuth.addAuthStateListener(mAuthListener);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        if (mAuthListener != null) {
+//            mAuth.removeAuthStateListener(mAuthListener);
+//        }
     }
 
     // [START onActivityResult]
@@ -182,14 +221,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         editor.putString("userAccount-WeTrack", jsonAccount);
                         editor.commit();
 
+
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
 
                         String deviceToken = sharedPref.getString("deviceToken-WeTrack", "");
                         JsonParser parser = new JsonParser();
                         JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \"" + userAccount.getId() + "\"}").getAsJsonObject();
-                        Log.i("yyyyyyyyy", obj.toString());
-
 
                         serverAPI.sendToken(obj).enqueue(new Callback<JsonObject>() {
                             @Override
@@ -335,7 +373,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("userToken-WeTrack", "anonymous");
-                editor.putString("userID-WeTrack", "69");
+                editor.putString("userID-WeTrack", "0");
                 EmailInfo account = new EmailInfo("Anonymous", "Anonymous", R.drawable.my_avt + "");
                 Gson gson2 = new Gson();
                 String jsonAccount = gson2.toJson(account);
@@ -344,8 +382,28 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 String deviceToken = sharedPref.getString("deviceToken-WeTrack", "");
                 JsonParser parser = new JsonParser();
-                JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \" 69 \"}").getAsJsonObject();
-                Log.i("ttttttttttttt", obj.toString());
+                JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \" 0 \"}").getAsJsonObject();
+
+//                mAuth.signInAnonymously()
+//                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+//
+//
+//                                // If sign in fails, display a message to the user. If sign in succeeds
+//                                // the auth state listener will be notified and logic to handle the
+//                                // signed in user can be handled in the listener.
+//                                if (!task.isSuccessful()) {
+//                                    Log.w(TAG, "signInAnonymously", task.getException());
+//                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+//                                            Toast.LENGTH_SHORT).show();
+//                                }
+//
+//                                // ...
+//                            }
+//                        });
+
 
                 serverAPI.sendToken(obj).enqueue(new Callback<JsonObject>() {
                     @Override
@@ -370,6 +428,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 break;
         }
     }
+
 
 
 }

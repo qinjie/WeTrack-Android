@@ -67,7 +67,8 @@
             app:elevation="6dp"
             app:fabSize="normal"
             app:rippleColor="#50ffffff"
-            app:theme="@style/FloatingActionButton" />
+            app:theme="@style/FloatingActionButton"
+            android:visibility="gone"/>
 
 
     </android.support.design.widget.CoordinatorLayout>
