@@ -1,6 +1,8 @@
 package edu.np.ece.wetrack;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -210,7 +212,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         editor.commit();
                         signOut();
 
-                        Toast.makeText(getBaseContext(), "Account has not registered yet", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getBaseContext(), "Account has not registered yet", Toast.LENGTH_SHORT).show();
+
+
+
+
+                        AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
+                        alertDialog.setTitle("Login Failed");
+                        alertDialog.setMessage("This function can only be used by registered user. You can go to nearest police station for registration or use Anonymous login");
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+
                     }
                 }
 

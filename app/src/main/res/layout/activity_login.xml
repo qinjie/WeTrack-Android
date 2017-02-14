@@ -82,7 +82,7 @@
                 android:visibility="visible"
                 tools:visibility="visible"
                 android:layout_toEndOf="@id/sign_in_button"
-                android:text="Anonymous log in" />
+                android:text="Anonymous login" />
         </RelativeLayout>
 
 
