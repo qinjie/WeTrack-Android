@@ -24,6 +24,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import edu.np.ece.wetrack.api.RetrofitUtils;
 import edu.np.ece.wetrack.api.ServerAPI;
@@ -93,17 +94,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String token = sharedPref.getString("userToken-WeTrack","");
+        String token = sharedPref.getString("userToken-WeTrack", "");
         if (opr.isDone() || token.equals("anonymous")) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
             Log.d(TAG, "Got cached sign-in");
-            if(opr.isDone()) {
+            if (opr.isDone()) {
                 GoogleSignInResult result = opr.get();
                 handleSignInResult(result);
             }
 
-            if(token.equals("anonymous")){
+            if (token.equals("anonymous")) {
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
             }
@@ -153,7 +154,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             JsonObject obj = gson.toJsonTree(email).getAsJsonObject();
 
 
-
             serverAPI.loginViaEmail(obj).enqueue(new Callback<UserAccount>() {
                 @Override
                 public void onResponse(Call<UserAccount> call, Response<UserAccount> response) {
@@ -165,10 +165,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("userToken-WeTrack", userAccount.getToken());
-                        editor.putString("userID-WeTrack", userAccount.getId()+"");
+                        editor.putString("userID-WeTrack", userAccount.getId() + "");
                         editor.commit();
 
-                        EmailInfo account = new EmailInfo(acct.getEmail(),acct.getDisplayName(),acct.getPhotoUrl().toString());
+                        EmailInfo account;
+                        if (acct.getPhotoUrl() == null) {
+                            account = new EmailInfo(acct.getEmail(), acct.getDisplayName(), "");
+
+                        } else {
+                            account = new EmailInfo(acct.getEmail(), acct.getDisplayName(), acct.getPhotoUrl().toString());
+                        }
                         Gson gson2 = new Gson();
                         String jsonAccount = gson2.toJson(account);
                         editor.putString("userAccount-WeTrack", jsonAccount);
@@ -176,6 +182,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
+
+                        String deviceToken = sharedPref.getString("deviceToken-WeTrack", "");
+                        JsonParser parser = new JsonParser();
+                        JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \"" + userAccount.getId() + "\"}").getAsJsonObject();
+                        Log.i("yyyyyyyyy", obj.toString());
+
+
+                        serverAPI.sendToken(obj).enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                            }
+                        });
+
 
                     } else {
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -185,7 +210,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         editor.commit();
                         signOut();
 
-                        Toast.makeText(getBaseContext(), "Account has not registed yet", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "Account has not registered yet", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -194,7 +219,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 }
             });
-
 
 
 //TODO
@@ -294,12 +318,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("userToken-WeTrack", "anonymous");
                 editor.putString("userID-WeTrack", "69");
-                EmailInfo account = new EmailInfo("Anonymous","Anonymous",R.drawable.my_avt+"");
+                EmailInfo account = new EmailInfo("Anonymous", "Anonymous", R.drawable.my_avt + "");
                 Gson gson2 = new Gson();
                 String jsonAccount = gson2.toJson(account);
                 editor.putString("userAccount-WeTrack", jsonAccount);
-
                 editor.commit();
+
+                String deviceToken = sharedPref.getString("deviceToken-WeTrack", "");
+                JsonParser parser = new JsonParser();
+                JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \" 69 \"}").getAsJsonObject();
+                Log.i("ttttttttttttt", obj.toString());
+
+                serverAPI.sendToken(obj).enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
                 break;

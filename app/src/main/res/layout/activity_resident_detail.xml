@@ -81,6 +81,11 @@
                     android:textColor="@color/md_black_1000"
                     android:textSize="28sp"
                     android:textStyle="bold" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="9">
 
                 <ImageView
                     android:id="@+id/avatar"
@@ -91,6 +96,32 @@
                     android:maxHeight="80dp"
                     android:maxWidth="80dp"
                     android:src="@mipmap/thumbnail" />
+
+                <ToggleButton
+                    android:id="@+id/mySwitch"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/toggletoswitch"
+                    android:textOff=""
+                    android:textOn=""
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/avatar"
+                    />
+
+
+                    <TextView
+                        android:id="@+id/tvRemind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="Resident status will be auto changed after 24 hours."
+                        android:textSize="9sp"
+                        android:textColor="@color/md_red_900"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/mySwitch"
+                        android:visibility="gone"/>
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -133,11 +164,6 @@
                     android:text="Status:"
                     android:textSize="18sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="9">
 
                     <TextView
                         android:id="@+id/status"
@@ -151,18 +177,7 @@
                         tool:text="hfdfsfsffs"
                         android:layout_weight="1" />
 
-                    <ToggleButton
-                        android:id="@+id/mySwitch"
-                        android:layout_width="100dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="start"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/toggletoswitch"
-                        android:textOff=""
-                        android:textOn="" />
 
-
-                </LinearLayout>
 
 
                 <TextView
@@ -199,6 +214,24 @@
                     android:scrollbars="vertical"
                     android:textColor="@color/md_black_1000"
                     android:textSize="20sp" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="Beacon detected:"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/beaconList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:gravity="start"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"

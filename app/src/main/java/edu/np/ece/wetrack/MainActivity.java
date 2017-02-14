@@ -114,7 +114,11 @@ public class MainActivity extends AppCompatActivity {
         IProfile profile;
         String token = sharedPref.getString("userToken-WeTrack", "");
         if (!token.equals("anonymous")) {
-            profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(account.getAvatarUrl());
+            if (account.getAvatarUrl() == null) {
+                profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(R.drawable.default_avt);
+            } else {
+                profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(account.getAvatarUrl());
+            }
         } else {
             profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(R.drawable.default_avt);
 
@@ -123,9 +127,8 @@ public class MainActivity extends AppCompatActivity {
         headerResult.addProfile(profile, 0);
 
 
-
         //tablayout
-        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(),token);
+        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), token);
         adapterViewPager.getItem(0);
         viewPager.setAdapter(adapterViewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -298,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
 
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -307,11 +309,11 @@ public class MainActivity extends AppCompatActivity {
                     toolbar.setTitle("Missing Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
                 }
-                if (position == 1){
+                if (position == 1) {
                     toolbar.setTitle("Nearby Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Beacon List")).commit();
                 }
-                if (position == 2){
+                if (position == 2) {
                     toolbar.setTitle("Relatives");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, RelativesFragment.newInstance("Relatives List")).commit();
                 }
@@ -329,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String token = sharedPref.getString("userToken-WeTrack", "");
-        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(),token);
+        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), token);
         adapterViewPager.getItem(0);
         viewPager.setAdapter(adapterViewPager);
         tabLayout.setupWithViewPager(viewPager);

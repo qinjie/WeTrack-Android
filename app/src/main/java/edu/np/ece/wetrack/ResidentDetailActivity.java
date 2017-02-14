@@ -29,8 +29,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.np.ece.wetrack.api.RetrofitUtils;
 import edu.np.ece.wetrack.api.ServerAPI;
+import edu.np.ece.wetrack.model.BeaconInfo;
 import edu.np.ece.wetrack.model.Relative;
 import edu.np.ece.wetrack.model.Resident;
+import edu.np.ece.wetrack.tasks.ImageLoadTask;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +55,9 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.dob)
     TextView dob;
+
+    @BindView(R.id.beaconList)
+    TextView tvBeaconList;
 
     @BindView(R.id.reportedAt)
     TextView created;
@@ -78,6 +83,9 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.mySwitch)
     ToggleButton toggleButton;
+
+    @BindView(R.id.tvRemind)
+    TextView remind;
 
     String uri;
 
@@ -232,7 +240,6 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                     public void onClick(View v) {
 
 
-//                                            String residentID = aPatient.getId()+"";
                                                         String token = sharedPref.getString("userToken-WeTrack", "");
 
                                                         Gson gson = new GsonBuilder()
@@ -245,8 +252,10 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                             public void onResponse(Call<Resident> call, Response<Resident> response) {
                                                                 if (status.getText().equals("Missing")) {
                                                                     status.setText("Available");
+                                                                    remind.setVisibility(View.GONE);
                                                                 } else {
                                                                     status.setText("Missing");
+                                                                    remind.setVisibility(View.VISIBLE);
                                                                 }
 
                                                             }
@@ -268,6 +277,16 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                 }
 
                                 dob.setText(aPatient.getDob());
+
+                                String beacons = "";
+
+                                if (aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
+                                    for (BeaconInfo temp : aPatient.getBeacons()) {
+                                        beacons += temp.getId() + " ";
+                                    }
+                                }
+                                tvBeaconList.setText(beacons);
+
                                 created.setText(aPatient.getCreatedAt());
 
 

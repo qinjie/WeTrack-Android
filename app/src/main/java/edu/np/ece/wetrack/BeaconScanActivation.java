@@ -2,13 +2,9 @@ package edu.np.ece.wetrack;
 
 import android.Manifest;
 import android.app.Application;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,8 +15,6 @@ import android.os.Handler;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -58,6 +52,9 @@ import edu.np.ece.wetrack.model.Resident;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static edu.np.ece.wetrack.tasks.SendNotificationTask.sendNotification;
+import static edu.np.ece.wetrack.tasks.SendNotificationTask.sendNotificationForDetected;
 
 
 /**
@@ -162,7 +159,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             @Override
             public void onFailure(Call<List<Resident>> call, Throwable t) {
-                sendNotification("Please turn on internet connection");
+                sendNotification(getBaseContext(),"Please turn on internet connection");
 //                sendNotification(t.getMessage());
                 Gson gson = new Gson();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -252,7 +249,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             @Override
                             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                                 try {
-                                    sendNotification2(patient, "is nearby.");
+                                    sendNotificationForDetected(getBaseContext(),patient, "is nearby.");
 
 //                                    if(detectedBeaconList.contains(a))
                                     detectedPatientList.add(patient);
@@ -276,7 +273,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             }
         } else {
             if (mLocation == null) {
-                sendNotification("Please turn on location service");
+                sendNotification(getBaseContext(),"Please turn on location service");
             }
         }
 
@@ -318,7 +315,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                         BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
 
-                        sendNotification2(patient, "is out of range.");
+                        sendNotificationForDetected(getBaseContext(),patient, "is out of range.");
 
                         List<Resident> residentToRemove = new ArrayList<>();
                         List<BeaconInfo> beaconToRemove = new ArrayList<>();
@@ -377,65 +374,65 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             }
         } else {
             if (mLocation == null) {
-                sendNotification("Please turn on location service");
+                sendNotification(getBaseContext(),"Please turn on location service");
             }
         }
     }
 
 
-    private void sendNotification(String name) {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setContentTitle("We Track")
-                        .setContentText(name)
-                        .setSmallIcon(R.drawable.ic_notification)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                                R.drawable.icon))
-                        .setAutoCancel(true);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        Intent intent = new Intent(this, MainActivity.class);
-
-        stackBuilder.addNextIntent(intent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        builder.setContentIntent(resultPendingIntent);
-        NotificationManager notificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(999, builder.build());
-    }
-
-    private void sendNotification2(Resident aResident, String msg) {
-//        Resident r = new Resident(aResident);
-
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setContentTitle("We Track")
-                        .setContentText(aResident.getFullname() + " " + msg)
-                        .setSmallIcon(R.drawable.ic_notification)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                                R.drawable.icon))
-                        .setAutoCancel(true);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        Intent intent = new Intent(this, ResidentDetailActivity.class);
-//        intent.putExtra("patient", r);
-        intent.putExtra("patient", aResident);
-//        intent.putExtra("fromNotification", aResident.getId()+"");
-        stackBuilder.addNextIntent(intent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        aResident.getId(),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        builder.setContentIntent(resultPendingIntent);
-        NotificationManager notificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(aResident.getId(), builder.build());
-    }
+//    private void sendNotification(String name) {
+//        NotificationCompat.Builder builder =
+//                new NotificationCompat.Builder(this)
+//                        .setContentTitle("We Track")
+//                        .setContentText(name)
+//                        .setSmallIcon(R.drawable.ic_notification)
+//                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+//                                R.drawable.icon))
+//                        .setAutoCancel(true);
+//
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//        Intent intent = new Intent(this, MainActivity.class);
+//
+//        stackBuilder.addNextIntent(intent);
+//        PendingIntent resultPendingIntent =
+//                stackBuilder.getPendingIntent(
+//                        0,
+//                        PendingIntent.FLAG_UPDATE_CURRENT
+//                );
+//        builder.setContentIntent(resultPendingIntent);
+//        NotificationManager notificationManager =
+//                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(999, builder.build());
+//    }
+//
+//    private void sendNotificationForDetected(Resident aResident, String msg) {
+////        Resident r = new Resident(aResident);
+//
+//        NotificationCompat.Builder builder =
+//                new NotificationCompat.Builder(this)
+//                        .setContentTitle("We Track")
+//                        .setContentText(aResident.getFullname() + " " + msg)
+//                        .setSmallIcon(R.drawable.ic_notification)
+//                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+//                                R.drawable.icon))
+//                        .setAutoCancel(true);
+//
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//        Intent intent = new Intent(this, ResidentDetailActivity.class);
+////        intent.putExtra("patient", r);
+//        intent.putExtra("patient", aResident);
+////        intent.putExtra("fromNotification", aResident.getId()+"");
+//        stackBuilder.addNextIntent(intent);
+//        PendingIntent resultPendingIntent =
+//                stackBuilder.getPendingIntent(
+//                        aResident.getId(),
+//                        PendingIntent.FLAG_UPDATE_CURRENT
+//                );
+//        builder.setContentIntent(resultPendingIntent);
+//        NotificationManager notificationManager =
+//                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(aResident.getId(), builder.build());
+//    }
 
     private int mInterval = 10000;
     Runnable mStatusChecker = new Runnable() {
