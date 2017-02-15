@@ -382,7 +382,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 String deviceToken = sharedPref.getString("deviceToken-WeTrack", "");
                 JsonParser parser = new JsonParser();
-                JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \" 0 \"}").getAsJsonObject();
+                JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \"0\"}").getAsJsonObject();
 
 //                mAuth.signInAnonymously()
 //                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

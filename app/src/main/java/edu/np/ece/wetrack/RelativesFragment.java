@@ -398,6 +398,7 @@ public class RelativesFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     final int EDIT_USER = 69;

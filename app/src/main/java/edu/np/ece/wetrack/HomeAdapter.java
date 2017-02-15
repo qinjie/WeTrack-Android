@@ -62,13 +62,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             new ImageLoadTask(Constant.BACKEND_URL+ resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
         }
 
-
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new OpenEvent(residentList.indexOf(resident), resident));
+
             }
         });
+
+
     }
 
     public class OpenEvent {

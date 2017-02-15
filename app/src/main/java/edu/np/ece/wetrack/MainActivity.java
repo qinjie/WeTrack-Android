@@ -40,6 +40,8 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -56,7 +58,12 @@ import java.lang.reflect.Type;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import edu.np.ece.wetrack.api.RetrofitUtils;
+import edu.np.ece.wetrack.api.ServerAPI;
 import edu.np.ece.wetrack.model.EmailInfo;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static edu.np.ece.wetrack.BeaconScanActivation.detectedBeaconList;
 import static edu.np.ece.wetrack.BeaconScanActivation.detectedPatientList;
@@ -67,13 +74,15 @@ import static edu.np.ece.wetrack.BeaconScanActivation.detectedPatientList;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private ServerAPI serverAPI;
+
     public static final int REQUEST_ENABLE_LOCATION = 1994;
-    //    public static ArrayAdapter<String> beaconListAdapter;
+
     public static BeaconListAdapter beaconListAdapter;
 
 //    public static HomeAdapter homeAdapter;
 
-//    public static RelativesAdapter relativeAdapter;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -100,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     GoogleApiClient mGoogleApiClient;
+    AccountHeader headerResult;
+
 
     @Override
     protected void onStart() {
@@ -137,18 +148,53 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.getTabAt(i).setIcon(icons[i]);
             tabLayout.getTabAt(i).setText(null);
         }
-//        if (token.equals("anonymous") && tabLayout.getTabCount() == 3) {
-//
-//
-//            tabLayout.removeTabAt(2);
-//        } else {
-//            if (tabLayout.getTabCount() == 2) {
-//                tabLayout.newTab().setIcon(R.drawable.ic_group);
-//            }
-//        }
+
+
+        Intent detailIntent = getIntent();
+        result.setSelection(0);
+        result.closeDrawer();
+
+        if (detailIntent != null) {
+            Bundle b = detailIntent.getExtras();
+
+            if (b != null) {
+                boolean tmp = b.getBoolean("isFromDetailActivity", false);
+                if (tmp) {
+                    TabLayout.Tab tab = tabLayout.getTabAt(1);
+                    tab.select();
+                    toolbar.setTitle("Nearby Residents");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("hihi")).commit();
+                    detailIntent.putExtra("isFromDetailActivity", false);
+                } else {
+                    TabLayout.Tab tab = tabLayout.getTabAt(0);
+                    tab.select();
+                    toolbar.setTitle("Missing Residents");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+                }
+            } else {
+                TabLayout.Tab tab = tabLayout.getTabAt(0);
+                tab.select();
+                toolbar.setTitle("Missing Residents");
+                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+            }
+        } else {
+            TabLayout.Tab tab = tabLayout.getTabAt(0);
+            tab.select();
+            toolbar.setTitle("Missing Residents");
+            getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+        }
+
     }
 
-    AccountHeader headerResult;
+
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        Intent detailIntent = getIntent();
+//        Bundle b = detailIntent.getExtras();
+//
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        serverAPI = RetrofitUtils.get().create(ServerAPI.class);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -272,7 +318,9 @@ public class MainActivity extends AppCompatActivity {
                             break;
                             case 5: {
                                 Intent intent = new Intent(getBaseContext(), SettingActivity.class);
-                                startActivity(intent);                            }
+                                startActivity(intent);
+                                finish();
+                            }
                             break;
                             case 6: {
                                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -282,10 +330,33 @@ public class MainActivity extends AppCompatActivity {
                                                 result.setSelection(0);
                                                 result.closeDrawer();
                                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+                                                String deviceToken = sharedPref.getString("deviceToken-WeTrack", "");
+                                                String  userID = sharedPref.getString("userID-WeTrack", "");
+                                                JsonParser parser = new JsonParser();
+                                                JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \"" + userID + "\"}").getAsJsonObject();
+
+                                                serverAPI.deleteToken(obj).enqueue(new Callback<JsonObject>() {
+                                                    @Override
+                                                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                                                    }
+                                                });
+
                                                 SharedPreferences.Editor editor = sharedPref.edit();
                                                 editor.putString("userToken-WeTrack", "");
                                                 editor.putString("userID-WeTrack", "");
                                                 editor.commit();
+
+
+
+
+
                                                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                                 startActivity(intent);
                                             }
@@ -341,36 +412,6 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.getTabAt(i).setText(null);
         }
 
-
-        Intent detailIntent = getIntent();
-        if (detailIntent != null) {
-            Bundle b = detailIntent.getExtras();
-            if (b != null) {
-                boolean tmp = b.getBoolean("isFromDetailActivity", false);
-                if (tmp) {
-                    TabLayout.Tab tab = tabLayout.getTabAt(1);
-                    tab.select();
-                    toolbar.setTitle("Nearby Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("hihi")).commit();
-                    detailIntent.putExtra("isFromDetailActivity", false);
-                } else {
-                    TabLayout.Tab tab = tabLayout.getTabAt(0);
-                    tab.select();
-                    toolbar.setTitle("Missing Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
-                }
-            } else {
-                TabLayout.Tab tab = tabLayout.getTabAt(0);
-                tab.select();
-                toolbar.setTitle("Missing Residents");
-                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
-            }
-        } else {
-            TabLayout.Tab tab = tabLayout.getTabAt(0);
-            tab.select();
-            toolbar.setTitle("Missing Residents");
-            getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
-        }
 
         IntentFilter intentFilter = new IntentFilter();
 

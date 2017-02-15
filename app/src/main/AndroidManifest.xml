@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.np.ece.wetrack">
 
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/icon_noti" />
+
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -21,38 +19,21 @@
         android:label="We Track"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/icon_noti" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.NoActionbar"></activity>
-
-        <!-- <service -->
-        <!-- android:name=".BeaconScanService" -->
-        <!-- android:enabled="true" -->
-        <!-- /> -->
+            android:theme="@style/AppTheme.NoActionbar">
+        </activity>
 
 
-        <!-- <service -->
-        <!-- android:name=".BeaconMonitoringService" -->
-        <!-- android:enabled="false" -->
-        <!-- /> -->
-
-        <receiver
-            android:name=".receiver.BeaconBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="">
-            <intent-filter>
-                <action android:name="android.bluetooth.device.action.FOUND" />
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-                <action android:name="android.bluetooth.device.action.BOND_STATE_CHANGED" />
-                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
+        <activity android:name=".SettingActivity"
+            android:theme="@style/AppTheme.NoActionbar">
+        </activity>
 
         <activity
             android:name=".ResidentDetailActivity"
@@ -68,19 +49,34 @@
             </intent-filter>
         </activity>
 
+        <receiver
+            android:name=".receiver.BeaconBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="">
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.FOUND" />
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+                <action android:name="android.bluetooth.device.action.BOND_STATE_CHANGED" />
+                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
         <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <service android:name=".services.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".SettingActivity"
-            android:theme="@style/AppTheme.NoActionbar"></activity>
     </application>
 
 </manifest>

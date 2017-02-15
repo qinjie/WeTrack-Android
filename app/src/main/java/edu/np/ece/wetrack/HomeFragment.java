@@ -1,5 +1,6 @@
 package edu.np.ece.wetrack;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -75,6 +76,7 @@ public class HomeFragment extends Fragment {
         rvResident.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
 //        MainActivity.homeAdapter = new HomeAdapter(missingPatientList);
 //        rvResident.setAdapter(MainActivity.homeAdapter);
+        onActivityCreated(savedInstanceState);
 
         serverAPI = RetrofitUtils.get().create(ServerAPI.class);
 
@@ -372,6 +374,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+
     }
 
     @Override
@@ -382,18 +385,22 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        EventBus.getDefault().register(this);
+
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
+
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
+
     }
 
     final int EDIT_USER = 69;

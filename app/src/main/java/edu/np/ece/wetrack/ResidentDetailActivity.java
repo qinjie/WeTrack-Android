@@ -335,27 +335,27 @@ public class ResidentDetailActivity extends AppCompatActivity {
                 if (b != null) {
                     String tmp = b.getString("fromWhat");
                     if (tmp.equals("home")) {
-                        intent.putExtra("isFromDetailActivity", false);
+                        intent.putExtra("isFromDetailActivity", "false");
                     } else {
-                        intent.putExtra("isFromDetailActivity", true);
+                        intent.putExtra("isFromDetailActivity", "true");
                     }
-                    startActivityForResult(intent, 101);
+                    startActivity(intent);
+
                 }
             } catch (Exception e) {
-                intent.putExtra("isFromDetailActivity", false);
-                startActivityForResult(intent, 101);
+                intent.putExtra("isFromDetailActivity", "false");
+                startActivity(intent);
 
             }
 
         }
-
+        finish();
+        super.onBackPressed();
 
     }
 
     @OnClick(R.id.openMap)
     public void onUpdateClick() {
-//        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", 1.2829696, 103.8586867);
-
         if (uri != null && !uri.equals("")) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

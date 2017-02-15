@@ -31,8 +31,11 @@ public interface ServerAPI {
     @POST("v1/resident/status")
     Call<Resident> changeStatus(@Header("Authorization") String authorization, @Header("Content-Type") String type,@Body JsonObject residentId);
 
-    @POST("v1/device-token")
+    @POST("v1/device-token/new")
     Call<JsonObject> sendToken(@Body JsonObject obj);
+
+    @POST("v1/device-token/del")
+    Call<JsonObject> deleteToken(@Body JsonObject obj);
 
 
 }
