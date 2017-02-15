@@ -132,10 +132,7 @@ public class SettingActivity extends AppCompatActivity {
 
         }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
 
-        intent.putExtras(detailIntent.getExtras());
         finish();
 
     }
