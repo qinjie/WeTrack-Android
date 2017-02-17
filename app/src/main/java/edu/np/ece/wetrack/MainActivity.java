@@ -54,6 +54,9 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.lang.reflect.Type;
 
 import butterknife.BindView;
@@ -123,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
         }.getType();
         EmailInfo account = gson.fromJson(jsonPatients, type);
         IProfile profile;
-        String token = sharedPref.getString("userToken-WeTrack", "");
-        if (!token.equals("anonymous")) {
+        String userRole = sharedPref.getString("userRole-WeTrack", "");
+        if (!userRole.equals("5")) {
             if (account.getAvatarUrl() == null) {
                 profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(R.drawable.default_avt);
             } else {
@@ -139,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //tablayout
-        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), token);
+        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), userRole);
         adapterViewPager.getItem(0);
         viewPager.setAdapter(adapterViewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -151,32 +154,46 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent detailIntent = getIntent();
-        result.setSelection(0);
-        result.closeDrawer();
 
         if (detailIntent != null) {
-            Bundle b = detailIntent.getExtras();
 
-            if (b != null) {
-                boolean tmp = b.getBoolean("isFromDetailActivity", false);
-                if (tmp) {
-                    TabLayout.Tab tab = tabLayout.getTabAt(1);
-                    tab.select();
-                    toolbar.setTitle("Nearby Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("hihi")).commit();
-                    detailIntent.putExtra("isFromDetailActivity", false);
-                } else {
+
+//            Bundle b = detailIntent.getExtras();
+
+//            if (b != null) {
+//                boolean tmp = b.getBoolean("isFromDetailActivity", false);
+            String tmp = detailIntent.getStringExtra("whatParent");
+            if (tmp != null) {
+
+                if (tmp.equals("home")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(0);
                     tab.select();
                     toolbar.setTitle("Missing Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
                 }
+
+                if (tmp.equals("detectedList")) {
+                    TabLayout.Tab tab = tabLayout.getTabAt(1);
+                    tab.select();
+                    toolbar.setTitle("Nearby Residents");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Detected")).commit();
+                    detailIntent.putExtra("isFromDetailActivity", false);
+                }
+
+                if (tmp.equals("relativeList")) {
+                    TabLayout.Tab tab = tabLayout.getTabAt(2);
+                    tab.select();
+                    toolbar.setTitle("Relatives");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, RelativesFragment.newInstance("Relative")).commit();
+                }
+
             } else {
                 TabLayout.Tab tab = tabLayout.getTabAt(0);
                 tab.select();
                 toolbar.setTitle("Missing Residents");
                 getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
             }
+
         } else {
             TabLayout.Tab tab = tabLayout.getTabAt(0);
             tab.select();
@@ -203,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         serverAPI = RetrofitUtils.get().create(ServerAPI.class);
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -265,7 +283,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("hahahah");
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(0).withName("Homepage").withIcon(R.drawable.ic_home_black);
         PrimaryDrawerItem faq = new PrimaryDrawerItem().withIdentifier(1).withName("FAQ").withIcon(R.drawable.ic_help);
@@ -297,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                                 tab.select();
                                 toolbar.setTitle("Missing Residents");
                                 tabLayout.setVisibility(View.VISIBLE);
-                                btnSearch.setVisibility(View.VISIBLE);
+//                                btnSearch.setVisibility(View.VISIBLE);
                             }
                             break;
                             case 2: {
@@ -305,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                                 result.closeDrawer();
                                 toolbar.setTitle("FAQ");
                                 tabLayout.setVisibility(View.GONE);
-                                btnSearch.setVisibility(View.GONE);
+//                                btnSearch.setVisibility(View.GONE);
                             }
                             break;
                             case 3: {
@@ -313,11 +330,12 @@ public class MainActivity extends AppCompatActivity {
                                 result.closeDrawer();
                                 toolbar.setTitle("About");
                                 tabLayout.setVisibility(View.GONE);
-                                btnSearch.setVisibility(View.GONE);
+//                                btnSearch.setVisibility(View.GONE);
                             }
                             break;
                             case 5: {
                                 Intent intent = new Intent(getBaseContext(), SettingActivity.class);
+                                intent.putExtra("fromWhat", "home");
                                 startActivity(intent);
                                 finish();
                             }
@@ -332,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
                                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
                                                 String deviceToken = sharedPref.getString("deviceToken-WeTrack", "");
-                                                String  userID = sharedPref.getString("userID-WeTrack", "");
+                                                String userID = sharedPref.getString("userID-WeTrack", "");
                                                 JsonParser parser = new JsonParser();
                                                 JsonObject obj = parser.parse("{\"token\": \"" + deviceToken + "\",\"user_id\": \"" + userID + "\"}").getAsJsonObject();
 
@@ -351,10 +369,9 @@ public class MainActivity extends AppCompatActivity {
                                                 SharedPreferences.Editor editor = sharedPref.edit();
                                                 editor.putString("userToken-WeTrack", "");
                                                 editor.putString("userID-WeTrack", "");
+                                                editor.putString("userRole-WeTrack", "");
+
                                                 editor.commit();
-
-
-
 
 
                                                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
@@ -402,7 +419,8 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String token = sharedPref.getString("userToken-WeTrack", "");
-        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), token);
+        String userRole = sharedPref.getString("userRole-WeTrack", "");
+        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), userRole);
         adapterViewPager.getItem(0);
         viewPager.setAdapter(adapterViewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -441,6 +459,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             btnSearch.setImageResource(R.drawable.ic_pause);
         }
+
+        result.setSelection(0);
+        result.closeDrawer();
 
         initBluetooth();
 
@@ -566,34 +587,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    @Override
-    public void onResume() {
-        /*register broadcast*/
-        IntentFilter intentFilter = new IntentFilter();
-
-        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-
-        registerReceiver(broadcastReceiver, intentFilter);
-
-        if (!bluetoothAdapter.isEnabled()) {
-            btnSearch.setImageResource(R.drawable.ic_play_arrow);
-        } else {
-            btnSearch.setImageResource(R.drawable.ic_pause);
-        }
-
-
-//        listDevice.clear();
-//        beaconListAdapter.notifyDataSetChanged();
-//        bluetoothAdapter.startDiscovery();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(broadcastReceiver);
-        super.onPause();
-    }
-
     public void logToDisplay() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -626,4 +619,59 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        return super.onTouchEvent(event);
 //    }
+
+
+    @Override
+    public void onResume() {
+        /*register broadcast*/
+        IntentFilter intentFilter = new IntentFilter();
+
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+
+        registerReceiver(broadcastReceiver, intentFilter);
+
+        if (!bluetoothAdapter.isEnabled()) {
+            btnSearch.setImageResource(R.drawable.ic_play_arrow);
+        } else {
+            btnSearch.setImageResource(R.drawable.ic_pause);
+        }
+
+
+//        listDevice.clear();
+//        beaconListAdapter.notifyDataSetChanged();
+//        bluetoothAdapter.startDiscovery();
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().register(this);
+
+    }
+
+    @Override
+    protected void onPause() {
+        EventBus.getDefault().unregister(this);
+
+        unregisterReceiver(broadcastReceiver);
+        super.onPause();
+    }
+
+
+
+    final int EDIT_USER = 69;
+
+    @Subscribe
+    public void onEvent(FragmentAdapter.OpenEvent event) {
+//        EventBus.getDefault().unregister(this);
+        Intent intent = new Intent(this, ResidentDetailActivity.class);
+        intent.putExtra("patient", event.patient);
+        intent.putExtra("position", event.position);
+        intent.putExtra("fromWhat", event.from);
+        startActivityForResult(intent, EDIT_USER);
+        finish();
+    }
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,16 +26,22 @@ public class FAQFragment extends Fragment {
         return fragment;
     }
 
-    @BindView(R.id.text)
-    JustifyTextView jtv;
+//    @BindView(R.id.text)
+//    JustifyTextView jtv;
+
+    @BindView(R.id.webView)
+    WebView webView;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_faq, container, false);
+//        View rootView = inflater.inflate(R.layout.fragment_faq, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_faq_webview, container, false);
         ButterKnife.bind(this, rootView);
-        jtv.setText(getResources().getString(R.string.FAQ));
+
+        webView.loadUrl("file:///android_asset/faq.html");
+//        jtv.setText(getResources().getString(R.string.FAQ));
 
         return rootView;
     }

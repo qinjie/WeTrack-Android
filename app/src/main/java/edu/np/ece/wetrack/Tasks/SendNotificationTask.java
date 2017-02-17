@@ -47,9 +47,11 @@ public class SendNotificationTask {
             builder.setContentIntent(resultPendingIntent);
             NotificationManager notificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(999, builder.build());
+            notificationManager.notify(x++, builder.build());
         }
     }
+
+    static int x = 999;
 
     public static void sendNotificationForDetected(Context context, Resident aResident, String msg) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);

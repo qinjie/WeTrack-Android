@@ -22,12 +22,16 @@ public class UserAccount {
     @SerializedName("token")
     private String token;
 
-    public UserAccount(String result, int id, String username, String email, String token) {
+    @SerializedName("role")
+    private int role;
+
+    public UserAccount(String result, int id, String username, String email, String token, int role) {
         this.result = result;
         this.id = id;
         this.username = username;
         this.email = email;
         this.token = token;
+        this.role = role;
     }
 
     public String getResult() {
@@ -68,5 +72,13 @@ public class UserAccount {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

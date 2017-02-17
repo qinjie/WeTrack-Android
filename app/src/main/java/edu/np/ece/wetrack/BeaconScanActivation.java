@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -231,39 +230,45 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             editor.commit();
                         }
 
-                        BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+                        String userID = sharedPref.getString("userID-WeTrack", "");
 
 
-                        Gson gson = new GsonBuilder()
-                                .setLenient()
-                                .create();
-                        JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
+                        if(!userID.equals("")){
+                            BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
 
 
-                        String token = sharedPref.getString("userToken-WeTrack", "");
-                        Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
-                        call.enqueue(new Callback<JsonObject>() {
-                            @Override
-                            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                                try {
-                                    sendNotificationForDetected(getBaseContext(), patient, "is nearby.");
+                            Gson gson = new GsonBuilder()
+                                    .setLenient()
+                                    .create();
+                            JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
+
+
+                            String token = sharedPref.getString("userToken-WeTrack", "");
+                            Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
+                            call.enqueue(new Callback<JsonObject>() {
+                                @Override
+                                public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                                    try {
+                                        sendNotificationForDetected(getBaseContext(), patient, "is nearby.");
 
 //                                    if(detectedBeaconList.contains(a))
-                                    detectedPatientList.add(patient);
-                                    detectedBeaconList.add(aBeacon);
-                                    if (MainActivity.beaconListAdapter != null) {
+                                        detectedPatientList.add(patient);
+                                        detectedBeaconList.add(aBeacon);
+                                        if (MainActivity.beaconListAdapter != null) {
 
-                                        forDisplay.logToDisplay();
+                                            forDisplay.logToDisplay();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<JsonObject> call, Throwable error) {
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<JsonObject> call, Throwable error) {
+                                }
+                            });
+                        }
+
                     }
                 }
 
@@ -310,7 +315,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             editor.commit();
                         }
 
-                        BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+
+                        String userID = sharedPref.getString("userID-WeTrack", "");
+
 
                         sendNotificationForDetected(getBaseContext(), patient, "is out of range.");
 
@@ -344,27 +351,34 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                         }
 
-                        Gson gson = new GsonBuilder()
-                                .setLenient()
-                                .create();
-                        JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
 
-                        String token = sharedPref.getString("userToken-WeTrack", "");
-                        Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
-                        call.enqueue(new Callback<JsonObject>() {
-                            @Override
-                            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                                try {
+//                        if (!userID.equals("")) {
+//                            BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+//                            Gson gson = new GsonBuilder()
+//                                    .setLenient()
+//                                    .create();
+//                            JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
+//
+//                            String token = sharedPref.getString("userToken-WeTrack", "");
+//                            Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
+//                            call.enqueue(new Callback<JsonObject>() {
+//                                @Override
+//                                public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+//                                    try {
+//
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<JsonObject> call, Throwable error) {
+//                                }
+//                            });
+//
+//                        }
 
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
 
-                            @Override
-                            public void onFailure(Call<JsonObject> call, Throwable error) {
-                            }
-                        });
                     }
                 }
 
@@ -461,29 +475,35 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                         if (patient.getBeacons() != null && patient.getBeacons().size() > 0) {
                                             String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
                                             if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
-                                                BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), 68, Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
+                                                String userID = sharedPref.getString("userID-WeTrack", "");
 
-                                                Gson gson = new GsonBuilder()
-                                                        .setLenient()
-                                                        .create();
-                                                JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
 
-                                                Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
-                                                call.enqueue(new Callback<JsonObject>() {
-                                                    @Override
-                                                    public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                                                        try {
+                                                if (!userID.equals("")) {
+                                                    BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
 
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
+                                                    Gson gson = new GsonBuilder()
+                                                            .setLenient()
+                                                            .create();
+                                                    JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
+
+//                                                    String token = sharedPref.getString("userToken-WeTrack", "");
+                                                    Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
+                                                    call.enqueue(new Callback<JsonObject>() {
+                                                        @Override
+                                                        public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                                                            try {
+
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                            }
                                                         }
-                                                    }
 
-                                                    @Override
-                                                    public void onFailure(Call<JsonObject> call, Throwable error) {
-//                                                    sendNotification("Please turn on internet connection");
-                                                    }
-                                                });
+                                                        @Override
+                                                        public void onFailure(Call<JsonObject> call, Throwable error) {
+                                                        }
+                                                    });
+
+                                                }
 
                                             }
 

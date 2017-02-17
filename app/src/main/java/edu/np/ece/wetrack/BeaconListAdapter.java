@@ -66,20 +66,20 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new OpenEvent(patientList.indexOf(patient), patient));
+                EventBus.getDefault().post(new FragmentAdapter.OpenEvent(patientList.indexOf(patient), patient, "detectedList"));
             }
         });
     }
 
-    public class OpenEvent {
-        public final int position;
-        public final Resident patient;
-
-        public OpenEvent(int position, Resident patient) {
-            this.position = position;
-            this.patient = patient;
-        }
-    }
+//    public class OpenEvent {
+//        public final int position;
+//        public final Resident patient;
+//
+//        public OpenEvent(int position, Resident patient) {
+//            this.position = position;
+//            this.patient = patient;
+//        }
+//    }
 
     @Override
     public int getItemCount() {

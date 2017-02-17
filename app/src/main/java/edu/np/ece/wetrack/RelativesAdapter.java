@@ -65,20 +65,20 @@ public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new RelativesAdapter.OpenEvent(residentList.indexOf(resident), resident));
+                EventBus.getDefault().post(new FragmentAdapter.OpenEvent(residentList.indexOf(resident), resident, "relativeList"));
             }
         });
     }
 
-    public class OpenEvent {
-        public final int position;
-        public final Resident patient;
-
-        public OpenEvent(int position, Resident patient) {
-            this.position = position;
-            this.patient = patient;
-        }
-    }
+//    public class OpenEvent {
+//        public final int position;
+//        public final Resident patient;
+//
+//        public OpenEvent(int position, Resident patient) {
+//            this.position = position;
+//            this.patient = patient;
+//        }
+//    }
 
     @Override
     public int getItemCount() {

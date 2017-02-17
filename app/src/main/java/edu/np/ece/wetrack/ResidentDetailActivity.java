@@ -102,6 +102,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
         if (token.equals("")) {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            intent.putExtra("whatParent","yyy");
             startActivity(intent);
         } else {
             final ProgressDialog dialog = ProgressDialog.show(this, "We Track",
@@ -326,31 +327,57 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         Intent detailIntent = getIntent();
+
         Intent intent = new Intent(this, MainActivity.class);
 
+        Bundle c = new Bundle();
+
         if (detailIntent != null) {
-            Bundle b = detailIntent.getExtras();
+//            Bundle b = detailIntent.getExtras();
             try {
-                if (b != null) {
-                    String tmp = b.getString("fromWhat");
-                    if (tmp.equals("home")) {
-                        intent.putExtra("isFromDetailActivity", "false");
-                    } else {
-                        intent.putExtra("isFromDetailActivity", "true");
-                    }
-                    startActivity(intent);
+//                if (b != null) {
+                String tmp = detailIntent.getStringExtra("fromWhat");
+                if (tmp.equals("home")) {
+//                        intent.putExtra("isFromDetailActivity", String.valueOf("false"));
+                        c.putString("whatParent", "home");
+                        intent.putExtras(c);
+//                    intent.putExtra("whatParent", "home");
 
                 }
+                if (tmp.equals("detectedList")) {
+//                        intent.putExtra("isFromDetailActivity", "true");
+                        c.putString("whatParent", "detectedList");
+                        intent.putExtras(c);
+//                    intent.putExtra("whatParent", "detectedList");
+
+                }
+
+                if (tmp.equals("relativeList")) {
+//                        intent.putExtra("isFromDetailActivity", "true");
+                        c.putString("whatParent", "relativeList");
+                        intent.putExtras(c);
+//                    intent.putExtra("whatParent", "relativeList");
+
+                }
+
+                startActivity(intent);
+//                }
             } catch (Exception e) {
-                intent.putExtra("isFromDetailActivity", "false");
+//                intent.putExtra("isFromDetailActivity", "false");
+                c.putString("isFromDetailActivity", "false");
+                intent.putExtras(c);
+//                intent.putExtra("whatParent", "home");
+
                 startActivity(intent);
 
             }
 
         }
         finish();
-        super.onBackPressed();
+
+
 
     }
 
@@ -359,6 +386,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
         if (uri != null && !uri.equals("")) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("whatParent","xxx");
             getBaseContext().startActivity(intent);
         }
 

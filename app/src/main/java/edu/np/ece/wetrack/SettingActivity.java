@@ -1,6 +1,5 @@
 package edu.np.ece.wetrack;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import butterknife.BindView;
@@ -91,7 +89,6 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-
     }
 
     @Override
@@ -112,28 +109,51 @@ public class SettingActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
 
+//        Bundle c = new Bundle();
+
         if (detailIntent != null) {
-            Bundle b = detailIntent.getExtras();
+//            Bundle b = detailIntent.getExtras();
             try {
-                if (b != null) {
-                    String tmp = b.getString("fromWhat");
-                    if (tmp.equals("home")) {
-                        intent.putExtra("isFromDetailActivity", String.valueOf("false"));
-                    } else {
-                        intent.putExtra("isFromDetailActivity", "true");
-                    }
-                    startActivity(intent);
+//                if (b != null) {
+                String tmp = detailIntent.getStringExtra("fromWhat");
+                if (tmp.equals("home")) {
+//                        intent.putExtra("isFromDetailActivity", String.valueOf("false"));
+//                        c.putString("whatParent", "home");
+//                        intent.putExtras(c);
+                    intent.putExtra("whatParent", "home");
+
                 }
+                if (tmp.equals("detectedList")) {
+//                        intent.putExtra("isFromDetailActivity", "true");
+//                        c.putString("whatParent", "detectedList");
+//                        intent.putExtras(c);
+                    intent.putExtra("whatParent", "detectedList");
+
+                }
+
+                if (tmp.equals("relativeList")) {
+//                        intent.putExtra("isFromDetailActivity", "true");
+//                        c.putString("whatParent", "detectedList");
+//                        intent.putExtras(c);
+                    intent.putExtra("whatParent", "relativeList");
+
+                }
+
+                startActivity(intent);
+//                }
             } catch (Exception e) {
-                intent.putExtra("isFromDetailActivity", "false");
+//                intent.putExtra("isFromDetailActivity", "false");
+//                c.putString("isFromDetailActivity", "false");
+//                intent.putExtras(c);
+                intent.putExtra("whatParent", "home");
+
                 startActivity(intent);
 
             }
 
         }
-
-
         finish();
+
 
     }
 }

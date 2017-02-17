@@ -385,7 +385,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
 
     }
 
@@ -399,19 +399,20 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
 
     }
 
     final int EDIT_USER = 69;
 
-    @Subscribe
-    public void onEvent(HomeAdapter.OpenEvent event) {
-        Intent intent = new Intent(getActivity(), ResidentDetailActivity.class);
-        intent.putExtra("patient", event.patient);
-        intent.putExtra("position", event.position);
-        intent.putExtra("fromWhat", "home");
-        startActivityForResult(intent, EDIT_USER);
-//        Toast.makeText(this, "ahihi", Toast.LENGTH_SHORT).show();
-    }
+//    @Subscribe
+//    public void onEvent(HomeAdapter.OpenEvent event) {
+////        EventBus.getDefault().unregister(this);
+//        Intent intent = new Intent(getActivity(), ResidentDetailActivity.class);
+//        intent.putExtra("patient", event.patient);
+//        intent.putExtra("position", event.position);
+//        intent.putExtra("fromWhat", "home");
+//        startActivityForResult(intent, EDIT_USER);
+//        getActivity().finish();
+//    }
 }

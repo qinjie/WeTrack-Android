@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         tools:context="com.example.hoanglong.wetrack.MainActivity">
 
-
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"
@@ -213,14 +212,15 @@
                     android:maxLines="4"
                     android:scrollbars="vertical"
                     android:textColor="@color/md_black_1000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:text="Beacon detected:"
+                    android:text="Beacon belong:"
                     android:textSize="18sp" />
 
                 <TextView

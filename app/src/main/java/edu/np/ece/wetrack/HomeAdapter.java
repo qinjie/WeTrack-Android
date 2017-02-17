@@ -65,7 +65,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new OpenEvent(residentList.indexOf(resident), resident));
+                EventBus.getDefault().post(new FragmentAdapter.OpenEvent(residentList.indexOf(resident), resident, "home"));
 
             }
         });
@@ -73,15 +73,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
-    public class OpenEvent {
-        public final int position;
-        public final Resident patient;
-
-        public OpenEvent(int position, Resident patient) {
-            this.position = position;
-            this.patient = patient;
-        }
-    }
+//    public class OpenEvent {
+//        public final int position;
+//        public final Resident patient;
+//
+//        public OpenEvent(int position, Resident patient) {
+//            this.position = position;
+//            this.patient = patient;
+//        }
+//    }
 
     @Override
     public int getItemCount() {
