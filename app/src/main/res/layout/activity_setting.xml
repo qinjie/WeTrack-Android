@@ -35,16 +35,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            >
-
+            android:layout_marginTop="?attr/actionBarSize">
 
             <LinearLayout
                 android:id="@+id/scanning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:weightSum="10">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,7 +65,18 @@
                     android:background="@drawable/toggletoscan"
                     android:textOff=""
                     android:textOn="" />
+
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/scanningInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Turn on/off the scanning \n beacon function of your app"
+                android:layout_below="@id/scanning"
+                />
+
 
             <LinearLayout
                 android:id="@+id/notification"
@@ -75,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="10"
                 android:layout_marginTop="5dp"
-                android:layout_below="@id/scanning">
+                android:layout_below="@id/scanningInfo">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -97,8 +106,19 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/toggletoscan"
                     android:textOff=""
-                    android:textOn="" />
+                    android:textOn=""/>
             </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/notificationInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Turn on/off notification"
+                android:layout_below="@id/notification"
+                />
+
 
         </RelativeLayout>
 

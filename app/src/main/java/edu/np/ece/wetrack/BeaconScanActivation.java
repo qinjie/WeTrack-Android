@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -35,11 +37,13 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import edu.np.ece.wetrack.api.RetrofitUtils;
@@ -216,6 +220,13 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             String[] regionInfo = region.getUniqueId().split(";");
 
+
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
+            String fullAddress = "";
+
+
             for (final Resident patient : patientList) {
                 for (final BeaconInfo aBeacon : patient.getBeacons()) {
                     if (regionInfo[0].equals(patient.getId() + "") && regionInfo[1].equals(aBeacon.getUuid().toLowerCase()) && regionInfo[2].equals(String.valueOf(aBeacon.getMajor())) && regionInfo[3].equals(String.valueOf(aBeacon.getMinor())) && region.getId2().toString().equals(String.valueOf(aBeacon.getMajor())) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
@@ -233,15 +244,38 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         String userID = sharedPref.getString("userID-WeTrack", "");
 
 
-                        if(!userID.equals("")){
-                            BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
+                        if (!userID.equals("")) {
+
+
+                            //TODO
+
+
+                            try {
+                                addresses = geocoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+//                                addresses = geocoder.getFromLocation(1.3345032, 103.7767573, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                String city = addresses.get(0).getLocality();
+//                                String postalCode = addresses.get(0).getPostalCode();
+//                                String knownName = addresses.get(0).getFeatureName();
+                                fullAddress = address + ", " + city;
+
+//                                sendNotification(regionList.size() + " | " + " | " + mBeaconmanager.getMonitoredRegions().size());
+//                                sendNotification(address+" "+city+" "+postalCode +" "+knownName);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), mLocation.getLongitude(), mLocation.getLatitude(), dateObj, fullAddress);
 
 
                             Gson gson = new GsonBuilder()
                                     .setLenient()
                                     .create();
                             JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
-
 
                             String token = sharedPref.getString("userToken-WeTrack", "");
                             Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
@@ -408,6 +442,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         try {
                             patientList = response.body();
 
+
                             Gson gson = new Gson();
                             String jsonPatients = gson.toJson(patientList);
                             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -461,6 +496,12 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                     SharedPreferences.Editor editor = sharedPref3.edit();
                     String savedData = sharedPref3.getString("listPatientsAndLocations-WeTrack2", "");
 
+
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
+                    String fullAddress = "";
+
                     if (!savedData.equals("") && patientList != null) {
                         final String[] patientOffline = savedData.split(";");
                         for (int i = 0; i < patientOffline.length; i++) {
@@ -479,7 +520,25 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
 
                                                 if (!userID.equals("")) {
-                                                    BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3]);
+
+
+                                                    try {
+                                                        addresses = geocoder.getFromLocation(Double.parseDouble(patientInfoOffline[2]), Double.parseDouble(patientInfoOffline[1]), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                                        String city = addresses.get(0).getLocality();
+//                                                        String postalCode = addresses.get(0).getPostalCode();
+//                                                        String knownName = addresses.get(0).getFeatureName();
+                                                        fullAddress = address + ", " + city;
+
+//                                sendNotification(regionList.size() + " | " + " | " + mBeaconmanager.getMonitoredRegions().size());
+//                                sendNotification(address+" "+city+" "+postalCode +" "+knownName);
+
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+
+                                                    BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3], fullAddress);
 
                                                     Gson gson = new GsonBuilder()
                                                             .setLenient()
@@ -536,7 +595,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 }
 
             }
-
 
             mHandler.postDelayed(mStatusChecker, mInterval);
 

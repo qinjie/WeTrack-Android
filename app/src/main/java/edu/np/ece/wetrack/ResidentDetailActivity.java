@@ -1,6 +1,8 @@
 package edu.np.ece.wetrack;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,9 +12,12 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -81,6 +86,9 @@ public class ResidentDetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.statusArea)
+    LinearLayout statusArea;
+
     @BindView(R.id.mySwitch)
     ToggleButton toggleButton;
 
@@ -102,7 +110,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
         if (token.equals("")) {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-            intent.putExtra("whatParent","yyy");
+            intent.putExtra("whatParent", "yyy");
             startActivity(intent);
         } else {
             final ProgressDialog dialog = ProgressDialog.show(this, "We Track",
@@ -137,7 +145,8 @@ public class ResidentDetailActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-        toggleButton.setVisibility(View.INVISIBLE);
+        toggleButton.setVisibility(View.GONE);
+        statusArea.setVisibility(View.GONE);
 
 
     }
@@ -209,7 +218,13 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
 //                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aaPatient.getAvatar().replace("thumbnail_", ""), avt).execute();
 
-                                remark.setText(aPatient.getRemark());
+                                if (aPatient.getRemark().equals("")) {
+                                    remark.setText("None");
+
+                                } else {
+                                    remark.setText(aPatient.getRemark());
+
+                                }
 
                                 nric.setText(aPatient.getNric());
                                 String tmp = "";
@@ -228,44 +243,104 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                 final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                                 String userID = sharedPref.getString("userID-WeTrack", "");
                                 if (userID.equals("0")) {
-                                    toggleButton.setVisibility(View.INVISIBLE);
+                                    toggleButton.setVisibility(View.GONE);
+                                    statusArea.setVisibility(View.GONE);
                                 } else {
                                     if (!userID.equals("")) {
                                         for (Relative aRelative : aPatient.getRelatives()) {
                                             if (String.valueOf(aRelative.getId()).equals(userID)) {
                                                 toggleButton.setVisibility(View.VISIBLE);
-
+                                                statusArea.setVisibility(View.VISIBLE);
 
                                                 toggleButton.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
 
+                                                        final String token = sharedPref.getString("userToken-WeTrack", "");
 
-                                                        String token = sharedPref.getString("userToken-WeTrack", "");
-
-                                                        Gson gson = new GsonBuilder()
+                                                        final Gson gson = new GsonBuilder()
                                                                 .setLenient()
                                                                 .create();
-                                                        JsonObject obj = gson.toJsonTree(aPatient).getAsJsonObject();
 
-                                                        serverAPI.changeStatus("Bearer " + token, "application/json", obj).enqueue(new Callback<Resident>() {
-                                                            @Override
-                                                            public void onResponse(Call<Resident> call, Response<Resident> response) {
-                                                                if (status.getText().equals("Missing")) {
-                                                                    status.setText("Available");
-                                                                    remind.setVisibility(View.GONE);
-                                                                } else {
-                                                                    status.setText("Missing");
-                                                                    remind.setVisibility(View.VISIBLE);
+                                                        final EditText input = new EditText(ResidentDetailActivity.this);
+                                                        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
+                                                        AlertDialog alertDialog = new AlertDialog.Builder(ResidentDetailActivity.this).create();
+                                                        alertDialog.setTitle("Remark");
+
+                                                        alertDialog.setView(input);
+                                                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                                                                new DialogInterface.OnClickListener() {
+                                                                    public void onClick(DialogInterface dialog, int which) {
+//                                                                            String token = sharedPref.getString("userToken-WeTrack", "");
+//
+//                                                                            Gson gson = new GsonBuilder()
+//                                                                                    .setLenient()
+//                                                                                    .create();
+                                                                        aPatient.setRemark(input.getText().toString());
+                                                                        JsonObject obj = gson.toJsonTree(aPatient).getAsJsonObject();
+
+                                                                        serverAPI.changeStatus("Bearer " + token, "application/json", obj).enqueue(new Callback<Resident>() {
+                                                                            @Override
+                                                                            public void onResponse(Call<Resident> call, Response<Resident> response) {
+                                                                                if (status.getText().equals("Missing")) {
+                                                                                    status.setText("Available");
+                                                                                    remind.setVisibility(View.GONE);
+                                                                                } else {
+                                                                                    status.setText("Missing");
+                                                                                    remind.setVisibility(View.VISIBLE);
+                                                                                }
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onFailure(Call<Resident> call, Throwable t) {
+
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+
+                                                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL",
+                                                                new DialogInterface.OnClickListener() {
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        if (status.getText().equals("Missing")) {
+                                                                            toggleButton.setChecked(true);
+                                                                            remind.setVisibility(View.GONE);
+                                                                        } else {
+                                                                            toggleButton.setChecked(false);
+                                                                            remind.setVisibility(View.VISIBLE);
+                                                                        }
+                                                                        dialog.dismiss();
+                                                                    }
+                                                                });
+
+
+                                                        if (status.getText().equals("Available")) {
+                                                            alertDialog.show();
+                                                        } else {
+
+                                                            final JsonObject obj = gson.toJsonTree(aPatient).getAsJsonObject();
+
+                                                            serverAPI.changeStatus("Bearer " + token, "application/json", obj).enqueue(new Callback<Resident>() {
+                                                                @Override
+                                                                public void onResponse(Call<Resident> call, Response<Resident> response) {
+                                                                    if (status.getText().equals("Missing")) {
+                                                                        status.setText("Available");
+                                                                        remind.setVisibility(View.GONE);
+                                                                    } else {
+                                                                        status.setText("Missing");
+                                                                        remind.setVisibility(View.VISIBLE);
+                                                                    }
+
                                                                 }
 
-                                                            }
+                                                                @Override
+                                                                public void onFailure(Call<Resident> call, Throwable t) {
 
-                                                            @Override
-                                                            public void onFailure(Call<Resident> call, Throwable t) {
-
-                                                            }
-                                                        });
+                                                                }
+                                                            });
+                                                        }
 
 
                                                     }
@@ -283,7 +358,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
                                 if (aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
                                     for (BeaconInfo temp : aPatient.getBeacons()) {
-                                        beacons += temp.getId() + " ";
+                                        beacons += "\t► ID: " + temp.getId() + " ☼ Major | Minor: " + temp.getMajor() + " | " + temp.getMinor() + "\n";
                                     }
                                 }
                                 tvBeaconList.setText(beacons);
@@ -295,13 +370,13 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                     if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
                                         lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
                                         lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
-                                    } else {
-                                        lastSeen.setText("Unknown");
-                                        lastLocation.setText("Unknown");
                                     }
 
                                     uri = "http://maps.google.com/maps?q=loc:" + aPatient.getLatestLocation().get(0).getLatitude() + "," + aPatient.getLatestLocation().get(0).getLongitude() + " (" + aPatient.getFullname() + ")";
 
+                                } else {
+                                    lastSeen.setText("Unknown");
+                                    lastLocation.setText("Unknown");
                                 }
                             }
 
@@ -341,23 +416,23 @@ public class ResidentDetailActivity extends AppCompatActivity {
                 String tmp = detailIntent.getStringExtra("fromWhat");
                 if (tmp.equals("home")) {
 //                        intent.putExtra("isFromDetailActivity", String.valueOf("false"));
-                        c.putString("whatParent", "home");
-                        intent.putExtras(c);
+                    c.putString("whatParent", "home");
+                    intent.putExtras(c);
 //                    intent.putExtra("whatParent", "home");
 
                 }
                 if (tmp.equals("detectedList")) {
 //                        intent.putExtra("isFromDetailActivity", "true");
-                        c.putString("whatParent", "detectedList");
-                        intent.putExtras(c);
+                    c.putString("whatParent", "detectedList");
+                    intent.putExtras(c);
 //                    intent.putExtra("whatParent", "detectedList");
 
                 }
 
                 if (tmp.equals("relativeList")) {
 //                        intent.putExtra("isFromDetailActivity", "true");
-                        c.putString("whatParent", "relativeList");
-                        intent.putExtras(c);
+                    c.putString("whatParent", "relativeList");
+                    intent.putExtras(c);
 //                    intent.putExtra("whatParent", "relativeList");
 
                 }
@@ -378,7 +453,6 @@ public class ResidentDetailActivity extends AppCompatActivity {
         finish();
 
 
-
     }
 
     @OnClick(R.id.openMap)
@@ -386,7 +460,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
         if (uri != null && !uri.equals("")) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("whatParent","xxx");
+            intent.putExtra("whatParent", "xxx");
             getBaseContext().startActivity(intent);
         }
 

@@ -21,9 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -83,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_ENABLE_LOCATION = 1994;
 
     public static BeaconListAdapter beaconListAdapter;
-
-//    public static HomeAdapter homeAdapter;
 
 
     @BindView(R.id.toolbar)
@@ -188,10 +183,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             } else {
-                TabLayout.Tab tab = tabLayout.getTabAt(0);
-                tab.select();
-                toolbar.setTitle("Missing Residents");
-                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+//                TabLayout.Tab tab = tabLayout.getTabAt(0);
+//                tab.select();
+//                toolbar.setTitle("Missing Residents");
+//                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
             }
 
         } else {
@@ -200,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setTitle("Missing Residents");
             getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
         }
+        tabLayout.setVisibility(View.VISIBLE);
 
     }
 
@@ -239,18 +235,18 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
+        final int height = displaymetrics.heightPixels;
 
 
         //Get height of actionbar
         TypedValue tv = new TypedValue();
         getBaseContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
-        int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
+        final int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
 
         // Gets layout
-        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
+        final CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
         // Gets the layout params that will allow you to resize the layout
-        ViewGroup.LayoutParams params = layout.getLayoutParams();
+        final ViewGroup.LayoutParams params = layout.getLayoutParams();
         // Changes the height and width to the specified *pixels*
         Resources r = getResources();
 //        int px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
@@ -307,7 +303,8 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position) {
                             case 1: {
-
+                                params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
+                                layout.setLayoutParams(params);
                                 getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
                                 result.closeDrawer();
                                 TabLayout.Tab tab = tabLayout.getTabAt(0);
@@ -318,14 +315,19 @@ public class MainActivity extends AppCompatActivity {
                             }
                             break;
                             case 2: {
+                                params.height = height + (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
+                                layout.setLayoutParams(params);
+                                tabLayout.setVisibility(View.GONE);
                                 getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, FAQFragment.newInstance("FAQ")).commit();
                                 result.closeDrawer();
                                 toolbar.setTitle("FAQ");
-                                tabLayout.setVisibility(View.GONE);
+
 //                                btnSearch.setVisibility(View.GONE);
                             }
                             break;
                             case 3: {
+                                params.height = height + (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
+                                layout.setLayoutParams(params);
                                 getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, AboutFragment.newInstance("About")).commit();
                                 result.closeDrawer();
                                 toolbar.setTitle("About");
@@ -393,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
-                if (position == 0) {
+                if (position == 0 && result.getCurrentSelectedPosition()==1) {
                     toolbar.setTitle("Missing Residents");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
                 }
@@ -405,6 +407,7 @@ public class MainActivity extends AppCompatActivity {
                     toolbar.setTitle("Relatives");
                     getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, RelativesFragment.newInstance("Relatives List")).commit();
                 }
+
             }
 
             @Override
@@ -463,30 +466,34 @@ public class MainActivity extends AppCompatActivity {
         result.setSelection(0);
         result.closeDrawer();
 
-        initBluetooth();
 
+        String isScanning = sharedPref.getString("isScanning-WeTrack", "true");
+
+        if (!isScanning.equals("true")) {
+            initBluetooth();
+        }
         displayLocationSettingsRequest(getBaseContext());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menu_1:
-                Toast.makeText(getBaseContext(), "this is about us", Toast.LENGTH_SHORT).show();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle item selection
+//        switch (item.getItemId()) {
+//            case R.id.menu_1:
+//                Toast.makeText(getBaseContext(), "this is about us", Toast.LENGTH_SHORT).show();
+//                return true;
+//
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     private void initBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -590,36 +597,10 @@ public class MainActivity extends AppCompatActivity {
     public void logToDisplay() {
         runOnUiThread(new Runnable() {
             public void run() {
-//                beaconListAdapter.notifyDataSetChanged();
-//                listBeacon.add("hj");
                 beaconListAdapter.add(detectedPatientList, detectedBeaconList);
-//                homeAdapter.add(missingPatientList);
-
-//                beaconListAdapter.setBeacons(listBeacon);
             }
         });
     }
-
-//    public void logToDisplay2() {
-//        runOnUiThread(new Runnable() {
-//            public void run() {
-////                beaconListAdapter.notifyDataSetChanged();
-////                listBeacon.add("hj");
-//                homeAdapter.add(missingPatientList);
-////                beaconListAdapter.setBeacons(listBeacon);
-//            }
-//        });
-//    }
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        if (isRefeshing) {
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//            isRefeshing = false;
-//        }
-//        return super.onTouchEvent(event);
-//    }
-
 
     @Override
     public void onResume() {
@@ -637,11 +618,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+//        tabLayout.setVisibility(View.VISIBLE);
+
+
 //        listDevice.clear();
 //        beaconListAdapter.notifyDataSetChanged();
 //        bluetoothAdapter.startDiscovery();
-        super.onResume();
         EventBus.getDefault().register(this);
+        super.onResume();
+
     }
 
     @Override
@@ -659,7 +644,6 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(broadcastReceiver);
         super.onPause();
     }
-
 
 
     final int EDIT_USER = 69;
