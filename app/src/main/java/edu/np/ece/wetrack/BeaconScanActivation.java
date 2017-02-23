@@ -195,16 +195,16 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         }
 
         //TODO
-        for (Region allRegion : mBeaconmanager.getMonitoredRegions()) {
-            if (!regionList.contains(allRegion)) {
-                try {
-                    mBeaconmanager.stopMonitoringBeaconsInRegion(allRegion);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
+//        for (Region allRegion : mBeaconmanager.getMonitoredRegions()) {
+//            if (!regionList.contains(allRegion)) {
+//                try {
+//                    mBeaconmanager.stopMonitoringBeaconsInRegion(allRegion);
+//                } catch (RemoteException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        }
 
         if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

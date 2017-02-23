@@ -9,18 +9,19 @@
         android:id="@+id/expandableButton1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#ba1f04"
+        android:background="#a3daff"
         android:drawableRight="@android:drawable/arrow_down_float"
         android:paddingRight="10dp"
-        android:text="Expandable Layout Example"
+        android:textSize="12sp"
+        android:text="@string/faq1"
         android:textColor="#fff" />
 
     <com.github.aakira.expandablelayout.ExpandableRelativeLayout
         android:id="@+id/expandableLayout1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/expandableButton1"
-        android:background="#90ba1f04"
+        android:background="#d6ecfa"
         android:padding="16dp"
         app:ael_duration="400"
         app:ael_expanded="false"
@@ -30,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Expandable Layout provides an easy way to create a view called header with an expandable view. Views are external layout to allow a maximum of customization." />
+            android:text="@string/answer1" />
     </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
 
@@ -39,18 +40,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/expandableLayout1"
-        android:background="#b77803"
+        android:background="#1ec0ff"
         android:drawableRight="@android:drawable/arrow_down_float"
         android:paddingRight="10dp"
-        android:text="Expandable Views Tutorial"
+        android:text="@string/faq2"
+        android:textSize="12sp"
         android:textColor="#fff" />
 
     <com.github.aakira.expandablelayout.ExpandableRelativeLayout
         android:id="@+id/expandableLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/expandableButton2"
-        android:background="#90b77803"
+        android:background="#d6ecfa"
         android:padding="16dp"
         app:ael_duration="400"
         app:ael_expanded="false"
@@ -60,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Android library for creating an expandable and collapsible to full screen view inside a viewgroup composition. Expandable Layout provides an easy way to create a view called header with an expandable view. Views are external layout to allow a maximum of customization." />
+            android:text="@string/answer2" />
     </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
     <Button
@@ -68,18 +70,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/expandableLayout2"
-        android:background="#10a106"
+        android:background="#0080ff"
         android:drawableRight="@android:drawable/arrow_down_float"
         android:paddingRight="10dp"
-        android:text="Expand/Collapse Android Widgets"
+        android:text="@string/faq3"
+        android:textSize="12sp"
         android:textColor="#fff" />
 
     <com.github.aakira.expandablelayout.ExpandableRelativeLayout
         android:id="@+id/expandableLayout3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/expandableButton3"
-        android:background="#9010a106"
+        android:background="#d6ecfa"
         android:padding="16dp"
         app:ael_duration="400"
         app:ael_expanded="false"
@@ -89,8 +92,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="An android library that brings the expandable and collapsible layouts or views or widgets with various animation effect and material design color. You can include optional contents and use everywhere according to your demand.
-An android library that brings the expandable and collapsible layouts or views or widgets with various animation effect and material design color. You can include optional contents and use everywhere according to your demand" />
+            android:text="@string/answer3" />
     </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
 
@@ -99,18 +101,19 @@ An android library that brings the expandable and collapsible layouts or views o
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/expandableLayout3"
-        android:background="#066da1"
+        android:background="#03a6ff"
         android:drawableRight="@android:drawable/arrow_down_float"
         android:paddingRight="10dp"
-        android:text="Expand/Collapse Android Example"
+        android:text="@string/faq4"
+        android:textSize="12sp"
         android:textColor="#fff" />
 
     <com.github.aakira.expandablelayout.ExpandableRelativeLayout
         android:id="@+id/expandableLayout4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/expandableButton4"
-        android:background="#90066da1"
+        android:background="#d6ecfa"
         android:padding="16dp"
         app:ael_duration="400"
         app:ael_expanded="false"
@@ -120,7 +123,6 @@ An android library that brings the expandable and collapsible layouts or views o
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Implements the expand and collapse by sliding logic for a top or a bottom view in a two children view  or layout or any widgets composition.
-             Implements the expand and collapse by sliding logic for a top or a bottom view in a two children view  or layout or any widgets composition." />
+            android:text="@string/answer4" />
     </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 </RelativeLayout>

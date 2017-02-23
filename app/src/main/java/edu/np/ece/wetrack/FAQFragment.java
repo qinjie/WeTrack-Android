@@ -1,21 +1,17 @@
 package edu.np.ece.wetrack;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.biubiubiu.justifytext.library.JustifyTextView;
 
 /**
  * Created by hoanglong on 20-Jan-17.
@@ -63,14 +59,38 @@ public class FAQFragment extends Fragment {
 //        webView.loadUrl("file:///android_asset/about.html");
 //        jtv.setText(getResources().getString(R.string.FAQ));
 
+        expandableLayout1.expand();
+        expandableLayout2.collapse();
+        expandableLayout3.collapse();
+        expandableLayout4.collapse();
+
+
         return rootView;
     }
 
-@OnClick(R.id.expandableButton1)
-public void onUpdateClick() {
-    expandableLayout1.toggle();
+    @OnClick(R.id.expandableButton1)
+    public void onClick1() {
+        expandableLayout1.toggle();
 
-}
+    }
+
+    @OnClick(R.id.expandableButton2)
+    public void onClick2() {
+        expandableLayout2.toggle();
+
+    }
+
+    @OnClick(R.id.expandableButton3)
+    public void onClick3() {
+        expandableLayout3.toggle();
+
+    }
+
+    @OnClick(R.id.expandableButton4)
+    public void onClick4() {
+        expandableLayout4.toggle();
+
+    }
 //    public void expandableButton1(View view) {
 ////        expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
 //         // toggle expand and collapse

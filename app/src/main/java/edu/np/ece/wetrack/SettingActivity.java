@@ -1,5 +1,6 @@
 package edu.np.ece.wetrack;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,9 @@ public class SettingActivity extends AppCompatActivity {
 
     @BindView(R.id.btnNoti)
     ToggleButton btnNoti;
+
+    BluetoothAdapter bluetoothAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class SettingActivity extends AppCompatActivity {
 
                 if (btnScanning.isChecked()) {
                     editor.putString("isScanning-WeTrack", "true");
+                    initBluetooth();
                 } else {
                     editor.putString("isScanning-WeTrack", "false");
                 }
@@ -153,7 +158,14 @@ public class SettingActivity extends AppCompatActivity {
 
         }
         finish();
+    }
 
+    private void initBluetooth() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, 9);
 
+        }
     }
 }

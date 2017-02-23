@@ -9,4 +9,12 @@
         *Does the app drain lots of power?\nThe app only gets activated when there is interested beacon nearby. Turning on Bluetooth does not drain too much battery. You may check its battery usage through Settings/Battery usage.\n\n
         *Does the app tracks my location (privacy concern)?\nThe app will send location to server when it sense an missing resident, the data will be anonymously.
     </string>
+    <string name="faq1">Do I need to register an account to use the app?</string>
+    <string name="answer1">No, no registration is required. You can help by simply installing the app.</string>
+    <string name="faq2">Why do I need to turn on Bluetooth on the phone all the time?</string>
+    <string name="answer2">Beacon is a bluetooth device. The app uses bluetooth to sense nearby beacons.</string>
+    <string name="faq3">Does the app drain lots of power?</string>
+    <string name="answer3">The app only gets activated when there is interested beacon nearby. Turning on Bluetooth does not drain too much battery. You may check its battery usage through Settings/Battery usage.</string>
+    <string name="faq4">Does the app tracks my location (privacy concern)?</string>
+    <string name="answer4">Although the app will send location to server when it sense an interested beacon, it is use to indicate the location of the found beacon. The data will be sent anonymously.</string>
 </resources>

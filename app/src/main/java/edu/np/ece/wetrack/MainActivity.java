@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
 
         String isScanning = sharedPref.getString("isScanning-WeTrack", "true");
 
-        if (!isScanning.equals("true")) {
+        if (isScanning.equals("true")) {
             initBluetooth();
         }
         displayLocationSettingsRequest(getBaseContext());

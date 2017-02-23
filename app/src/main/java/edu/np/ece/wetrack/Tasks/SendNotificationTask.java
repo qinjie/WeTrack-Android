@@ -84,4 +84,35 @@ public class SendNotificationTask {
     }
 
 
+    public static void sendNotificationForFireBase(Context context, Resident aResident, String msg) {
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String isNoti = sharedPref.getString("isNoti-WeTrack", "true");
+
+        if (isNoti.equals("true")) {
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(context)
+                            .setContentTitle("We Track")
+                            .setContentText(msg)
+                            .setSmallIcon(R.drawable.icon_noti)
+                            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                                    R.drawable.icon))
+                            .setAutoCancel(true);
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            Intent intent = new Intent(context, ResidentDetailActivity.class);
+            intent.putExtra("patient", aResident);
+            stackBuilder.addNextIntent(intent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            aResident.getId(),
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            builder.setContentIntent(resultPendingIntent);
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(aResident.getId(), builder.build());
+        }
+    }
+
+
 }
