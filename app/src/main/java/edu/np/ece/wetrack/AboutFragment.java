@@ -38,6 +38,10 @@ public class AboutFragment extends Fragment {
     @BindView(R.id.webView)
     WebView webView;
 
+//    @BindView(R.id.webView)
+//    TextView webView;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class AboutFragment extends Fragment {
 
 
 //        jtv.setText(getResources().getString(R.string.about));
+
         webView.loadUrl("file:///android_asset/about.html");
 
 //        webView.setText(Html.fromHtml("file:///android_asset/about.html\n"));
