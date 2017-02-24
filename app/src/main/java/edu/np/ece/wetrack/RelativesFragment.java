@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,7 +43,7 @@ import static edu.np.ece.wetrack.BeaconScanActivation.patientList;
  */
 
 public class RelativesFragment extends Fragment {
-    @BindView(R.id.rvMissingResident)
+    @BindView(R.id.rvRelatives)
     RecyclerView rvResident;
 
     private List<Resident> missingRelativesList = new ArrayList<>();
@@ -71,6 +72,12 @@ public class RelativesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_relatives, container, false);
         ButterKnife.bind(this, rootView);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvResident.getContext(),
+                DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_line));
+        rvResident.addItemDecoration(dividerItemDecoration);
+
         rvResident.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
 
         serverAPI = RetrofitUtils.get().create(ServerAPI.class);

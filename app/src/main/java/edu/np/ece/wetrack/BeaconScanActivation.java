@@ -256,10 +256,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 //                                addresses = geocoder.getFromLocation(1.3345032, 103.7767573, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
                                 String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                                String city = addresses.get(0).getLocality();
+                                String country = addresses.get(0).getCountryName();
 //                                String postalCode = addresses.get(0).getPostalCode();
 //                                String knownName = addresses.get(0).getFeatureName();
-                                fullAddress = address + ", " + city;
+                                fullAddress = address + ", " + country;
 
 //                                sendNotification(regionList.size() + " | " + " | " + mBeaconmanager.getMonitoredRegions().size());
 //                                sendNotification(address+" "+city+" "+postalCode +" "+knownName);
@@ -353,7 +353,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         String userID = sharedPref.getString("userID-WeTrack", "");
 
 
-                        sendNotificationForDetected(getBaseContext(), patient, "is out of range.");
+//                        sendNotificationForDetected(getBaseContext(), patient, "is out of range.");
 
                         List<Resident> residentToRemove = new ArrayList<>();
                         List<BeaconInfo> beaconToRemove = new ArrayList<>();

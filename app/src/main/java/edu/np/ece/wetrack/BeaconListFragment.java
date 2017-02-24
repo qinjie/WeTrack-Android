@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,6 +49,12 @@ public class BeaconListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_beacon_list, container, false);
         ButterKnife.bind(this, rootView);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvBeacons.getContext(),
+                DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_line));
+        rvBeacons.addItemDecoration(dividerItemDecoration);
+
         rvBeacons.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         MainActivity.beaconListAdapter = new BeaconListAdapter(detectedPatientList, detectedBeaconList);
         rvBeacons.setAdapter(MainActivity.beaconListAdapter);

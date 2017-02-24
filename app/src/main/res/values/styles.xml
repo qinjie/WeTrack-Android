@@ -33,4 +33,8 @@
         <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="DividerForList">
+        <item name="android:listDivider">@drawable/divider_line</item>
+    </style>
+
 </resources>

@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static edu.np.ece.wetrack.BeaconScanActivation.patientList;
+import static edu.np.ece.wetrack.R.attr.layoutManager;
 //import static edu.np.ece.wetrack.MainActivity.homeAdapter;
 
 /**
@@ -73,7 +75,17 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 //        tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
         ButterKnife.bind(this, rootView);
-        rvResident.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvResident.getContext(),
+                DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_line));
+        rvResident.addItemDecoration(dividerItemDecoration);
+
+//        rvResident.addItemDecoration(
+//                new DividerItemDecoration(getActivity(), R.drawable.divider_line));
+
+        rvResident.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 //        MainActivity.homeAdapter = new HomeAdapter(missingPatientList);
 //        rvResident.setAdapter(MainActivity.homeAdapter);
         onActivityCreated(savedInstanceState);

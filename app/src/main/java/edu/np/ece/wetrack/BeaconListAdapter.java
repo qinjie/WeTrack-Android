@@ -14,6 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import edu.np.ece.wetrack.tasks.ImageLoadTask;
 import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.model.BeaconInfo;
@@ -94,7 +95,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public TextView tvPatient;
 
         @BindView(R.id.ivAvatar)
-        public ImageView ivAvatar2;
+        public CircleImageView ivAvatar2;
 
         public BeaconViewHolder(View itemView) {
             super(itemView);

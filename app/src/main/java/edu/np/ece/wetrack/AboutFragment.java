@@ -3,10 +3,14 @@ package edu.np.ece.wetrack;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.TextView;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableWebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,8 +45,15 @@ public class AboutFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_about_webview, container, false);
 
         ButterKnife.bind(this, rootView);
+
+//        webView.setVerticalScrollBarEnabled(true);
+//        webView.setHorizontalScrollBarEnabled(true);
+
+
 //        jtv.setText(getResources().getString(R.string.about));
         webView.loadUrl("file:///android_asset/about.html");
+
+//        webView.setText(Html.fromHtml("file:///android_asset/about.html\n"));
 
         return rootView;
     }

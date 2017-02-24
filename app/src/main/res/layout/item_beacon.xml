@@ -8,14 +8,23 @@
     android:background="?attr/selectableItemBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivAvatar"
-        android:layout_width="60dp"
+        android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/thumbnail" />
+        android:src="@mipmap/thumbnail"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/material_drawer_background"/>
+
+
+    <!--<ImageView-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:scaleType="centerCrop"-->
+       <!--/>-->
 
     <TextView
         android:id="@+id/tvResident"
@@ -27,7 +36,7 @@
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:paddingTop="2dp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:text="tvResident" />
 
@@ -35,15 +44,14 @@
         android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/ivAvatar"
-        android:layout_below="@id/tvResident"
         android:layout_toEndOf="@id/ivAvatar"
         android:gravity="center_vertical"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="italic"
-        tools:text="tvInfo" />
+        tools:text="tvInfo"
+        android:layout_below="@+id/tvResident" />
 
 </RelativeLayout>

@@ -358,7 +358,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
                                 if (aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
                                     for (BeaconInfo temp : aPatient.getBeacons()) {
-                                        beacons += "\t► ID: " + temp.getId() + " ☼ Major | Minor: " + temp.getMajor() + " | " + temp.getMinor() + "\n";
+                                        beacons += "\t► ID: " + temp.getId() + " ☼ Major: " + temp.getMajor() + " | Minor: " + temp.getMinor() + "\n";
                                     }
                                 }
                                 tvBeaconList.setText(beacons);

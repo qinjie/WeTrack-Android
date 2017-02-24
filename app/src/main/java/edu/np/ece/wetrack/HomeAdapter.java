@@ -14,6 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import edu.np.ece.wetrack.tasks.ImageLoadTask;
 import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.model.Location;
@@ -99,7 +100,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView tvPatient;
 
         @BindView(R.id.ivAvatar)
-        public ImageView ivAvatar;
+        public CircleImageView ivAvatar;
 
         public BeaconViewHolder(View itemView) {
             super(itemView);

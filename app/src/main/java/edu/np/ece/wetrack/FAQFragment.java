@@ -47,6 +47,13 @@ public class FAQFragment extends Fragment {
 
 //    @BindView(R.id.expandableLayout5)
 //    ExpandableRelativeLayout expandableLayout5;
+//
+//    @BindView(R.id.expandableLayout6)
+//    ExpandableRelativeLayout expandableLayout6;
+//
+//    @BindView(R.id.expandableLayout7)
+//    ExpandableRelativeLayout expandableLayout7;
+
 
 
     @Nullable
@@ -59,10 +66,10 @@ public class FAQFragment extends Fragment {
 //        webView.loadUrl("file:///android_asset/about.html");
 //        jtv.setText(getResources().getString(R.string.FAQ));
 
-        expandableLayout1.expand();
-        expandableLayout2.collapse();
-        expandableLayout3.collapse();
-        expandableLayout4.collapse();
+        expandableLayout1.toggle();
+        expandableLayout2.toggle();
+        expandableLayout3.toggle();
+        expandableLayout4.toggle();
 
 
         return rootView;
@@ -91,24 +98,22 @@ public class FAQFragment extends Fragment {
         expandableLayout4.toggle();
 
     }
-//    public void expandableButton1(View view) {
-////        expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
-//         // toggle expand and collapse
+
+//    @OnClick(R.id.expandableButton5)
+//    public void onClick5() {
+//        expandableLayout5.toggle();
+//
 //    }
 //
-//    public void expandableButton2(View view) {
-////        expandableLayout2 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout2);
-//        expandableLayout2.toggle(); // toggle expand and collapse
-//    }
+//    @OnClick(R.id.expandableButton6)
+//    public void onClick6() {
+//        expandableLayout6.toggle();
 //
-//    public void expandableButton3(View view) {
-////        expandableLayout3 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout3);
-//        expandableLayout3.toggle(); // toggle expand and collapse
 //    }
+//    @OnClick(R.id.expandableButton7)
+//    public void onClick7() {
+//        expandableLayout7.toggle();
 //
-//    public void expandableButton4(View view) {
-////        expandableLayout4 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout4);
-//        expandableLayout4.toggle(); // toggle expand and collapse
 //    }
 
     @Override
