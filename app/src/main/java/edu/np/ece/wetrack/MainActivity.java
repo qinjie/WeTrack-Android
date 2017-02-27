@@ -137,10 +137,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         //tablayout
-        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), userRole);
-        adapterViewPager.getItem(0);
-        viewPager.setAdapter(adapterViewPager);
-        tabLayout.setupWithViewPager(viewPager);
+//        adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), userRole);
+//        adapterViewPager.getItem(0);
+//        viewPager.setAdapter(adapterViewPager);
+//        tabLayout.setupWithViewPager(viewPager);
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             tabLayout.getTabAt(i).setIcon(icons[i]);
@@ -164,14 +164,14 @@ public class MainActivity extends AppCompatActivity {
                     TabLayout.Tab tab = tabLayout.getTabAt(0);
                     tab.select();
                     toolbar.setTitle("Missing Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, HomeFragment.newInstance("Home")).commit();
                 }
 
                 if (tmp.equals("detectedList")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(1);
                     tab.select();
                     toolbar.setTitle("Nearby Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Detected")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, BeaconListFragment.newInstance("Detected")).commit();
                     detailIntent.putExtra("isFromDetailActivity", false);
                 }
 
@@ -179,21 +179,21 @@ public class MainActivity extends AppCompatActivity {
                     TabLayout.Tab tab = tabLayout.getTabAt(2);
                     tab.select();
                     toolbar.setTitle("Relatives");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, RelativesFragment.newInstance("Relative")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, RelativesFragment.newInstance("Relative")).commit();
                 }
 
             } else {
 //                TabLayout.Tab tab = tabLayout.getTabAt(0);
 //                tab.select();
 //                toolbar.setTitle("Missing Residents");
-//                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, HomeFragment.newInstance("Home1")).commit();
             }
 
         } else {
             TabLayout.Tab tab = tabLayout.getTabAt(0);
             tab.select();
             toolbar.setTitle("Missing Residents");
-            getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home1")).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, HomeFragment.newInstance("Home1")).commit();
         }
         tabLayout.setVisibility(View.VISIBLE);
 
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                             case 1: {
                                 params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
                                 layout.setLayoutParams(params);
-                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, HomeFragment.newInstance("Home")).commit();
                                 result.closeDrawer();
                                 TabLayout.Tab tab = tabLayout.getTabAt(0);
                                 tab.select();
@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
                                 params.height = height + (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
                                 layout.setLayoutParams(params);
                                 tabLayout.setVisibility(View.GONE);
-                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, FAQFragment.newInstance("FAQ")).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FAQFragment.newInstance("FAQ")).commit();
                                 result.closeDrawer();
                                 toolbar.setTitle("FAQ");
 
@@ -326,12 +326,17 @@ public class MainActivity extends AppCompatActivity {
                             }
                             break;
                             case 3: {
-                                params.height = height + (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
-                                layout.setLayoutParams(params);
-                                getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, AboutFragment.newInstance("About")).commit();
-                                result.closeDrawer();
-                                toolbar.setTitle("About");
-                                tabLayout.setVisibility(View.GONE);
+//                                params.height = height + (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
+//                                layout.setLayoutParams(params);
+//                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, AboutFragment.newInstance("About")).commit();
+//                                result.closeDrawer();
+//                                toolbar.setTitle("About");
+//                                tabLayout.setVisibility(View.GONE);
+
+                                Intent intent = new Intent(getBaseContext(), AboutActivity.class);
+                                intent.putExtra("fromWhat", "home");
+                                startActivity(intent);
+                                finish();
 //                                btnSearch.setVisibility(View.GONE);
                             }
                             break;
@@ -397,15 +402,15 @@ public class MainActivity extends AppCompatActivity {
                 int position = tab.getPosition();
                 if (position == 0 && result.getCurrentSelectedPosition()==1) {
                     toolbar.setTitle("Missing Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, HomeFragment.newInstance("Home")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, HomeFragment.newInstance("Home")).commit();
                 }
                 if (position == 1) {
                     toolbar.setTitle("Nearby Residents");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, BeaconListFragment.newInstance("Beacon List")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, BeaconListFragment.newInstance("Beacon List")).commit();
                 }
                 if (position == 2) {
                     toolbar.setTitle("Relatives");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_tab_layout, RelativesFragment.newInstance("Relatives List")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, RelativesFragment.newInstance("Relatives List")).commit();
                 }
 
             }
@@ -423,6 +428,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String token = sharedPref.getString("userToken-WeTrack", "");
         String userRole = sharedPref.getString("userRole-WeTrack", "");
+
+
         adapterViewPager = new FragmentAdapter(getSupportFragmentManager(), userRole);
         adapterViewPager.getItem(0);
         viewPager.setAdapter(adapterViewPager);

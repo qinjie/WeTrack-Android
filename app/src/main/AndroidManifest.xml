@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.np.ece.wetrack">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -18,7 +17,6 @@
         android:label="We Track"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/icon_noti" />
@@ -32,18 +30,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".MainActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.NoActionbar"></activity>
-
-
+            android:theme="@style/AppTheme.NoActionbar" />
         <activity
             android:name=".SettingActivity"
-            android:theme="@style/AppTheme.NoActionbar"></activity>
-
+            android:theme="@style/AppTheme.NoActionbar" />
         <activity
             android:name=".ResidentDetailActivity"
             android:theme="@style/AppTheme.NoActionbar" />
@@ -51,12 +44,20 @@
             android:name=".LoginActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionbar">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
+
+        <activity android:name=".AboutActivity"
+            android:theme="@style/AppTheme.NoActionbar">
+
+        </activity>
+
 
         <receiver
             android:name=".receiver.BeaconBroadcastReceiver"
@@ -80,7 +81,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".services.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
