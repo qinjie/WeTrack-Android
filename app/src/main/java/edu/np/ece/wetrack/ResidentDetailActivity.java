@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -65,7 +68,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
     TextView tvBeaconList;
 
     @BindView(R.id.reportedAt)
-    TextView created;
+    TextView reportedAt;
 
     @BindView(R.id.lastSeen)
     TextView lastSeen;
@@ -115,7 +118,6 @@ public class ResidentDetailActivity extends AppCompatActivity {
         } else {
             final ProgressDialog dialog = ProgressDialog.show(this, "We Track",
                     "Loading...Please wait...", true, false);
-
 
             serverAPI = RetrofitUtils.get().create(ServerAPI.class);
 
@@ -213,10 +215,10 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                 if (aPatient.getThumbnailPath() == null || aPatient.getThumbnailPath().equals("")) {
                                     avt.setImageResource(R.drawable.default_avt);
                                 } else {
-                                    new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_", ""), avt).execute();
+                                    new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_",""), avt).execute();
+//                                    avt.setMaxHeight(150);
+//                                    avt.setMaxWidth(150);
                                 }
-
-//                                new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aaPatient.getAvatar().replace("thumbnail_", ""), avt).execute();
 
                                 if (aPatient.getRemark().equals("")) {
                                     remark.setText("None");
@@ -265,6 +267,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                         final EditText input = new EditText(ResidentDetailActivity.this);
                                                         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
+//                                                        ContextThemeWrapper ctw = new ContextThemeWrapper(this, AlertDialog.);
                                                         AlertDialog alertDialog = new AlertDialog.Builder(ResidentDetailActivity.this).create();
                                                         alertDialog.setTitle("Remark");
 
@@ -272,11 +275,21 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                                                                 new DialogInterface.OnClickListener() {
                                                                     public void onClick(DialogInterface dialog, int which) {
-//                                                                            String token = sharedPref.getString("userToken-WeTrack", "");
-//
-//                                                                            Gson gson = new GsonBuilder()
-//                                                                                    .setLenient()
-//                                                                                    .create();
+
+                                                                        Date aDate = new Date();
+                                                                        SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                                                        String dateObj = curFormatter.format(aDate);
+                                                                        reportedAt.setText(dateObj);
+
+                                                                        if(input.getText().toString().equals(""))
+                                                                        {
+                                                                            remark.setText("Unknown");
+
+                                                                        }else{
+                                                                            remark.setText(input.getText().toString());
+
+                                                                        }
+
                                                                         aPatient.setRemark(input.getText().toString());
                                                                         JsonObject obj = gson.toJsonTree(aPatient).getAsJsonObject();
 
@@ -288,6 +301,8 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                                                     remind.setVisibility(View.GONE);
                                                                                 } else {
                                                                                     status.setText("Missing");
+                                                                                    lastSeen.setText("Unknown");
+                                                                                    lastLocation.setText("Unknown");
                                                                                     remind.setVisibility(View.VISIBLE);
                                                                                 }
 
@@ -363,7 +378,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                 }
                                 tvBeaconList.setText(beacons);
 
-                                created.setText(aPatient.getCreatedAt());
+                                reportedAt.setText(aPatient.getCreatedAt());
 
 
                                 if (aPatient.getLatestLocation().size() != 0) {
@@ -410,41 +425,29 @@ public class ResidentDetailActivity extends AppCompatActivity {
         Bundle c = new Bundle();
 
         if (detailIntent != null) {
-//            Bundle b = detailIntent.getExtras();
             try {
-//                if (b != null) {
                 String tmp = detailIntent.getStringExtra("fromWhat");
                 if (tmp.equals("home")) {
-//                        intent.putExtra("isFromDetailActivity", String.valueOf("false"));
                     c.putString("whatParent", "home");
                     intent.putExtras(c);
-//                    intent.putExtra("whatParent", "home");
 
                 }
                 if (tmp.equals("detectedList")) {
-//                        intent.putExtra("isFromDetailActivity", "true");
                     c.putString("whatParent", "detectedList");
                     intent.putExtras(c);
-//                    intent.putExtra("whatParent", "detectedList");
 
                 }
 
                 if (tmp.equals("relativeList")) {
-//                        intent.putExtra("isFromDetailActivity", "true");
                     c.putString("whatParent", "relativeList");
                     intent.putExtras(c);
-//                    intent.putExtra("whatParent", "relativeList");
 
                 }
 
                 startActivity(intent);
-//                }
             } catch (Exception e) {
-//                intent.putExtra("isFromDetailActivity", "false");
                 c.putString("isFromDetailActivity", "false");
                 intent.putExtras(c);
-//                intent.putExtra("whatParent", "home");
-
                 startActivity(intent);
 
             }

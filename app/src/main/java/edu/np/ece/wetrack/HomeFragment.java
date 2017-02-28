@@ -276,7 +276,7 @@ public class HomeFragment extends Fragment {
 
                                 }
 
-                            }, 500
+                            }, 300
         );
 
 

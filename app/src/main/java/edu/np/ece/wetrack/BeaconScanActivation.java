@@ -88,8 +88,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     public void onCreate() {
         super.onCreate();
 
-//        Toast.makeText(getBaseContext(), "onCreate beaconScanActivation", Toast.LENGTH_SHORT).show();
-
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder, String tag) {
@@ -184,34 +182,22 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     @Override
     public void didEnterRegion(Region region) {
 
-        //TODO
+        //Clear offline list if user doesn't turn on internet connection after 31 days
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if (sharedPref.getLong("ExpiredDate", -1) < System.currentTimeMillis()) {
             SharedPreferences.Editor editor = sharedPref.edit();
-//            editor.clear();
             editor.putString("listPatientsAndLocations-WeTrack2", "");
             editor.putLong("ExpiredDate", System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(44640));
             editor.apply();
         }
 
-        //TODO
-//        for (Region allRegion : mBeaconmanager.getMonitoredRegions()) {
-//            if (!regionList.contains(allRegion)) {
-//                try {
-//                    mBeaconmanager.stopMonitoringBeaconsInRegion(allRegion);
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        }
-
+        //Setup to get location
         if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
         mLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+        //Setup to get date
         Date aDate = new Date();
         SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateObj = curFormatter.format(aDate);
@@ -253,16 +239,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             try {
                                 addresses = geocoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
-//                                addresses = geocoder.getFromLocation(1.3345032, 103.7767573, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
                                 String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                                 String country = addresses.get(0).getCountryName();
-//                                String postalCode = addresses.get(0).getPostalCode();
-//                                String knownName = addresses.get(0).getFeatureName();
-                                fullAddress = address + ", " + country;
 
-//                                sendNotification(regionList.size() + " | " + " | " + mBeaconmanager.getMonitoredRegions().size());
-//                                sendNotification(address+" "+city+" "+postalCode +" "+knownName);
+                                fullAddress = address + ", " + country;
 
                             } catch (IOException e) {
                                 e.printStackTrace();

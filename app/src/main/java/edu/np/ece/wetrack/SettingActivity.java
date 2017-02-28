@@ -114,46 +114,26 @@ public class SettingActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
 
-//        Bundle c = new Bundle();
-
         if (detailIntent != null) {
-//            Bundle b = detailIntent.getExtras();
             try {
-//                if (b != null) {
                 String tmp = detailIntent.getStringExtra("fromWhat");
                 if (tmp.equals("home")) {
-//                        intent.putExtra("isFromDetailActivity", String.valueOf("false"));
-//                        c.putString("whatParent", "home");
-//                        intent.putExtras(c);
                     intent.putExtra("whatParent", "home");
-
                 }
-                if (tmp.equals("detectedList")) {
-//                        intent.putExtra("isFromDetailActivity", "true");
-//                        c.putString("whatParent", "detectedList");
-//                        intent.putExtras(c);
-                    intent.putExtra("whatParent", "detectedList");
 
+                if (tmp.equals("detectedList")) {
+                    intent.putExtra("whatParent", "detectedList");
                 }
 
                 if (tmp.equals("relativeList")) {
-//                        intent.putExtra("isFromDetailActivity", "true");
-//                        c.putString("whatParent", "detectedList");
-//                        intent.putExtras(c);
                     intent.putExtra("whatParent", "relativeList");
-
                 }
 
                 startActivity(intent);
-//                }
+
             } catch (Exception e) {
-//                intent.putExtra("isFromDetailActivity", "false");
-//                c.putString("isFromDetailActivity", "false");
-//                intent.putExtras(c);
                 intent.putExtra("whatParent", "home");
-
                 startActivity(intent);
-
             }
 
         }

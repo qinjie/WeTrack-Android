@@ -175,7 +175,7 @@ public class RelativesFragment extends Fragment {
 //        startRepeatingTask();
 
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         String token = sharedPref.getString("userToken-WeTrack", "");
 
         serverAPI.getPatientList("Bearer " + token).enqueue(new Callback<List<Resident>>() {
@@ -237,9 +237,9 @@ public class RelativesFragment extends Fragment {
 //        }
 
 
-//        handler.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
         //TODO
         //thay the cai missing resident list
         //chinh lai vong for
@@ -271,10 +271,10 @@ public class RelativesFragment extends Fragment {
         relativeAdapter = new RelativesAdapter(missingRelativesList);
         rvResident.setAdapter(relativeAdapter);
 
-//                                }
-//
-//                            }, 500
-//        );
+                                }
+
+                            }, 300
+        );
 
 
         return rootView;

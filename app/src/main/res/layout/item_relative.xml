@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:padding="5dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@mipmap/thumbnail"
+        app:civ_border_color="@color/material_drawer_background"
+        app:civ_border_width="1dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/areaResident"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/ivAvatar"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/tvResident"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="tvResident" />
+
+        <ImageView
+            android:id="@+id/imgStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingStart"
+            android:layout_weight="1"
+            android:src="@drawable/ic_available" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/areaResident"
+        android:layout_toEndOf="@id/ivAvatar"
+        android:gravity="center_vertical"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textSize="13sp"
+        tools:text="tvInfo" />
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/ivAvatar"
+        android:layout_below="@id/tvInfo"
+        android:layout_toEndOf="@id/ivAvatar"
+        android:gravity="center_vertical"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textSize="11sp"
+        android:textStyle="italic"
+        tools:text="tvLocation" />
+
+
+</RelativeLayout>

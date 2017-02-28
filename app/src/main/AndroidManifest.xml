@@ -52,12 +52,12 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-
-        <activity android:name=".AboutActivity"
-            android:theme="@style/AppTheme.NoActionbar">
-
-        </activity>
-
+        <activity
+            android:name=".AboutActivity"
+            android:theme="@style/AppTheme.NoActionbar"></activity>
+        <activity
+            android:name=".AboutUsActivity"
+            android:theme="@style/AppTheme.NoActionbar"></activity>
 
         <receiver
             android:name=".receiver.BeaconBroadcastReceiver"

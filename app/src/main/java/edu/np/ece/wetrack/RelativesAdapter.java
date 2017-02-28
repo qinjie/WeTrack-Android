@@ -1,5 +1,6 @@
 package edu.np.ece.wetrack;
 
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +16,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import edu.np.ece.wetrack.tasks.ImageLoadTask;
 import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.model.Location;
 import edu.np.ece.wetrack.model.Resident;
+import edu.np.ece.wetrack.tasks.ImageLoadTask;
 
 /**
  * Created by hoanglong on 10-Feb-17.
  */
 
-public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Resident> residentList = new ArrayList<>();
+
 
     public RelativesAdapter(List<Resident> residentList) {
         this.residentList = residentList;
@@ -35,7 +37,7 @@ public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
-        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_resident, parent, false);
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_relative, parent, false);
         return new RelativesAdapter.BeaconViewHolder(itemView);
     }
 
@@ -59,13 +61,20 @@ public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (resident.getThumbnailPath() == null || resident.getThumbnailPath().equals("")) {
             viewHolder.ivAvatar.setImageResource(R.drawable.default_avt);
         } else {
-            new ImageLoadTask(Constant.BACKEND_URL+ resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
+            new ImageLoadTask(Constant.BACKEND_URL + resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
         }
 
+        if (resident.getStatus() == 1) {
+            viewHolder.imgStatus.setImageResource(R.drawable.ic_missing);
+        } else {
+            viewHolder.imgStatus.setImageResource(R.drawable.ic_available);
+
+        }
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 EventBus.getDefault().post(new FragmentAdapter.OpenEvent(residentList.indexOf(resident), resident, "relativeList"));
             }
         });
@@ -99,6 +108,9 @@ public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @BindView(R.id.ivAvatar)
         public CircleImageView ivAvatar;
 
+        @BindView(R.id.imgStatus)
+        public ImageView imgStatus;
+
         public BeaconViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -109,5 +121,5 @@ public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.residentList = patientList;
         notifyDataSetChanged();
     }
-    
+
 }
