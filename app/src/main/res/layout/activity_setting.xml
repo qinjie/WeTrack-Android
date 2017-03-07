@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Active the scanning \n beacon function of your app"
+                android:text="Activate the beacon scanning \n function of the app"
                 android:layout_below="@id/scanning"
                 />
 
@@ -115,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Receive push notification"
+                android:text="Receive app notifications"
                 android:layout_below="@id/notification"
                 />
 
