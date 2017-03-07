@@ -262,7 +262,6 @@
                         android:id="@+id/remark"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
                         android:gravity="start"
                         android:maxLines="4"
                         android:scrollbars="vertical"
@@ -298,7 +297,6 @@
                         android:id="@+id/lastLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
                         android:gravity="start"
                         android:textColor="@color/md_black_1000"
                         android:textSize="18sp" />
