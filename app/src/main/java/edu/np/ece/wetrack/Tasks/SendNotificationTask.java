@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -20,7 +21,7 @@ import edu.np.ece.wetrack.model.Resident;
  */
 
 public class SendNotificationTask {
-    public static void sendNotification(Context context, String name) {
+    public static void sendNotification(Context context, String content) {
 
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String isNoti = sharedPref.getString("isNoti-WeTrack", "true");
@@ -29,10 +30,13 @@ public class SendNotificationTask {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
                             .setContentTitle("We Track")
-                            .setContentText(name)
+                            .setContentText(content)
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                                     R.drawable.icon))
+                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(content))
                             .setAutoCancel(true);
 
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -65,6 +69,9 @@ public class SendNotificationTask {
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                                     R.drawable.icon))
+                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(aResident.getFullname() + " " + msg))
                             .setAutoCancel(true);
 
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -96,6 +103,9 @@ public class SendNotificationTask {
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                                     R.drawable.icon))
+                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(msg))
                             .setAutoCancel(true);
 
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);

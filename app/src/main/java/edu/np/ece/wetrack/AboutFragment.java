@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableWebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.np.ece.wetrack.R;
-import me.biubiubiu.justifytext.library.JustifyTextView;
 
 
 /**

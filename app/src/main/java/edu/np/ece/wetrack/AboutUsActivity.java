@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +33,9 @@ public class AboutUsActivity extends AppCompatActivity {
 
     @BindView(R.id.button)
     Button button;
+
+    @BindView(R.id.mScrollView)
+    ScrollView scrollView;
 
 
 //    @BindView(R.id.webView)
@@ -52,6 +56,7 @@ public class AboutUsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         credit.setVisibility(View.GONE);
 
         final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
@@ -146,7 +151,7 @@ public class AboutUsActivity extends AppCompatActivity {
         mStatusChecker.run();
     }
 
-    private int mInterval = 18000;
+    private int mInterval = 20000;
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
