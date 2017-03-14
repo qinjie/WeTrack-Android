@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -29,6 +30,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import butterknife.BindView;
 import edu.np.ece.wetrack.api.RetrofitUtils;
 import edu.np.ece.wetrack.api.ServerAPI;
 import edu.np.ece.wetrack.model.EmailInfo;
@@ -44,7 +46,6 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
-    private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
 
     private ServerAPI serverAPI;
@@ -56,14 +57,10 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.btnAnonymous).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -105,20 +102,9 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         String userID = sharedPref.getString("userID-WeTrack", "");
 
 
-//        if (opr.isDone() || userRole.equals("5")) {
         if (!userID.equals("")) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
-//            if (opr.isDone()) {
-//                GoogleSignInResult result = opr.get();
-//                handleSignInResult(result);
-//            }
-//
-//            if (userRole.equals("5")) {
-//                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
 
             Intent intent = new Intent(getBaseContext(), MainActivity.class);
             startActivity(intent);
@@ -275,20 +261,6 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
             }
 
 
-//TODO
-//            if (userAccount.getResult()!=null && userAccount.getResult().equals("wrong")) {
-//                signOut();
-//
-//            }
-
-//            updateUI(true);
-
-
-        } else {
-
-
-            // Signed out, show unauthenticated UI.
-//            updateUI(false);
         }
     }
     // [END handleSignInResult]
@@ -314,19 +286,6 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     }
     // [END signOut]
 
-    // [START revokeAccess]
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-//                        updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END revokeAccess]
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -356,12 +315,9 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     private void updateUI(boolean signedIn) {
         if (signedIn) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
-            mStatusTextView.setText("Signed out");
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
 
@@ -382,9 +338,6 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 editor.putString("userRole-WeTrack", "5");
                 editor.commit();
 
-//                String userID = sharedPref.getString("userID-WeTrack", "");
-//
-//                if (userID.equals("")) {
                 serverAPI.sendToken(obj).enqueue(new Callback<UserAccount>() {
                     @Override
                     public void onResponse(Call<UserAccount> call, Response<UserAccount> response) {
@@ -427,15 +380,8 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                         alertDialog.show();
                     }
                 });
-//                }
+                break;
 
-                break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-            case R.id.disconnect_button:
-                revokeAccess();
-                break;
         }
     }
 

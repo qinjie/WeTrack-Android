@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -29,6 +30,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
+import io.fabric.sdk.android.Fabric;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
@@ -118,6 +120,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 return super.placeholder(ctx, tag);
             }
         });
+
+        Fabric.with(this, new Crashlytics());
 
 
         mBeaconmanager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getBaseContext());

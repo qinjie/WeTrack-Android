@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -19,11 +17,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -214,22 +208,22 @@ public class MainActivity extends AppCompatActivity {
 
         //[Start adjust the height of content with tabLayout for multiple device]
         //get height of screen
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        final int height = displaymetrics.heightPixels;
-
-        //Get height of actionbar
-        TypedValue tv = new TypedValue();
-        getBaseContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
-        final int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
-
-        // Gets layout
-        final CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
-        // Gets the layout params that will allow you to resize the layout
-        final ViewGroup.LayoutParams params = layout.getLayoutParams();
-        // Changes the height and width to the specified *pixels*
-        params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
-        layout.setLayoutParams(params);
+//        DisplayMetrics displaymetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//        final int height = displaymetrics.heightPixels;
+//
+//        //Get height of actionbar
+//        TypedValue tv = new TypedValue();
+//        getBaseContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
+//        final int actionBarHeight = getResources().getDimensionPixelSize(tv.resourceId);
+//
+//        // Gets layout
+//        final CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.activity_tab_layout);
+//        // Gets the layout params that will allow you to resize the layout
+//        final ViewGroup.LayoutParams params = layout.getLayoutParams();
+//        // Changes the height and width to the specified *pixels*
+//        params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 4 / 19);
+//        layout.setLayoutParams(params);
         //[End of adjusting]
 
         //Asking user for access location service
@@ -280,8 +274,9 @@ public class MainActivity extends AppCompatActivity {
                             case 1: {
                                 //Adjust the size of content and tablayout back to normal
                                 tabLayout.setVisibility(View.VISIBLE);
-                                params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
-                                layout.setLayoutParams(params);
+
+//                                params.height = height - (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
+//                                layout.setLayoutParams(params);
 
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, HomeFragment.newInstance("Home")).commit();
                                 result.closeDrawer();
@@ -294,8 +289,9 @@ public class MainActivity extends AppCompatActivity {
                             case 2: {
                                 //Hide tablayout and increase height of content
                                 tabLayout.setVisibility(View.GONE);
-                                params.height = height + (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
-                                layout.setLayoutParams(params);
+
+//                                params.height = height + (actionBarHeight * 4 / 3 + actionBarHeight * 2 / 19);
+//                                layout.setLayoutParams(params);
 
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FAQFragment.newInstance("FAQ")).commit();
                                 result.closeDrawer();
