@@ -456,16 +456,61 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 if (patientList != null && !patientList.equals("") && patientList.size() > 0 && tmp != null) {
                     for (Resident aPatient : patientList) {
                         for (BeaconInfo aBeacon : aPatient.getBeacons()) {
+
+                            String uuid = aBeacon.getUuid();
+                            Identifier identifier = Identifier.parse(uuid);
+                            Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
+                            Identifier identifier3 = Identifier.parse(String.valueOf(aBeacon.getMinor()));
+                            Region region = new Region(aPatient.getId() + ";" + identifier + ";" + identifier2 + ";" + identifier3, identifier, identifier2, identifier3);
+
+
                             if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
 
-                                String uuid = aBeacon.getUuid();
-                                Identifier identifier = Identifier.parse(uuid);
-                                Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
-                                Identifier identifier3 = Identifier.parse(String.valueOf(aBeacon.getMinor()));
-                                Region region = new Region(aPatient.getId() + ";" + identifier + ";" + identifier2 + ";" + identifier3, identifier, identifier2, identifier3);
                                 if (!regionList.contains(region)) {
                                     regionList.add(region);
                                 }
+
+                            }else{
+
+
+                                List<Resident> residentToRemove = new ArrayList<>();
+                                List<BeaconInfo> beaconToRemove = new ArrayList<>();
+
+                                for (Resident aResident : detectedPatientList) {
+                                    if (aResident.getId() == aPatient.getId()) {
+                                        residentToRemove.add(aResident);
+                                        break;
+                                    }
+                                }
+
+
+                                for (BeaconInfo removeBeacon : detectedBeaconList) {
+                                    if (removeBeacon.getId() == aBeacon.getId()) {
+                                        beaconToRemove.add(removeBeacon);
+                                        break;
+                                    }
+                                }
+
+                                detectedPatientList.removeAll(residentToRemove);
+                                detectedBeaconList.removeAll(beaconToRemove);
+
+                                residentToRemove.clear();
+                                beaconToRemove.clear();
+
+
+                                if (regionList.contains(region)) {
+                                    regionList.remove(region);
+                                    try {
+                                        mBeaconmanager.stopMonitoringBeaconsInRegion(region);
+                                    } catch (RemoteException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+
+
+
+
                             }
                         }
 
@@ -562,6 +607,14 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                 }
 
 //            sendNotification(mBeaconmanager.getMonitoredRegions().size() + " | " + detectedBeaconList.size());
+
+
+
+
+
+
+
+
 
                 if (MainActivity.beaconListAdapter != null) {
                     forDisplay.logToDisplay();
