@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         IProfile profile;
         String userRole = sharedPref.getString("userRole-WeTrack", "");
         if (!userRole.equals("5")) {
-            if (account.getAvatarUrl() == null) {
+            if (account.getAvatarUrl() == null || account.getAvatarUrl() == "") {
                 profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(R.drawable.default_avt);
             } else {
                 profile = new ProfileDrawerItem().withName(account.getName()).withEmail(account.getEmail()).withIcon(account.getAvatarUrl());
