@@ -13,7 +13,7 @@
     <application
         android:name=".BeaconScanActivation"
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="We Track"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

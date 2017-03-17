@@ -33,7 +33,7 @@ public class SendNotificationTask {
                             .setContentText(content)
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                                    R.drawable.icon))
+                                    R.mipmap.ic_launcher))
                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .bigText(content))
@@ -68,7 +68,7 @@ public class SendNotificationTask {
                             .setContentText(aResident.getFullname() + " " + msg)
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                                    R.drawable.icon))
+                                    R.mipmap.ic_launcher))
                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .bigText(aResident.getFullname() + " " + msg))
@@ -102,7 +102,7 @@ public class SendNotificationTask {
                             .setContentText(msg)
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                                    R.drawable.icon))
+                                    R.mipmap.ic_launcher))
                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .bigText(msg))

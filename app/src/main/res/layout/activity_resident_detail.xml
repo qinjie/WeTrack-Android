@@ -100,7 +100,7 @@
                             android:maxHeight="80dp"
                             android:maxWidth="80dp"
                             android:background="@drawable/rounded_rectangle"
-                            android:src="@mipmap/thumbnail" />
+                            android:src="@drawable/thumbnail" />
 
 
                         <RelativeLayout
