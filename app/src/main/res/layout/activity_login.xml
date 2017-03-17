@@ -11,27 +11,27 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="4.75"
         android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/google_icon"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_centerInParent="true"
-            android:contentDescription="icon"
-            android:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/google_icon"
             android:layout_centerInParent="true"
             android:layout_marginBottom="10dp"
             android:text="We Track"
             android:textColor="@android:color/white"
             android:textSize="36sp" />
+
+        <ImageView
+            android:id="@+id/google_icon"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_above="@id/title_text"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="icon"
+            android:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/status"
@@ -42,48 +42,66 @@
             android:textSize="14sp"
             android:visibility="gone" />
 
-    </RelativeLayout>
+        <View
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_weight="0.25" />
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/empty"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/transparent"
+            android:elevation="0dp"
+            android:visibility="visible" />
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/colorPrimary">
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tvForRelative"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
-
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:elevation="0dp"
-                android:background="@drawable/transparent"/>
-
-            <Button
-                android:id="@+id/btnAnonymous"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:layout_toEndOf="@id/sign_in_button"
-                android:text="Anonymous login"
-                android:textColor="@color/md_white_1000"
-                android:textAllCaps="false"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:drawableStart="@drawable/ic_anonymous"
-                android:background="@drawable/transparent"
-                android:elevation="10dp"
-                android:translationZ="5dp"
-                />
-
-        </RelativeLayout>
+            android:layout_above="@id/sign_in_button"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:text="For registered family members"
+            android:textColor="@android:color/darker_gray" />
 
 
+        <Button
+            android:id="@+id/btnAnonymous"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tvForRelative"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:drawableStart="@drawable/ic_anonymous"
+            android:elevation="10dp"
+            android:paddingStart="20dp"
+            android:text="Anonymous User"
+            android:textAllCaps="false"
+            android:translationZ="5dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvForPublic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/btnAnonymous"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:text="For public volunteers"
+            android:textColor="@android:color/darker_gray" />
 
     </RelativeLayout>
 
