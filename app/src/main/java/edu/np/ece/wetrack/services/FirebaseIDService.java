@@ -14,7 +14,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static edu.np.ece.wetrack.tasks.SendNotificationTask.sendNotification;
 
 /**
  * Created by hoanglong on 09-Feb-17.

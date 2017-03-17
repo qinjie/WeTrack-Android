@@ -22,8 +22,8 @@ android {
         applicationId "edu.np.ece.wetrack"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 5
-        versionName "3.2"
+        versionCode 6
+        versionName "3.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

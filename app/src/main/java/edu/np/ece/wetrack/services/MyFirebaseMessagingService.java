@@ -1,7 +1,5 @@
 package edu.np.ece.wetrack.services;
 
-import android.util.Log;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -32,10 +30,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //            Log.d(TAG, "Notification Message Body: " + remoteMessage.getData());
 //            Log.d(TAG, "Notification Message Body: " + remoteMessage.getData().size());
 //            Log.d(TAG, "Notification Message Body: " + remoteMessage.getData().get("data"));
-
-            for(Resident aResident : patientList){
-                if(remoteMessage.getData().get("id").equals(String.valueOf(aResident.getId()))){
-                    sendNotificationForFireBase(getBaseContext(),aResident ,remoteMessage.getData().get("data"));
+//            sendNotification(getBaseContext(), "ppppp " + remoteMessage.getData().get("data"));
+            for (Resident aResident : patientList) {
+                if (remoteMessage.getData().get("id").equals(String.valueOf(aResident.getId()))) {
+                    sendNotificationForFireBase(getBaseContext(), aResident, remoteMessage.getData().get("data"));
 
                 }
             }
