@@ -1,0 +1,104 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,nav ul,nav li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
+article, aside, details, figcaption, figure,footer, header, hgroup, menu, nav, section {display: block;}
+blockquote,q{quotes:none;}
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
+table{border-collapse:collapse;border-spacing:0;}
+/* start editing from here */
+a{text-decoration:none;}
+.txt-rt{text-align:right;}/* text align right */
+.txt-lt{text-align:left;}/* text align left */
+.txt-center{text-align:center;}/* text align center */
+.float-rt{float:right;}/* float right */
+.float-lt{float:left;}/* float left */
+.clear{clear:both;}/* clear float */:
+.pos-relative{position:relative;}/* Position Relative */
+.pos-absolute{position:absolute;}/* Position Absolute */
+.vertical-base{	vertical-align:baseline;}/* vertical align baseline */
+.vertical-top{	vertical-align:top;}/* vertical align top */
+.underline{	padding-bottom:5px;	border-bottom: 1px solid #eee; margin:0 0 20px 0;}/* Add 5px bottom padding and a underline */
+nav.vertical ul li{	display:block;}/* vertical menu */
+nav.horizontal ul li{	display: inline-block;}/* horizontal menu */
+/*end reset*/
+img{
+	width: 100%;
+}
+
+html{
+	font-family: 'Roboto', sans-serif;
+	background-color:white;
+
+}
+
+/*ul {
+	list-style-type: lower-greek;
+
+}
+
+ul li{
+	font-size: 12px;
+	margin:0; padding:0;
+	background:url('') no-repeat 0 0;
+	padding-left:10px;  // according to your image with
+	padding-bottom: 100px;
+	padding-top: 0px;
+	min-height:21px;
+
+
+}
+
+.aboutBullet{
+	list-style-image:url(../checkmark.png);
+
+	}*/
+
+	ul{
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	li{
+		background-image: url(../checkmark.png);
+		background-repeat: no-repeat;
+		background-position: 5px;
+		padding-left:30px; 
+		font-size: 14px;
+		padding-top: 5px;
+		padding-top: 5px;
+    min-height: 20px;
+
+	}
+
+
+	.wrap{
+
+	}
+
+	p{
+		text-align: justify;
+		text-justify: inter-word;
+		font-size: 14px;
+		padding: 10px 10px 0px 10px;
+	}
+
+	.banner{
+		width: 100%;
+	}
+
+	.search{
+		width:100%;
+		margin:0px auto 0 auto; 
+		position: relative;
+	}
+
+	@media(min-width: 768px){
+		img{
+			width: 70%;
+			display: block;
+			margin: 0px auto 0px auto;
+		}
+
+		p{
+			font-size: 16px;
+		}
+	}

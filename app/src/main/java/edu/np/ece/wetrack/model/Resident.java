@@ -201,6 +201,8 @@ public class Resident implements Parcelable {
         this.latestLocation = latestLocation;
     }
 
+
+
     public List<Location> getLocationHistories() {
         return locationHistories;
     }

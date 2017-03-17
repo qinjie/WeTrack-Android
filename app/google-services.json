@@ -1,0 +1,43 @@
+{
+  "project_info": {
+    "project_number": "747063229538",
+    "firebase_url": "https://we-track-50c51.firebaseio.com",
+    "project_id": "we-track-50c51",
+    "storage_bucket": "we-track-50c51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747063229538:android:2c2931fa394fc65d",
+        "android_client_info": {
+          "package_name": "edu.np.ece.wetrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "747063229538-psj4c61toiigpjig830v9e6iib59e8re.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARTZjZ7an7-GNax_Edzq3znqKX5FZQY3Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+
+  "configuration_version": "1"
+}

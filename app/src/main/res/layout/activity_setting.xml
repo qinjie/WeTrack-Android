@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.hoanglong.wetrack.MainActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:theme="@style/Toolbar"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:title="We Track" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
+
+            <LinearLayout
+                android:id="@+id/scanning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:gravity="start"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Scanning:"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="9" />
+
+                <ToggleButton
+                    android:id="@+id/btnScanning"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/toggletoscan"
+                    android:textOff=""
+                    android:textOn="" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/scanningInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Activate the beacon scanning \nfunction of the app"
+                android:layout_below="@id/scanning"
+                />
+
+
+            <LinearLayout
+                android:id="@+id/notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/scanningInfo">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:gravity="start"
+                    android:textColor="@color/md_black_1000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Notification:"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="9" />
+
+                <ToggleButton
+                    android:id="@+id/btnNoti"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/toggletoscan"
+                    android:textOff=""
+                    android:textOn=""/>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/notificationInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Receive app notifications"
+                android:layout_below="@id/notification"
+                />
+
+
+        </RelativeLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+</LinearLayout>
+
+

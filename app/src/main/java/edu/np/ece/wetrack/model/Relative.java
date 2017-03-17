@@ -63,7 +63,7 @@ public class Relative implements Parcelable {
         dest.writeValue(id);
         dest.writeValue(username);
         dest.writeValue(email);
-        dest.writeValue(status);
+//        dest.writeValue(status);
     }
 
     public int describeContents() {

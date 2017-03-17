@@ -11,15 +11,18 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name="edu.np.ece.wetrack.BeaconScanActivation"
+        android:name=".BeaconScanActivation"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="We Track"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/icon_noti" />
+
         <activity
-            android:name="edu.np.ece.wetrack.MainActivity"
-            android:launchMode="singleInstance"
+            android:name=".LoadingActivity"
             android:theme="@style/AppTheme.NoActionbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,20 +30,37 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionbar" />
+        <activity
+            android:name=".SettingActivity"
+            android:theme="@style/AppTheme.NoActionbar" />
+        <activity
+            android:name=".ResidentDetailActivity"
+            android:theme="@style/AppTheme.NoActionbar" />
+        <activity
+            android:name=".LoginActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionbar">
 
-        <!-- <service -->
-        <!-- android:name=".BeaconScanService" -->
-        <!-- android:enabled="true" -->
-        <!-- /> -->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-        <!-- <service -->
-        <!-- android:name=".BeaconMonitoringService" -->
-        <!-- android:enabled="false" -->
-        <!-- /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:theme="@style/AppTheme.NoActionbar"></activity>
+        <activity
+            android:name=".AboutUsActivity"
+            android:theme="@style/AppTheme.NoActionbar"></activity>
 
         <receiver
-            android:name="edu.np.ece.wetrack.receiver.BeaconBroadcastReceiver"
+            android:name=".receiver.BeaconBroadcastReceiver"
             android:enabled="true"
             android:exported="true"
             android:permission="">
@@ -56,7 +76,20 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="edu.np.ece.wetrack.ResidentDetailActivity" />
+        <service android:name=".services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".services.FirebaseIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fb2362b8d50c1272da41f488ad21dfdc6d4cb7dc" />
     </application>
 
 </manifest>

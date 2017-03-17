@@ -1,7 +1,6 @@
 package edu.np.ece.wetrack;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+import edu.np.ece.wetrack.tasks.ImageLoadTask;
 import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.model.BeaconInfo;
 import edu.np.ece.wetrack.model.Resident;
@@ -54,25 +55,32 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         viewHolder.tvPatient.setText(patient.getFullname());
         viewHolder.tvInfo.setText("is nearby.");
 
-        if (!TextUtils.isEmpty(patient.getThumbnailPath()))
-            new ImageLoadTask(Constant.BACKEND_URL + patient.getThumbnailPath(), viewHolder.ivAvatar).execute();
+        if (patient.getThumbnailPath() == null || patient.getThumbnailPath().equals("")) {
+            viewHolder.ivAvatar2.setImageResource(R.drawable.default_avt);
+        } else {
+            new ImageLoadTask(Constant.BACKEND_URL+ patient.getThumbnailPath(), viewHolder.ivAvatar2).execute();
+        }
+
+//        if (!TextUtils.isEmpty(patient.getThumbnailPath()))
+//            new ImageLoadTask( + patient.getThumbnailPath(), viewHolder.ivAvatar).execute();
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new OpenEvent(patientList.indexOf(patient), patient));
+                EventBus.getDefault().post(new FragmentAdapter.OpenEvent(patientList.indexOf(patient), patient, "detectedList"));
             }
         });
     }
 
-    public class OpenEvent {
-        public final int position;
-        public final Resident patient;
-
-        public OpenEvent(int position, Resident patient) {
-            this.position = position;
-            this.patient = patient;
-        }
-    }
+//    public class OpenEvent {
+//        public final int position;
+//        public final Resident patient;
+//
+//        public OpenEvent(int position, Resident patient) {
+//            this.position = position;
+//            this.patient = patient;
+//        }
+//    }
 
     @Override
     public int getItemCount() {
@@ -87,7 +95,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public TextView tvPatient;
 
         @BindView(R.id.ivAvatar)
-        public ImageView ivAvatar;
+        public CircleImageView ivAvatar2;
 
         public BeaconViewHolder(View itemView) {
             super(itemView);

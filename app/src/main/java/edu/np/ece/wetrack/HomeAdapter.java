@@ -1,7 +1,6 @@
 package edu.np.ece.wetrack;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+import edu.np.ece.wetrack.tasks.ImageLoadTask;
 import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.model.Location;
 import edu.np.ece.wetrack.model.Resident;
@@ -45,7 +46,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         bindResident(patient, (HomeAdapter.BeaconViewHolder) holder);
     }
 
-
     private void bindResident(final Resident resident, final BeaconViewHolder viewHolder) {
         viewHolder.tvPatient.setText(resident.getFullname());
         if (resident.getLatestLocation() != null && resident.getLatestLocation().size() > 0) {
@@ -56,25 +56,33 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.tvInfo.setText("No report yet");
             viewHolder.tvLocation.setText("");
         }
-        if (!TextUtils.isEmpty(resident.getThumbnailPath()))
-            new ImageLoadTask(Constant.BACKEND_URL + resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
+
+        if (resident.getThumbnailPath() == null || resident.getThumbnailPath().equals("")) {
+            viewHolder.ivAvatar.setImageResource(R.drawable.default_avt);
+        } else {
+            new ImageLoadTask(Constant.BACKEND_URL+ resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
+        }
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new OpenEvent(residentList.indexOf(resident), resident));
+                EventBus.getDefault().post(new FragmentAdapter.OpenEvent(residentList.indexOf(resident), resident, "home"));
+
             }
         });
+
+
     }
 
-    public class OpenEvent {
-        public final int position;
-        public final Resident patient;
-
-        public OpenEvent(int position, Resident patient) {
-            this.position = position;
-            this.patient = patient;
-        }
-    }
+//    public class OpenEvent {
+//        public final int position;
+//        public final Resident patient;
+//
+//        public OpenEvent(int position, Resident patient) {
+//            this.position = position;
+//            this.patient = patient;
+//        }
+//    }
 
     @Override
     public int getItemCount() {
@@ -92,7 +100,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView tvPatient;
 
         @BindView(R.id.ivAvatar)
-        public ImageView ivAvatar;
+        public CircleImageView ivAvatar;
 
         public BeaconViewHolder(View itemView) {
             super(itemView);

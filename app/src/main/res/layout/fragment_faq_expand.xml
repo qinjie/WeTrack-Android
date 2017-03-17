@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <Button
+            android:id="@+id/expandableButton1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#a3daff"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="@string/faq1"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/expandableLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expandableButton1"
+            android:background="#d6ecfa"
+            android:padding="16dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="bounce"
+            app:ael_orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/answer1" />
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+        <Button
+            android:id="@+id/expandableButton2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expandableLayout1"
+            android:background="#1ec0ff"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="@string/faq2"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/expandableLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expandableButton2"
+            android:background="#d6ecfa"
+            android:padding="16dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="bounce"
+            app:ael_orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/answer2" />
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+        <Button
+            android:id="@+id/expandableButton3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expandableLayout2"
+            android:background="#a3daff"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="@string/faq3"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/expandableLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expandableButton3"
+            android:background="#d6ecfa"
+            android:padding="16dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="bounce"
+            app:ael_orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/answer3" />
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+        <Button
+            android:id="@+id/expandableButton4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expandableLayout3"
+            android:background="#1ec0ff"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:paddingRight="10dp"
+            android:text="@string/faq4"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+
+        <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+            android:id="@+id/expandableLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expandableButton4"
+            android:background="#d6ecfa"
+            android:padding="16dp"
+            app:ael_duration="400"
+            app:ael_expanded="false"
+            app:ael_interpolator="bounce"
+            app:ael_orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/answer4" />
+        </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+        <!--<Button-->
+        <!--android:id="@+id/expandableButton5"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/expandableLayout4"-->
+        <!--android:background="#03a6ff"-->
+        <!--android:drawableRight="@android:drawable/arrow_down_float"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:text="@string/faq4"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="12sp" />-->
+
+        <!--<com.github.aakira.expandablelayout.ExpandableRelativeLayout-->
+        <!--android:id="@+id/expandableLayout5"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/expandableButton5"-->
+        <!--android:background="#d6ecfa"-->
+        <!--android:padding="16dp"-->
+        <!--app:ael_duration="400"-->
+        <!--app:ael_expanded="false"-->
+        <!--app:ael_interpolator="bounce"-->
+        <!--app:ael_orientation="vertical">-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/answer4" />-->
+        <!--</com.github.aakira.expandablelayout.ExpandableRelativeLayout>-->
+
+
+        <!--<Button-->
+        <!--android:id="@+id/expandableButton6"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/expandableLayout5"-->
+        <!--android:background="#03a6ff"-->
+        <!--android:drawableRight="@android:drawable/arrow_down_float"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:text="@string/faq4"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="12sp" />-->
+
+        <!--<com.github.aakira.expandablelayout.ExpandableRelativeLayout-->
+        <!--android:id="@+id/expandableLayout6"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/expandableButton6"-->
+        <!--android:background="#d6ecfa"-->
+        <!--android:padding="16dp"-->
+        <!--app:ael_duration="400"-->
+        <!--app:ael_expanded="false"-->
+        <!--app:ael_interpolator="bounce"-->
+        <!--app:ael_orientation="vertical">-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/answer4" />-->
+        <!--</com.github.aakira.expandablelayout.ExpandableRelativeLayout>-->
+
+
+        <!--<Button-->
+        <!--android:id="@+id/expandableButton7"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/expandableLayout6"-->
+        <!--android:background="#03a6ff"-->
+        <!--android:drawableRight="@android:drawable/arrow_down_float"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:text="@string/faq4"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="12sp" />-->
+
+        <!--<com.github.aakira.expandablelayout.ExpandableRelativeLayout-->
+        <!--android:id="@+id/expandableLayout7"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/expandableButton7"-->
+        <!--android:background="#d6ecfa"-->
+        <!--android:padding="16dp"-->
+        <!--app:ael_duration="400"-->
+        <!--app:ael_expanded="false"-->
+        <!--app:ael_interpolator="bounce"-->
+        <!--app:ael_orientation="vertical">-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/answer4" />-->
+        <!--</com.github.aakira.expandablelayout.ExpandableRelativeLayout>-->
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

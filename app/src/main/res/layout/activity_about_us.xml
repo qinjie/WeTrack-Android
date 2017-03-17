@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_about_us"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/about_us"
+    android:orientation="vertical"
+    tools:context="edu.np.ece.wetrack.AboutUsActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/activity_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="edu.np.ece.wetrack.AboutActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:theme="@style/Toolbar"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:title="We Track" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:id="@+id/mScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:id="@+id/credit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/creditImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="50dp"
+                    android:src="@drawable/human_credit"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/about1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/creditImage"
+                    android:gravity="center"
+                    android:text="Project manager"
+                    android:textColor="@color/md_grey_100"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/about2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about1"
+                    android:gravity="center"
+                    android:text="Mr.Zhang Qinjie"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about2"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="zhang_qinjie@np.edu.sg"
+
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+
+
+                <ImageView
+                    android:id="@+id/developerImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about3"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/developer_credit"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/about4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/developerImage"
+                    android:gravity="center"
+                    android:text="Developers"
+                    android:textColor="@color/md_grey_100"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/about5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about4"
+                    android:gravity="center"
+                    android:text="Mr.Long Pham"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about5"
+                    android:gravity="center"
+                    android:text="long.phamlp94@gmail.com"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/about7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about6"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="Ms.Hoa Nguyen"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about7"
+                    android:gravity="center"
+                    android:text="phuonghoatink22@gmail.com"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/about9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about8"
+                    android:gravity="center"
+                    android:text="Mr.Hiep Bui"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about9"
+                    android:gravity="center"
+                    android:text="hiepbh1995@gmail.com"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/about11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about10"
+                    android:gravity="center"
+                    android:text="Ms.Huyen Tran"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about11"
+                    android:gravity="center"
+                    android:text="nhathuyenqt@gmail.com"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+
+
+                <ImageView
+                    android:id="@+id/designerImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about12"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/designer_credit"
+                    android:visibility="visible" />
+
+
+                <TextView
+                    android:id="@+id/about13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/designerImage"
+                    android:gravity="center"
+                    android:text="Design"
+                    android:textColor="@color/md_grey_100"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/about14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about13"
+                    android:gravity="center"
+                    android:text="Mr.Long Pham"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about14"
+                    android:gravity="center"
+                    android:text="long.phamlp94@gmail.com"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/about16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about15"
+                    android:gravity="center"
+                    android:text="Ms.Hoa Nguyen"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about17"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about16"
+                    android:gravity="center"
+                    android:text="phuonghoatink22@gmail.com"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp"
+                    android:textStyle="italic"
+                    />
+
+                <ImageView
+                    android:id="@+id/thanksTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about17"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/thanks_to"
+                    android:visibility="visible" />
+
+
+                <TextView
+                    android:id="@+id/about18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/thanksTo"
+                    android:gravity="center"
+                    android:text="Libraries"
+                    android:textColor="@color/md_grey_100"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/about19"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about18"
+                    android:gravity="center"
+                    android:text="Android Beacon Library"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about19"
+                    android:gravity="center"
+                    android:text="Butter Knife of Jake Wharton"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about20"
+                    android:gravity="center"
+                    android:text="Retrofit2 of SquareUp"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about22"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about21"
+                    android:gravity="center"
+                    android:text="Circle Image View of Henning Dodenhof"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about23"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about22"
+                    android:gravity="center"
+                    android:text="Material Drawer of Mike Penz"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about24"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about23"
+                    android:gravity="center"
+                    android:text="Event Bus of Markus Junginger"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/about25"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about24"
+                    android:gravity="center"
+                    android:text="Expandable Scrollview of A.Akira"
+                    android:textColor="#D7FFF1"
+                    android:textSize="18sp" />
+
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ImageView
+                android:id="@+id/creditArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="60dp"
+                android:src="@drawable/human"
+                android:visibility="visible" />
+
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="130dp"
+                android:layout_height="70dp"
+                android:layout_alignTop="@+id/creditArea"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@id/creditArea"
+                android:background="@drawable/speech_bubble"
+                android:gravity="center"
+                android:onClick="didTapButton"
+                android:paddingStart="10dp"
+                android:stateListAnimator="@null"
+                android:text="Click Me"
+                android:textAlignment="gravity"
+                android:textColor="@color/md_white_1000"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

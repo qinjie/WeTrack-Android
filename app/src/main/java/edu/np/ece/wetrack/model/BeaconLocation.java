@@ -11,13 +11,15 @@ public class BeaconLocation {
     private double longitude;
     private double latitude;
     private String created_at;
+    private String address;
 
-    public BeaconLocation(int beacon_id, int user_id, double longitude, double latitude, String created_at) {
+    public BeaconLocation(int beacon_id, int user_id, double longitude, double latitude, String created_at, String address) {
         this.beacon_id = beacon_id;
         this.user_id = user_id;
         this.longitude = longitude;
         this.latitude = latitude;
         this.created_at = created_at;
+        this.address =address;
     }
 
     public int getBeacon_id() {
@@ -58,5 +60,21 @@ public class BeaconLocation {
 
     public void setcreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

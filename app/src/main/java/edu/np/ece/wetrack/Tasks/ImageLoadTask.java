@@ -1,4 +1,4 @@
-package edu.np.ece.wetrack;
+package edu.np.ece.wetrack.tasks;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
