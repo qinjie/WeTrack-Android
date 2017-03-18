@@ -62,10 +62,16 @@ public class AboutUsActivity extends AppCompatActivity {
         final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
 
         // Use bounce interpolator with amplitude 0.2 and frequency 20
-        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 20);
-        myAnim.setInterpolator(interpolator);
-        button.startAnimation(myAnim);
+//        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 20);
+//        myAnim.setInterpolator(interpolator);
+//        button.startAnimation(myAnim);
 
+
+        credit.setVisibility(View.VISIBLE);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.credit);
+
+        mHandler = new Handler();
+        startRepeatingTask();
     }
 
 
@@ -123,22 +129,22 @@ public class AboutUsActivity extends AppCompatActivity {
 
     public void didTapButton(View view) {
 
-        Animation fadeOut = new AlphaAnimation(1, 0);
-        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
-        fadeOut.setStartOffset(0);
-        fadeOut.setDuration(1000);
+//        Animation fadeOut = new AlphaAnimation(1, 0);
+//        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+//        fadeOut.setStartOffset(0);
+//        fadeOut.setDuration(1000);
+//
+//        creditArea.startAnimation(fadeOut);
+//        button.startAnimation(fadeOut);
+//        creditArea.setVisibility(View.GONE);
+//        button.setVisibility(View.GONE);
 
-        creditArea.startAnimation(fadeOut);
-        button.startAnimation(fadeOut);
-        creditArea.setVisibility(View.GONE);
-        button.setVisibility(View.GONE);
 
-
-        credit.setVisibility(View.VISIBLE);
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.credit);
-
-        mHandler = new Handler();
-        startRepeatingTask();
+//        credit.setVisibility(View.VISIBLE);
+//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.credit);
+//
+//        mHandler = new Handler();
+//        startRepeatingTask();
 
 
 //        button.setText("Product Manager \n Zhang \"Mark\" Qinjie \nDevelopers \n Long Pham \n long.phamlp94@gmail.com \n Hoa Nguyen \n phuonghoatink22@gmail.com \n");
@@ -151,7 +157,7 @@ public class AboutUsActivity extends AppCompatActivity {
         mStatusChecker.run();
     }
 
-    private int mInterval = 20000;
+    private int mInterval = 22000;
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {

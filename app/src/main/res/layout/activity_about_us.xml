@@ -5,7 +5,7 @@
     android:id="@+id/activity_about_us"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/about_us"
+    android:background="@drawable/maxresdefault"
     android:orientation="vertical"
     tools:context="edu.np.ece.wetrack.AboutUsActivity">
 
@@ -365,6 +365,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <ImageView
