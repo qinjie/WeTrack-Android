@@ -60,8 +60,9 @@ public class SendNotificationTask {
     public static void sendNotificationForDetected(Context context, Resident aResident, String msg) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String isNoti = sharedPref.getString("isNoti-WeTrack", "true");
+        String isLogin = sharedPref.getString("userToken-WeTrack", "");
 
-        if (isNoti.equals("true")) {
+        if (isNoti.equals("true") && !isLogin.equals("")) {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
                             .setContentTitle("We Track")
@@ -94,8 +95,9 @@ public class SendNotificationTask {
     public static void sendNotificationForFireBase(Context context, Resident aResident, String msg) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String isNoti = sharedPref.getString("isNoti-WeTrack", "true");
+        String isLogin = sharedPref.getString("userToken-WeTrack", "");
 
-        if (isNoti.equals("true")) {
+        if (isNoti.equals("true") && !isLogin.equals("")) {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
                             .setContentTitle("We Track")

@@ -235,11 +235,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
 
                         if (!userID.equals("")) {
-
-
-                            //TODO
-
-
                             try {
                                 addresses = geocoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 

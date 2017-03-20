@@ -199,7 +199,7 @@
                             android:id="@+id/about9"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ms.Hiep Bui:"
+                            android:text="Mr.Hiep Bui:"
                             android:textAlignment="viewStart"
                             android:textColor="#D7FFF1"
                             android:textSize="16sp"

@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:paddingStart="25dp"
-                android:text="For relatives"
+                android:text="For registered family members"
                 android:textColor="@color/md_white_1000"
                 android:textSize="20sp" />
 
@@ -82,6 +82,7 @@
             <TextView
                 android:id="@+id/tvVolunteer"
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sign_in_button"
                 android:layout_marginBottom="5dp"

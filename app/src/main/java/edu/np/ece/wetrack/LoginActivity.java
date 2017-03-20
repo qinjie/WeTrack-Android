@@ -1,6 +1,5 @@
 package edu.np.ece.wetrack;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -10,10 +9,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -31,7 +28,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import butterknife.BindView;
 import edu.np.ece.wetrack.api.RetrofitUtils;
 import edu.np.ece.wetrack.api.ServerAPI;
 import edu.np.ece.wetrack.model.EmailInfo;
@@ -58,11 +54,15 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/futurathn.TTF");
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/futurathn.TTF");
         TextView tvVolunteer = (TextView) findViewById(R.id.tvVolunteer);
-        tvVolunteer.setTypeface(custom_font);
         TextView tvRelative = (TextView) findViewById(R.id.tvRelative);
-        tvRelative.setTypeface(custom_font);
+
+        if (custom_font != null) {
+            tvVolunteer.setTypeface(custom_font);
+            tvRelative.setTypeface(custom_font);
+        }
+
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -396,7 +396,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         String userToken = sharedPref.getString("userToken-WeTrack", "");
-        if(!userToken.equals("")){
+        if (!userToken.equals("")) {
             super.onBackPressed();
         }
     }
