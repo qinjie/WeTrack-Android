@@ -371,6 +371,9 @@ public class MainActivity extends AppCompatActivity {
 
                                                 editor.commit();
 
+                                                detectedBeaconList.clear();
+                                                detectedPatientList.clear();
+
                                                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                                 startActivity(intent);
                                             }

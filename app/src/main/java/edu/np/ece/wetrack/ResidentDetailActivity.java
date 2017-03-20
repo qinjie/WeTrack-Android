@@ -100,6 +100,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
     String uri;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -205,7 +206,6 @@ public class ResidentDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (patient != null) {
-
 
                     if (patientList != null && !patientList.equals("") && patientList.size() > 0) {
                         for (final Resident aPatient : patientList) {

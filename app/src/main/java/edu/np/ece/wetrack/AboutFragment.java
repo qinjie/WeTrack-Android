@@ -51,10 +51,9 @@ public class AboutFragment extends Fragment {
 //        webView.setVerticalScrollBarEnabled(true);
 //        webView.setHorizontalScrollBarEnabled(true);
 
-
 //        jtv.setText(getResources().getString(R.string.about));
 
-        webView.loadUrl("file:///android_asset/about.html");
+        webView.loadUrl("file:///android_assets/about.html");
 
 //        webView.setText(Html.fromHtml("file:///android_asset/about.html\n"));
 

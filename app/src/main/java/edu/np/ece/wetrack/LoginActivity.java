@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -57,6 +58,11 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/futurathn.TTF");
+        TextView tvVolunteer = (TextView) findViewById(R.id.tvVolunteer);
+        tvVolunteer.setTypeface(custom_font);
+        TextView tvRelative = (TextView) findViewById(R.id.tvRelative);
+        tvRelative.setTypeface(custom_font);
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -385,5 +391,13 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
+        String userToken = sharedPref.getString("userToken-WeTrack", "");
+        if(!userToken.equals("")){
+            super.onBackPressed();
+        }
+    }
 }

@@ -364,9 +364,7 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
 
                         if (MainActivity.beaconListAdapter != null) {
-
                             forDisplay.logToDisplay();
-
                         }
 
 
@@ -418,8 +416,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             String token = sharedPref.getString("userToken-WeTrack", "");
 
             String isScanning = sharedPref.getString("isScanning-WeTrack", "true");
+            String isLogin = sharedPref.getString("userToken-WeTrack", "");
 
-            if (isScanning.equals("true")) {
+            if (isScanning.equals("true") && !isLogin.equals("")) {
                 serverAPI.getPatientList("Bearer " + token).enqueue(new Callback<List<Resident>>() {
                     @Override
                     public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {

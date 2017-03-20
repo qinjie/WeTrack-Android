@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    android:weightSum="10"
+    android:weightSum="20"
     tools:context=".LoginActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_weight="13"
         android:orientation="vertical">
 
         <ImageView
@@ -48,21 +48,22 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="7"
         android:background="@color/colorPrimary"
-        android:paddingTop="25dp">
+        >
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
 
             <TextView
-                android:id="@+id/tvVolunteer"
+                android:id="@+id/tvRelative"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:paddingStart="20dp"
-                android:text="For volunteer"
+                android:paddingStart="25dp"
+                android:text="For relatives"
                 android:textColor="@color/md_white_1000"
                 android:textSize="20sp" />
 
@@ -70,7 +71,7 @@
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvVolunteer"
+                android:layout_below="@id/tvRelative"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/transparent"
@@ -79,14 +80,14 @@
 
 
             <TextView
-                android:id="@+id/tvFamily"
+                android:id="@+id/tvVolunteer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sign_in_button"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:paddingStart="20dp"
-                android:text="For relatives"
+                android:paddingStart="25dp"
+                android:text="For volunteers"
                 android:textColor="@color/md_white_1000"
                 android:textSize="20sp" />
 
@@ -95,7 +96,7 @@
                 android:id="@+id/btnAnonymous"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvFamily"
+                android:layout_below="@id/tvVolunteer"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/transparent"
