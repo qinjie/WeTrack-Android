@@ -321,10 +321,10 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                                     public void onClick(DialogInterface dialog, int which) {
                                                                         if (status.getText().equals("Missing")) {
                                                                             toggleButton.setChecked(true);
-                                                                            remind.setVisibility(View.GONE);
+                                                                            remind.setVisibility(View.VISIBLE);
                                                                         } else {
                                                                             toggleButton.setChecked(false);
-                                                                            remind.setVisibility(View.VISIBLE);
+                                                                            remind.setVisibility(View.GONE);
                                                                         }
                                                                         dialog.dismiss();
                                                                     }
@@ -460,7 +460,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.openMap)
     public void onUpdateClick() {
-        if (uri != null && !uri.equals("")) {
+        if (uri != null && !uri.equals("") && !lastLocation.getText().equals("Unknown") ) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("whatParent", "xxx");
