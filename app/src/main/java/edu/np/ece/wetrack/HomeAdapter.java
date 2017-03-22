@@ -1,10 +1,10 @@
 package edu.np.ece.wetrack;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -15,10 +15,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import edu.np.ece.wetrack.tasks.ImageLoadTask;
 import edu.np.ece.wetrack.api.Constant;
 import edu.np.ece.wetrack.model.Location;
 import edu.np.ece.wetrack.model.Resident;
+import edu.np.ece.wetrack.tasks.ImageLoadTask;
 
 /**
  * Created by hoanglong on 19-Jan-17.
@@ -28,6 +28,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //    private List<String> beacons;
 //    private LinkedHashMap<String, Double> beaconsMap = new LinkedHashMap<>();
     private List<Resident> residentList = new ArrayList<>();
+    private Context context;
 
     public HomeAdapter(List<Resident> residentList) {
         this.residentList = residentList;
@@ -35,6 +36,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
         View itemView;
         itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_resident, parent, false);
         return new HomeAdapter.BeaconViewHolder(itemView);
@@ -60,7 +62,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (resident.getThumbnailPath() == null || resident.getThumbnailPath().equals("")) {
             viewHolder.ivAvatar.setImageResource(R.drawable.default_avt);
         } else {
-            new ImageLoadTask(Constant.BACKEND_URL+ resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
+            new ImageLoadTask(Constant.BACKEND_URL + resident.getThumbnailPath(), viewHolder.ivAvatar, context ).execute();
         }
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

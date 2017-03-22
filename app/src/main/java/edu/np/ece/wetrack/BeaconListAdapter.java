@@ -1,5 +1,6 @@
 package edu.np.ece.wetrack;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private List<Resident> patientList = new ArrayList<>();
     private List<BeaconInfo> beaconList = new ArrayList<>();
-
+    private Context context;
 
     public BeaconListAdapter(List<Resident> patientList, List<BeaconInfo> beaconList) {
         this.patientList = patientList;
@@ -37,6 +38,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
         View itemView;
         itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_beacon, parent, false);
         return new BeaconViewHolder(itemView);
@@ -58,7 +60,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (patient.getThumbnailPath() == null || patient.getThumbnailPath().equals("")) {
             viewHolder.ivAvatar2.setImageResource(R.drawable.default_avt);
         } else {
-            new ImageLoadTask(Constant.BACKEND_URL+ patient.getThumbnailPath(), viewHolder.ivAvatar2).execute();
+            new ImageLoadTask(Constant.BACKEND_URL+ patient.getThumbnailPath(), viewHolder.ivAvatar2, context).execute();
         }
 
 //        if (!TextUtils.isEmpty(patient.getThumbnailPath()))

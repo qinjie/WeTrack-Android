@@ -215,7 +215,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                 if (aPatient.getThumbnailPath() == null || aPatient.getThumbnailPath().equals("")) {
                                     avt.setImageResource(R.drawable.default_avt);
                                 } else {
-                                    new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_",""), avt).execute();
+                                    new ImageLoadTask("http://128.199.93.67/WeTrack/backend/web/" + aPatient.getThumbnailPath().replace("thumbnail_",""), avt, getBaseContext()).execute();
 //                                    avt.setMaxHeight(150);
 //                                    avt.setMaxWidth(150);
                                 }

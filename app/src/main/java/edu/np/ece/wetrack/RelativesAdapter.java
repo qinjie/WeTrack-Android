@@ -1,5 +1,6 @@
 package edu.np.ece.wetrack;
 
+import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import edu.np.ece.wetrack.tasks.ImageLoadTask;
 public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Resident> residentList = new ArrayList<>();
+    private Context context;
 
 
     public RelativesAdapter(List<Resident> residentList) {
@@ -36,6 +38,7 @@ public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
         View itemView;
         itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_relative, parent, false);
         return new RelativesAdapter.BeaconViewHolder(itemView);
@@ -61,7 +64,7 @@ public class RelativesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (resident.getThumbnailPath() == null || resident.getThumbnailPath().equals("")) {
             viewHolder.ivAvatar.setImageResource(R.drawable.default_avt);
         } else {
-            new ImageLoadTask(Constant.BACKEND_URL + resident.getThumbnailPath(), viewHolder.ivAvatar).execute();
+            new ImageLoadTask(Constant.BACKEND_URL + resident.getThumbnailPath(), viewHolder.ivAvatar, context).execute();
         }
 
         if (resident.getStatus() == 1) {

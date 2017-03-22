@@ -600,16 +600,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                     }
                 }
 
-//            sendNotification(mBeaconmanager.getMonitoredRegions().size() + " | " + detectedBeaconList.size());
-
-
-
-
-
-
-
-
-
                 if (MainActivity.beaconListAdapter != null) {
                     forDisplay.logToDisplay();
                 }

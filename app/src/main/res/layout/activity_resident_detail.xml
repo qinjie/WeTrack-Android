@@ -78,8 +78,8 @@
                         android:text="Resident"
                         android:textAllCaps="true"
                         android:textColor="@color/md_black_1000"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
 
 
                     <RelativeLayout
@@ -280,7 +280,6 @@
                         android:id="@+id/lastSeen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:gravity="start"
                         android:textColor="@color/md_black_1000"
                         android:textSize="18sp" />
@@ -325,6 +324,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         android:drawableStart="@drawable/ic_map"
                         android:textColor="@color/md_white_1000"
                         android:background="@drawable/ripple_effect"
