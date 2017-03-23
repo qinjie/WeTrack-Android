@@ -54,7 +54,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/futurathn.TTF");
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/futurathin.TTF");
         TextView tvVolunteer = (TextView) findViewById(R.id.tvVolunteer);
         TextView tvRelative = (TextView) findViewById(R.id.tvRelative);
 

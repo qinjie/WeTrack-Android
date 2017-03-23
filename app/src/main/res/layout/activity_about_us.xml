@@ -5,7 +5,6 @@
     android:id="@+id/activity_about_us"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/maxresdefault"
     android:orientation="vertical"
     tools:context="edu.np.ece.wetrack.AboutUsActivity">
 
@@ -35,7 +34,7 @@
         <ScrollView
             android:id="@+id/mScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <RelativeLayout
@@ -61,7 +60,7 @@
                     android:layout_below="@id/creditImage"
                     android:gravity="center"
                     android:text="Project manager"
-                    android:textColor="@color/md_grey_100"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -80,7 +79,7 @@
                         android:layout_below="@id/about1"
                         android:text="Mr.Zhang Qinjie:"
                         android:textAlignment="viewStart"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -91,7 +90,7 @@
                         android:paddingStart="5dp"
                         android:text="zhang_qinjie@np.edu.sg"
                         android:textAlignment="viewStart"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp"
                         android:textStyle="italic" />
 
@@ -115,7 +114,7 @@
                     android:layout_below="@id/developerImage"
                     android:gravity="center"
                     android:text="Developers"
-                    android:textColor="@color/md_grey_100"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -140,7 +139,7 @@
                             android:layout_height="wrap_content"
                             android:text="Mr.Long Pham:"
                             android:textAlignment="viewStart"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -150,7 +149,7 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="5dp"
                             android:text="long.phamlp94@gmail.com"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="italic" />
                     </LinearLayout>
@@ -170,7 +169,7 @@
                             android:layout_height="wrap_content"
                             android:text="Ms.Hoa Nguyen:"
                             android:textAlignment="viewStart"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -181,7 +180,7 @@
                             android:gravity="center"
                             android:paddingStart="5dp"
                             android:text="phuonghoatink22@gmail.com"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="italic" />
                     </LinearLayout>
@@ -192,7 +191,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/layoutAbout3"
                         android:orientation="horizontal"
-
                         android:weightSum="10">
 
                         <TextView
@@ -201,7 +199,7 @@
                             android:layout_height="wrap_content"
                             android:text="Mr.Hiep Bui:"
                             android:textAlignment="viewStart"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -212,7 +210,7 @@
                             android:gravity="center"
                             android:paddingStart="5dp"
                             android:text="hiepbh1995@gmail.com"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="italic" />
                     </LinearLayout>
@@ -230,7 +228,7 @@
                             android:layout_height="wrap_content"
                             android:text="Ms.Huyen Tran:"
                             android:textAlignment="viewStart"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -241,12 +239,11 @@
                             android:gravity="center"
                             android:paddingStart="5dp"
                             android:text="nhathuyenqt@gmail.com"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="italic" />
                     </LinearLayout>
                 </LinearLayout>
-
 
                 <ImageView
                     android:id="@+id/designerImage"
@@ -266,7 +263,7 @@
                     android:layout_below="@id/designerImage"
                     android:gravity="center"
                     android:text="Design"
-                    android:textColor="@color/md_grey_100"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -290,7 +287,7 @@
                             android:layout_height="wrap_content"
                             android:text="Mr.Long Pham:"
                             android:textAlignment="viewStart"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -300,7 +297,7 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="5dp"
                             android:text="long.phamlp94@gmail.com"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="italic" />
                     </LinearLayout>
@@ -318,7 +315,7 @@
                             android:layout_height="wrap_content"
                             android:text="Ms.Hoa Nguyen:"
                             android:textAlignment="viewStart"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -329,7 +326,7 @@
                             android:gravity="center"
                             android:paddingStart="5dp"
                             android:text="phuonghoatink22@gmail.com"
-                            android:textColor="#D7FFF1"
+                            android:textColor="@color/md_black_1000"
                             android:textSize="16sp"
                             android:textStyle="italic" />
                     </LinearLayout>
@@ -354,7 +351,7 @@
                     android:layout_below="@id/thanksTo"
                     android:gravity="center"
                     android:text="Libraries"
-                    android:textColor="@color/md_grey_100"
+                    android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -362,15 +359,15 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@id/about18">
+                    android:layout_below="@id/about18"
+                    android:layout_centerHorizontal="true">
 
                     <TextView
                         android:id="@+id/about19"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Android Beacon Library"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp" />
 
                     <TextView
@@ -379,7 +376,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/about19"
                         android:text="Butter Knife of Jake Wharton"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp" />
 
                     <TextView
@@ -388,7 +385,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/about20"
                         android:text="Retrofit2 of SquareUp"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp" />
 
                     <TextView
@@ -397,7 +394,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/about21"
                         android:text="Circle Image View of Henning Dodenhof"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp" />
 
                     <TextView
@@ -406,7 +403,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/about22"
                         android:text="Material Drawer of Mike Penz"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp" />
 
                     <TextView
@@ -415,7 +412,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/about23"
                         android:text="Event Bus of Markus Junginger"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp" />
 
                     <TextView
@@ -424,7 +421,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/about24"
                         android:text="Expandable Scrollview of A.Akira"
-                        android:textColor="#D7FFF1"
+                        android:textColor="@color/md_black_1000"
                         android:textSize="16sp" />
                 </RelativeLayout>
 
@@ -435,37 +432,38 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <ImageView
+            <TextView
                 android:id="@+id/creditArea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="60dp"
-                android:src="@drawable/human"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="200dp"
+                android:text="About us"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="60sp"
                 android:visibility="visible" />
 
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="130dp"
-                android:layout_height="70dp"
-                android:layout_alignTop="@+id/creditArea"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@id/creditArea"
-                android:background="@drawable/speech_bubble"
-                android:gravity="center"
-                android:onClick="didTapButton"
-                android:paddingStart="10dp"
-                android:stateListAnimator="@null"
-                android:text="Click Me"
-                android:textAlignment="gravity"
-                android:textColor="@color/md_white_1000"
-                android:textSize="16sp" />
+            <!--<Button-->
+            <!--android:id="@+id/button"-->
+            <!--android:layout_width="130dp"-->
+            <!--android:layout_height="70dp"-->
+            <!--android:layout_alignTop="@+id/creditArea"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:layout_toEndOf="@id/creditArea"-->
+            <!--android:background="@drawable/speech_bubble"-->
+            <!--android:gravity="center"-->
+            <!--android:onClick="didTapButton"-->
+            <!--android:paddingStart="10dp"-->
+            <!--android:stateListAnimator="@null"-->
+            <!--android:text="Click Me"-->
+            <!--android:textAlignment="gravity"-->
+            <!--android:textColor="@color/md_white_1000"-->
+            <!--android:textSize="16sp"-->
+            <!--android:visibility="gone"/>-->
 
         </RelativeLayout>
 

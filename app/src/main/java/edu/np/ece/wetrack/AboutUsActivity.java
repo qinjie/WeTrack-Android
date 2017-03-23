@@ -1,24 +1,24 @@
 package edu.np.ece.wetrack;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import edu.np.ece.wetrack.tasks.MyBounceInterpolator;
 
 public class AboutUsActivity extends AppCompatActivity {
 
@@ -26,20 +26,13 @@ public class AboutUsActivity extends AppCompatActivity {
     RelativeLayout credit;
 
     @BindView(R.id.creditArea)
-    ImageView creditArea;
+    TextView creditArea;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.button)
-    Button button;
-
     @BindView(R.id.mScrollView)
     ScrollView scrollView;
-
-
-//    @BindView(R.id.webView)
-//    WebView webView;
 
     Animation animation;
 
@@ -56,22 +49,40 @@ public class AboutUsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        scrollView.setFocusable(false);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+//        setOverScrollMode(View.OVER_SCROLL_NEVER);
         credit.setVisibility(View.GONE);
 
-        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/homestead.TTF");
+        creditArea.setTypeface(custom_font);
 
-        // Use bounce interpolator with amplitude 0.2 and frequency 20
-//        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 20);
-//        myAnim.setInterpolator(interpolator);
-//        button.startAnimation(myAnim);
+        Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+        fadeOut.setStartOffset(0);
+        fadeOut.setDuration(3000);
+        creditArea.startAnimation(fadeOut);
 
-
-        credit.setVisibility(View.VISIBLE);
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.credit);
 
         mHandler = new Handler();
-        startRepeatingTask();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                creditArea.setVisibility(View.GONE);
+                credit.setVisibility(View.VISIBLE);
+                animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.credit);
+                startRepeatingTask();
+
+            }
+        }, 3000);
+
+
     }
 
 
@@ -127,7 +138,7 @@ public class AboutUsActivity extends AppCompatActivity {
     }
 
 
-    public void didTapButton(View view) {
+//    public void didTapButton(View view) {
 
 //        Animation fadeOut = new AlphaAnimation(1, 0);
 //        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
@@ -151,13 +162,13 @@ public class AboutUsActivity extends AppCompatActivity {
 //        button.setTextSize(16);
 
 
-    }
+//    }
 
     void startRepeatingTask() {
         mStatusChecker.run();
     }
 
-    private int mInterval = 22000;
+    private int mInterval = 20000;
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
