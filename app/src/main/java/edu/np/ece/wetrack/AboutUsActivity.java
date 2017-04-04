@@ -172,10 +172,13 @@ public class AboutUsActivity extends AppCompatActivity {
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
+            try {
+                credit.startAnimation(animation);
+                mHandler.postDelayed(mStatusChecker, mInterval);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            credit.startAnimation(animation);
-
-            mHandler.postDelayed(mStatusChecker, mInterval);
 
         }
     };
