@@ -31,7 +31,7 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:id="@+id/mScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,13 +44,10 @@
 
                 <ImageView
                     android:id="@+id/creditImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
                     android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="50dp"
-                    android:src="@drawable/human_credit"
+                    android:background="@drawable/about_us"
                     android:visibility="visible" />
 
                 <TextView
@@ -62,7 +59,8 @@
                     android:text="Project manager"
                     android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/layoutAbout1"
@@ -70,7 +68,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/about1"
                     android:layout_centerHorizontal="true"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/about2"
@@ -105,7 +104,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/developer_credit"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/about4"
@@ -116,7 +115,9 @@
                     android:text="Developers"
                     android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    />
 
                 <LinearLayout
                     android:id="@+id/layoutAbout5"
@@ -254,7 +255,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/designer_credit"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/about13"
@@ -265,7 +266,9 @@
                     android:text="Design"
                     android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    />
 
                 <LinearLayout
                     android:id="@+id/layoutAbout55"
@@ -342,7 +345,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/thanks_to"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/about18"
@@ -353,7 +356,9 @@
                     android:text="Libraries"
                     android:textColor="@color/md_black_1000"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    />
 
 
                 <RelativeLayout
@@ -427,12 +432,12 @@
 
 
             </RelativeLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <TextView
@@ -444,7 +449,7 @@
                 android:text="About us"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="60sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
 
             <!--<Button-->
