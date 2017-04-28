@@ -175,7 +175,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                     public void onResponse(Call<UserAccount> call, Response<UserAccount> response) {
                         userAccount = response.body();
 
-                        if (userAccount.getResult().equals("correct")) {
+                        if (userAccount != null && userAccount.getResult().equals("correct")) {
                             Log.i("Email", userAccount.getToken());
                             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                             SharedPreferences.Editor editor = sharedPref.edit();
@@ -349,18 +349,20 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                     public void onResponse(Call<UserAccount> call, Response<UserAccount> response) {
                         userAccount = response.body();
 
+                        if (userAccount != null) {
+                            editor.putString("userID-WeTrack", String.valueOf(userAccount.getId()));
+                            editor.putString("userToken-WeTrack", userAccount.getToken());
+                            EmailInfo account = new EmailInfo("Anonymous", "Anonymous", R.drawable.my_avt + "");
+                            Gson gson2 = new Gson();
+                            String jsonAccount = gson2.toJson(account);
+                            editor.putString("userAccount-WeTrack", jsonAccount);
+                            editor.commit();
 
-                        editor.putString("userID-WeTrack", String.valueOf(userAccount.getId()));
-                        editor.putString("userToken-WeTrack", userAccount.getToken());
-                        EmailInfo account = new EmailInfo("Anonymous", "Anonymous", R.drawable.my_avt + "");
-                        Gson gson2 = new Gson();
-                        String jsonAccount = gson2.toJson(account);
-                        editor.putString("userAccount-WeTrack", jsonAccount);
-                        editor.commit();
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
 
-                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                        startActivity(intent);
-                        finish();
 
                     }
 
