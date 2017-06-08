@@ -71,7 +71,7 @@ public class ResidentDetailActivity extends AppCompatActivity {
     TextView reportedAt;
 
     @BindView(R.id.lastSeen)
-    TextView lastSeen;
+    TextView lastSeenBeacon;
 
     @BindView(R.id.lastLocation)
     TextView lastLocation;
@@ -276,10 +276,10 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                                 new DialogInterface.OnClickListener() {
                                                                     public void onClick(DialogInterface dialog, int which) {
 
-                                                                        Date aDate = new Date();
-                                                                        SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                                                        String dateObj = curFormatter.format(aDate);
-                                                                        reportedAt.setText(dateObj);
+//                                                                        Date aDate = new Date();
+//                                                                        SimpleDateFormat curFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                                                                        String dateObj = curFormatter.format(aDate);
+//                                                                        reportedAt.setText(dateObj);
 
                                                                         if(input.getText().toString().equals(""))
                                                                         {
@@ -301,7 +301,8 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                                                                     remind.setVisibility(View.GONE);
                                                                                 } else {
                                                                                     status.setText("Missing");
-                                                                                    lastSeen.setText("Unknown");
+                                                                                    reportedAt.setText("Unknown");
+                                                                                    lastSeenBeacon.setText("Unknown");
                                                                                     lastLocation.setText("Unknown");
                                                                                     remind.setVisibility(View.VISIBLE);
                                                                                 }
@@ -378,19 +379,35 @@ public class ResidentDetailActivity extends AppCompatActivity {
                                 }
                                 tvBeaconList.setText(beacons);
 
-                                reportedAt.setText(aPatient.getCreatedAt());
+//                                reportedAt.setText(aPatient.getCreatedAt());
 
 
                                 if (aPatient.getLatestLocation().size() != 0) {
                                     if (aPatient.getLatestLocation() != null && aPatient.getLatestLocation().size() > 0) {
-                                        lastSeen.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
+                                        reportedAt.setText(aPatient.getLatestLocation().get(0).getCreatedAt());
+
+
+                                        String beaconDetected= "Unknown";
+                                        if (aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
+                                            for (BeaconInfo temp : aPatient.getBeacons()) {
+                                                if(aPatient.getLatestLocation().get(0).getBeaconId() == temp.getId()) {
+                                                    beaconDetected = "\t► ID: " + temp.getId() + " ☼ Major: " + temp.getMajor() + " | Minor: " + temp.getMinor() + "\n";
+                                                }
+                                            }
+                                        }
+
+
+                                        lastSeenBeacon.setText(beaconDetected);
+
+
                                         lastLocation.setText(aPatient.getLatestLocation().get(0).getAddress());
                                     }
 
                                     uri = "http://maps.google.com/maps?q=loc:" + aPatient.getLatestLocation().get(0).getLatitude() + "," + aPatient.getLatestLocation().get(0).getLongitude() + " (" + aPatient.getFullname() + ")";
 
                                 } else {
-                                    lastSeen.setText("Unknown");
+                                    reportedAt.setText("Unknown");
+                                    lastSeenBeacon.setText("Unknown");
                                     lastLocation.setText("Unknown");
                                 }
                             }

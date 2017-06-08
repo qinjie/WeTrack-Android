@@ -233,22 +233,6 @@
                             android:textSize="18sp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:text="Reported at:"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/reportedAt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:gravity="start"
-                        android:textColor="@color/md_black_1000"
-                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -267,6 +251,24 @@
                         android:scrollbars="vertical"
                         android:textColor="@color/md_black_1000"
                         android:textSize="18sp" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="Detected at:"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/reportedAt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:textColor="@color/md_black_1000"
+                        android:textSize="18sp" />
+
 
                     <TextView
                         android:layout_width="match_parent"
