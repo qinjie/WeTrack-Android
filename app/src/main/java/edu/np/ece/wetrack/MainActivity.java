@@ -408,7 +408,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (position == 2) {
                     toolbar.setTitle("Relatives");
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, RelativesFragment.newInstance("Relatives List")).commit();
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, RelativesFragment.newInstance("Relatives List")).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, adapterViewPager.getItem(2)).commit();
+
                 }
 
             }

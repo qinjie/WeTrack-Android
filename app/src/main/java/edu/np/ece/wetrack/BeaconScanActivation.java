@@ -30,7 +30,6 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
-import io.fabric.sdk.android.Fabric;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
@@ -53,6 +52,7 @@ import edu.np.ece.wetrack.api.ServerAPI;
 import edu.np.ece.wetrack.model.BeaconInfo;
 import edu.np.ece.wetrack.model.BeaconLocation;
 import edu.np.ece.wetrack.model.Resident;
+import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,8 +80,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
     LocationManager locationManager;
 
     ArrayList<Region> regionList = new ArrayList();
-    ArrayList<Region> toRemove = new ArrayList();
-    ArrayList<Region> toAdd = new ArrayList();
     final BootstrapNotifier tmp = this;
     private Handler mHandler;
     MainActivity forDisplay = new MainActivity();
@@ -162,7 +160,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             @Override
             public void onFailure(Call<List<Resident>> call, Throwable t) {
                 sendNotification(getBaseContext(), "Please turn on internet connection");
-//                sendNotification(t.getMessage());
                 Gson gson = new Gson();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String jsonPatients = sharedPref.getString("patientList-WeTrack", "");
@@ -174,12 +171,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
         mHandler = new Handler();
         startRepeatingTask();
-
     }
 
     @Override
     public void didDetermineStateForRegion(int status, Region region) {
-//        Log.i("Activation-determine", region.getUniqueId() + " : " + status);
 
     }
 
@@ -210,12 +205,10 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
             String[] regionInfo = region.getUniqueId().split(";");
 
-
             Geocoder geocoder;
             List<Address> addresses;
             geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
             String fullAddress = "";
-
 
             for (final Resident patient : patientList) {
                 for (final BeaconInfo aBeacon : patient.getBeacons()) {
@@ -233,7 +226,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
 
                         String userID = sharedPref.getString("userID-WeTrack", "");
 
-
                         if (!userID.equals("")) {
                             try {
                                 addresses = geocoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
@@ -242,14 +234,11 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                 String country = addresses.get(0).getCountryName();
 
                                 fullAddress = address + ", " + country;
-
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
 
-
                             BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), mLocation.getLongitude(), mLocation.getLatitude(), dateObj, fullAddress);
-
 
                             Gson gson = new GsonBuilder()
                                     .setLenient()
@@ -264,11 +253,9 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                     try {
                                         sendNotificationForDetected(getBaseContext(), patient, "is nearby.");
 
-//                                    if(detectedBeaconList.contains(a))
                                         detectedPatientList.add(patient);
                                         detectedBeaconList.add(aBeacon);
                                         if (MainActivity.beaconListAdapter != null) {
-
                                             forDisplay.logToDisplay();
                                         }
                                     } catch (Exception e) {
@@ -281,24 +268,18 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                 }
                             });
                         }
-
                     }
                 }
-
             }
         } else {
             if (mLocation == null) {
                 sendNotification(getBaseContext(), "Please turn on location service");
             }
         }
-
     }
 
     @Override
     public void didExitRegion(Region region) {
-
-//        sendNotification("exit: " + region.getUniqueId() + " | " + mBeaconmanager.getMonitoredRegions().size());
-
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -328,12 +309,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                             editor.commit();
                         }
 
-
-                        String userID = sharedPref.getString("userID-WeTrack", "");
-
-
-//                        sendNotificationForDetected(getBaseContext(), patient, "is out of range.");
-
                         List<Resident> residentToRemove = new ArrayList<>();
                         List<BeaconInfo> beaconToRemove = new ArrayList<>();
 
@@ -357,42 +332,11 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                         residentToRemove.clear();
                         beaconToRemove.clear();
 
-
                         if (MainActivity.beaconListAdapter != null) {
                             forDisplay.logToDisplay();
                         }
-
-
-//                        if (!userID.equals("")) {
-//                            BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), mLocation.getLongitude(), mLocation.getLatitude(), dateObj);
-//                            Gson gson = new GsonBuilder()
-//                                    .setLenient()
-//                                    .create();
-//                            JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
-//
-//                            String token = sharedPref.getString("userToken-WeTrack", "");
-//                            Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
-//                            call.enqueue(new Callback<JsonObject>() {
-//                                @Override
-//                                public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-//                                    try {
-//
-//                                    } catch (Exception e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<JsonObject> call, Throwable error) {
-//                                }
-//                            });
-//
-//                        }
-
-
                     }
                 }
-
             }
         } else {
             if (mLocation == null) {
@@ -401,12 +345,11 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         }
     }
 
-    //this will re-run after every 10 seconds
-    private int mInterval = 10000;
+    //this will re-run after every 2 hours
+    private int mInterval = 7200000;
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
-
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             String token = sharedPref.getString("userToken-WeTrack", "");
 
@@ -419,7 +362,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                     public void onResponse(Call<List<Resident>> call, Response<List<Resident>> response) {
                         try {
                             patientList = response.body();
-
 
                             Gson gson = new Gson();
                             String jsonPatients = gson.toJson(patientList);
@@ -446,27 +388,21 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                     }
                 });
 
-
                 if (patientList != null && !patientList.equals("") && patientList.size() > 0 && tmp != null) {
                     for (Resident aPatient : patientList) {
                         for (BeaconInfo aBeacon : aPatient.getBeacons()) {
-
                             String uuid = aBeacon.getUuid();
                             Identifier identifier = Identifier.parse(uuid);
                             Identifier identifier2 = Identifier.parse(String.valueOf(aBeacon.getMajor()));
                             Identifier identifier3 = Identifier.parse(String.valueOf(aBeacon.getMinor()));
                             Region region = new Region(aPatient.getId() + ";" + identifier + ";" + identifier2 + ";" + identifier3, identifier, identifier2, identifier3);
 
-
                             if (aPatient.getStatus() == 1 && aBeacon.getStatus() == 1 && aPatient.getBeacons() != null && aPatient.getBeacons().size() > 0) {
-
                                 if (!regionList.contains(region)) {
                                     regionList.add(region);
                                 }
 
-                            }else{
-
-
+                            } else {
                                 List<Resident> residentToRemove = new ArrayList<>();
                                 List<BeaconInfo> beaconToRemove = new ArrayList<>();
 
@@ -476,7 +412,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                         break;
                                     }
                                 }
-
 
                                 for (BeaconInfo removeBeacon : detectedBeaconList) {
                                     if (removeBeacon.getId() == aBeacon.getId()) {
@@ -491,7 +426,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                 residentToRemove.clear();
                                 beaconToRemove.clear();
 
-
                                 if (regionList.contains(region)) {
                                     regionList.remove(region);
                                     try {
@@ -499,26 +433,18 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                     } catch (RemoteException e) {
                                         e.printStackTrace();
                                     }
-
                                 }
-
-
-
-
                             }
                         }
-
                     }
                 }
 
                 regionBootstrap = new RegionBootstrap(tmp, regionList);
 
-
                 if (checkInternetOn()) {
                     SharedPreferences sharedPref3 = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                     SharedPreferences.Editor editor = sharedPref3.edit();
                     String savedData = sharedPref3.getString("listPatientsAndLocations-WeTrack2", "");
-
 
                     Geocoder geocoder;
                     List<Address> addresses;
@@ -540,26 +466,16 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                             String patientBeaconIdentifiers = aBeacon.getUuid() + aBeacon.getMajor() + aBeacon.getMinor();
                                             if (patientInfoOffline[0].equals(patientBeaconIdentifiers) && patient.getStatus() == 1 && aBeacon.getStatus() == 1) {
                                                 String userID = sharedPref.getString("userID-WeTrack", "");
-
-
                                                 if (!userID.equals("")) {
-
-
                                                     try {
                                                         addresses = geocoder.getFromLocation(Double.parseDouble(patientInfoOffline[2]), Double.parseDouble(patientInfoOffline[1]), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                                                         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                                                         String city = addresses.get(0).getLocality();
-//                                                        String postalCode = addresses.get(0).getPostalCode();
-//                                                        String knownName = addresses.get(0).getFeatureName();
                                                         fullAddress = address + ", " + city;
-
-//                                sendNotification(regionList.size() + " | " + " | " + mBeaconmanager.getMonitoredRegions().size());
-//                                sendNotification(address+" "+city+" "+postalCode +" "+knownName);
 
                                                     } catch (IOException e) {
                                                         e.printStackTrace();
                                                     }
-
 
                                                     BeaconLocation aLocation = new BeaconLocation(aBeacon.getId(), Integer.parseInt(userID), Double.parseDouble(patientInfoOffline[1]), Double.parseDouble(patientInfoOffline[2]), patientInfoOffline[3], fullAddress);
 
@@ -568,7 +484,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
                                                             .create();
                                                     JsonObject obj = gson.toJsonTree(aLocation).getAsJsonObject();
 
-//                                                    String token = sharedPref.getString("userToken-WeTrack", "");
                                                     Call<JsonObject> call = serverAPI.sendBeaconLocation("Bearer " + token, "application/json", obj);
                                                     call.enqueue(new Callback<JsonObject>() {
                                                         @Override
@@ -618,7 +533,6 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
             }
 
             mHandler.postDelayed(mStatusChecker, mInterval);
-
         }
     };
 
@@ -637,6 +551,5 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         } else {
             return true;
         }
-
     }
 }

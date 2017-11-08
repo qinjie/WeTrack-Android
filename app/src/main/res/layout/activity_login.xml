@@ -29,7 +29,7 @@
             android:layout_below="@id/google_icon"
             android:layout_centerInParent="true"
             android:layout_marginBottom="10dp"
-            android:text="We Track"
+            android:text="Elderly Track"
             android:textColor="@android:color/white"
             android:textSize="32sp" />
 

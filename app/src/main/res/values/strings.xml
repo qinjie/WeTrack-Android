@@ -17,4 +17,8 @@
     <string name="answer3">The app only gets activated when there is interested beacon nearby. Turning on Bluetooth does not drain too much battery. You may check its battery usage through Settings/Battery usage.</string>
     <string name="faq4">Does the app tracks my location (privacy concern)?</string>
     <string name="answer4">Although the app will send location to server when it sense an interested beacon, it is use to indicate the location of the found beacon. The data will be sent anonymously.</string>
+    <string name="title_activity_main4324">MainActivity4324</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
