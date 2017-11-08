@@ -26,6 +26,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if (remoteMessage.getData().get("id").equals(String.valueOf(aResident.getId()))) {
                     if (aResident.getStatus() == 0) {
                         sendNotificationForFireBase(getBaseContext(), aResident, remoteMessage.getData().get("data"));
+                        aResident.setStatus(1);
                     }
                 }
             }
