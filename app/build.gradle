@@ -12,6 +12,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    google()
 }
 
 
@@ -22,7 +23,7 @@ android {
         applicationId "edu.np.ece.wetrack"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 16
+        versionCode 17
         versionName "4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -50,9 +51,12 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
@@ -65,10 +69,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.aakira:expandable-layout:1.6.0@aar'
-    compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
+
     testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }
 apply plugin: 'com.google.gms.google-services'
 

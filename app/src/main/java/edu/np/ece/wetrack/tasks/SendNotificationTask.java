@@ -29,7 +29,7 @@ public class SendNotificationTask {
         if (isNoti.equals("true")) {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
-                            .setContentTitle("We Track")
+                            .setContentTitle("Elderly Track")
                             .setContentText(content)
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
@@ -65,7 +65,7 @@ public class SendNotificationTask {
         if (isNoti.equals("true") && !isLogin.equals("")) {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
-                            .setContentTitle("We Track")
+                            .setContentTitle("Elderly Track")
                             .setContentText(aResident.getFullname() + " " + msg)
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
@@ -100,7 +100,7 @@ public class SendNotificationTask {
         if (isNoti.equals("true") && !isLogin.equals("")) {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
-                            .setContentTitle("We Track")
+                            .setContentTitle("Elderly Track")
                             .setContentText(msg)
                             .setSmallIcon(R.drawable.icon_noti)
                             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
