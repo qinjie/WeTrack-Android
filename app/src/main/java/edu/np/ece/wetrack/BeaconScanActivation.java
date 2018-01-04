@@ -345,8 +345,8 @@ public class BeaconScanActivation extends Application implements BootstrapNotifi
         }
     }
 
-    //this will re-run after every 4 hours
-    private int mInterval = 14400000;
+    //this will re-run after every 20 seconds
+    private int mInterval = 20000;
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
