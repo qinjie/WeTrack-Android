@@ -24,9 +24,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         try {
             for (Resident aResident : patientList) {
                 if (remoteMessage.getData().get("id").equals(String.valueOf(aResident.getId()))) {
-                    if (aResident.getStatus() == 0) {
+                    if (aResident.getStatus() == 1) {
                         sendNotificationForFireBase(getBaseContext(), aResident, remoteMessage.getData().get("data"));
-                        aResident.setStatus(1);
+                        aResident.setStatus(0);
                     }
                 }
             }
